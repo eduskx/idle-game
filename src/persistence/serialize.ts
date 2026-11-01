@@ -1,6 +1,6 @@
 import { CHARM_BY_ID, type CharmId } from '../data/charms';
-import { CREATURE_BY_ID } from '../data/creatures';
-import { emptyTalents, emptyUpgrades, newBattle, SAVE_VERSION } from '../engine/state';
+import { CREATURE_BY_ID, STARTER_CREATURES } from '../data/creatures';
+import { emptyTalents, emptyUpgrades, newBattle, newOwnedCreature, SAVE_VERSION } from '../engine/state';
 import type { GameState } from '../engine/types';
 import { migrate } from './migrations';
 import { saveSchema, type SaveData } from './schema';
@@ -46,8 +46,13 @@ export function fromUnknown(raw: unknown): GameState {
   const creatures = Object.fromEntries(
     Object.entries(d.creatures).filter(([key, c]) => CREATURE_BY_ID[key] && c.defId === key),
   );
-  const team = d.team.filter((tid) => creatures[tid] && !d.expeditions.some((e) => e.defId === tid));
-  if (team.length === 0) throw new SaveError('Save has no valid team');
+  // Creatures removed from the roster (e.g. the 30 → 10 redesign) are dropped above; make
+  // sure the player always keeps the starters and a usable team.
+  for (const starter of STARTER_CREATURES) {
+    if (!creatures[starter]) creatures[starter] = newOwnedCreature(starter);
+  }
+  let team = d.team.filter((tid) => creatures[tid] && !d.expeditions.some((e) => e.defId === tid));
+  if (team.length === 0) team = [...STARTER_CREATURES];
 
   const upgrades = emptyUpgrades();
   for (const key of Object.keys(upgrades) as (keyof typeof upgrades)[]) upgrades[key] = d.upgrades[key] ?? 0;

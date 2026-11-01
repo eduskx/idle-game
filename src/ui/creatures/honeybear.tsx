@@ -1,0 +1,147 @@
+import { Blush, Eye, GroundShadow, Shade, type ArtProps } from './kit';
+
+const INK = '#3a2210';
+
+function hexPath(cx: number, cy: number, r: number): string {
+  const pts = Array.from({ length: 6 }, (_, i) => {
+    const a = (Math.PI / 3) * i + Math.PI / 6;
+    return `${(cx + r * Math.cos(a)).toFixed(1)} ${(cy + r * Math.sin(a)).toFixed(1)}`;
+  });
+  return `M${pts.join(' L')} Z`;
+}
+
+/** Honeybear – a chunky cub in honeycomb armor, guarded by two loyal bees. */
+export function Honeybear({ uid, view }: ArtProps) {
+  const fur = `${uid}-fur`;
+  const comb = `${uid}-comb`;
+  const defs = (
+    <defs>
+      <Shade id={fur} light="#d99a62" base="#a8673a" dark="#6b3c1e" />
+      <Shade id={comb} light="#ffe08a" base="#f4b740" dark="#c27c10" />
+    </defs>
+  );
+
+  const bee = (x: number, y: number, s = 1) => (
+    <g transform={`translate(${x} ${y}) scale(${s})`} className="bee">
+      <ellipse cx="-4" cy="-8" rx="6" ry="8" fill="#ffffffcc" stroke={INK} strokeWidth={1.5} />
+      <ellipse cx="4" cy="-8" rx="6" ry="8" fill="#ffffffcc" stroke={INK} strokeWidth={1.5} />
+      <ellipse cx="0" cy="0" rx="10" ry="7" fill="#ffcf3f" stroke={INK} strokeWidth={2} />
+      <path d="M-3 -6 L-3 6 M3 -6 L3 6" stroke={INK} strokeWidth={2.5} />
+      <circle cx="6" cy="-1" r="1.4" fill={INK} />
+    </g>
+  );
+
+  const ears = (
+    <g stroke={INK} strokeWidth={3.5}>
+      <circle cx="58" cy="54" r="16" fill={`url(#${fur})`} />
+      <circle cx="142" cy="54" r="16" fill={`url(#${fur})`} />
+      <circle cx="58" cy="56" r="8" fill="#f1d3a6" stroke="none" />
+      <circle cx="142" cy="56" r="8" fill="#f1d3a6" stroke="none" />
+    </g>
+  );
+
+  const combCells = (cells: [number, number][], r: number) => (
+    <g>
+      {cells.map(([x, y], i) => (
+        <path key={i} d={hexPath(x, y, r)} fill={`url(#${comb})`} stroke="#8a5208" strokeWidth={2} />
+      ))}
+    </g>
+  );
+
+  if (view === 'back') {
+    return (
+      <svg viewBox="0 0 200 200">
+        {defs}
+        <GroundShadow rx={60} />
+        <ellipse cx="70" cy="176" rx="18" ry="10" fill="#6b3c1e" stroke={INK} strokeWidth={3} />
+        <ellipse cx="130" cy="176" rx="18" ry="10" fill="#6b3c1e" stroke={INK} strokeWidth={3} />
+        <path
+          d="M42 150 Q36 100 100 94 Q164 100 158 150 Q154 184 100 184 Q46 184 42 150 Z"
+          fill={`url(#${fur})`}
+          stroke={INK}
+          strokeWidth={3.5}
+        />
+        {/* honeycomb back plate */}
+        <path
+          d="M60 116 Q100 100 140 116 L136 158 Q100 170 64 158 Z"
+          fill="#c27c10"
+          stroke={INK}
+          strokeWidth={3}
+        />
+        {combCells(
+          [
+            [80, 124],
+            [100, 118],
+            [120, 124],
+            [90, 141],
+            [110, 141],
+            [100, 158],
+          ],
+          10,
+        )}
+        <circle cx="100" cy="176" r="7" fill="#a8673a" stroke={INK} strokeWidth={2.5} />
+        {ears}
+        <ellipse cx="100" cy="76" rx="46" ry="40" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
+        <path d="M84 40 Q92 50 88 60 Q96 54 104 60" fill="#f4b740" stroke="#8a5208" strokeWidth={2} />
+        {bee(36, 92, 0.9)}
+        {bee(166, 70, 0.8)}
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 200 200">
+      {defs}
+      <GroundShadow rx={60} />
+      <ellipse cx="72" cy="178" rx="18" ry="10" fill="#6b3c1e" stroke={INK} strokeWidth={3} />
+      <ellipse cx="128" cy="178" rx="18" ry="10" fill="#6b3c1e" stroke={INK} strokeWidth={3} />
+      {/* body */}
+      <path
+        d="M44 150 Q38 104 100 98 Q162 104 156 150 Q152 184 100 184 Q48 184 44 150 Z"
+        fill={`url(#${fur})`}
+        stroke={INK}
+        strokeWidth={3.5}
+      />
+      {/* honeycomb chest plate */}
+      <path
+        d="M68 118 Q100 108 132 118 L128 162 Q100 172 72 162 Z"
+        fill="#c27c10"
+        stroke={INK}
+        strokeWidth={3}
+      />
+      {combCells(
+        [
+          [88, 128],
+          [112, 128],
+          [100, 146],
+          [80, 150],
+          [120, 150],
+        ],
+        10,
+      )}
+      {/* shoulder pads */}
+      <path d={hexPath(52, 118, 16)} fill={`url(#${comb})`} stroke={INK} strokeWidth={3} />
+      <path d={hexPath(148, 118, 16)} fill={`url(#${comb})`} stroke={INK} strokeWidth={3} />
+      {ears}
+      {/* head */}
+      <ellipse cx="100" cy="80" rx="46" ry="40" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
+      <ellipse cx="100" cy="96" rx="22" ry="16" fill="#f1d3a6" />
+      <Eye cx={80} cy={78} r={8} />
+      <Eye cx={120} cy={78} r={8} />
+      <Blush cx={68} cy={94} rx={7} />
+      <Blush cx={132} cy={94} rx={7} />
+      <ellipse cx="100" cy="90" rx="8" ry="6" fill="#2a1608" />
+      <path d="M92 100 Q100 106 108 100" fill="none" stroke={INK} strokeWidth={2.5} strokeLinecap="round" />
+      {/* honey drip on the head */}
+      <path
+        d="M76 46 Q100 36 124 46 Q124 54 118 52 Q116 62 110 58 Q106 54 100 56 Q92 64 88 54 Q80 56 76 46 Z"
+        fill="#f6b52e"
+        stroke="#8a5208"
+        strokeWidth={2}
+      />
+      <ellipse cx="92" cy="45" rx="6" ry="2.5" fill="#fff3c4" opacity={0.8} />
+      {bee(34, 70, 0.9)}
+      {bee(168, 52, 0.8)}
+    </svg>
+  );
+}

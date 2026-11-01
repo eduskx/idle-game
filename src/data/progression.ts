@@ -1,5 +1,5 @@
 import type { GameState, Realm, TalentId, UpgradeId } from '../engine/types';
-import { CREATURE_BY_ID } from './creatures';
+import { CREATURE_BY_ID, CREATURES } from './creatures';
 
 export interface UpgradeDef {
   id: UpgradeId;
@@ -72,8 +72,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   { id: 'summon100', check: (s) => s.lifetime.summons >= 100 },
   { id: 'rebloom1', check: (s) => s.lifetime.reblooms >= 1 },
   { id: 'rebloom10', check: (s) => s.lifetime.reblooms >= 10 },
-  { id: 'collect10', check: (s) => Object.keys(s.creatures).length >= 10 },
-  { id: 'collectAll', check: (s) => Object.keys(s.creatures).length >= 30 },
+  { id: 'collect5', check: (s) => Object.keys(s.creatures).length >= 5 },
+  { id: 'collectAll', check: (s) => Object.keys(s.creatures).length >= CREATURES.length },
   { id: 'star5', check: (s) => Object.values(s.creatures).some((c) => c.stars >= 5) },
   { id: 'pureHearth', check: (s) => isPureTeam(s, 'hearth') },
   { id: 'pureUmbra', check: (s) => isPureTeam(s, 'umbra') },

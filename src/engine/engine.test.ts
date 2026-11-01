@@ -35,8 +35,8 @@ describe('data integrity', () => {
       for (const e of [...z.enemies, z.boss]) expect(ENEMY_BY_ID[e], `${z.id}:${e}`).toBeDefined();
     }
   });
-  it('has both realms in every rarity tier', () => {
-    for (const r of ['common', 'rare', 'epic', 'legendary', 'mythic']) {
+  it('has both realms in every rarity tier that is used', () => {
+    for (const r of ['common', 'rare', 'epic', 'legendary']) {
       const realms = new Set(CREATURES.filter((c) => c.rarity === r).map((c) => c.realm));
       expect(realms.size).toBe(2);
     }

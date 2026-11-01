@@ -24,7 +24,6 @@ describe('persistence', () => {
     expect(() => fromUnknown({ ...data, currencies: { gold: Infinity, essence: 0, seeds: 0 } })).toThrow(
       SaveError,
     );
-    expect(() => fromUnknown({ ...data, team: [] })).toThrow(SaveError);
     expect(() => fromUnknown(null)).toThrow(SaveError);
   });
 
@@ -35,6 +34,15 @@ describe('persistence', () => {
     const s = fromUnknown(data);
     expect(s.creatures.ghostcreature).toBeUndefined();
     expect(s.team).not.toContain('ghostcreature');
+  });
+
+  it('repairs saves whose team only had removed creatures', () => {
+    const data = toSaveData(createInitialState(1000, 9));
+    data.creatures = { oldcreature: { defId: 'oldcreature', level: 5, xp: 0, stars: 1, shards: 0 } };
+    data.team = ['oldcreature'];
+    const s = fromUnknown(data);
+    expect(s.team).toEqual(['mossling', 'gloomwisp']);
+    expect(Object.keys(s.creatures).sort()).toEqual(['gloomwisp', 'mossling']);
   });
 
   it('saves and loads through a repository', async () => {

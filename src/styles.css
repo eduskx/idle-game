@@ -352,96 +352,300 @@ h3 {
   background: var(--boss);
 }
 
-/* ---------------------------------------------------------------- battle */
+/* ---------------------------------------------------------------- sprites */
 
-.arena {
-  border-radius: var(--radius);
-  padding: 12px;
-  border: 1px solid var(--line);
+.sprite {
   position: relative;
+  display: inline-block;
+  flex: none;
+  line-height: 0;
+}
+.sprite > svg,
+.sprite > img {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.sprite.dim {
+  filter: grayscale(1) brightness(0.6);
+  opacity: 0.6;
+}
+.sprite.is-alpha > svg {
+  filter: drop-shadow(0 0 10px var(--boss)) drop-shadow(0 0 2px #fff6);
+}
+.alpha-crown {
+  position: absolute;
+  width: 26%;
+  left: 37%;
+  top: -6%;
+  transform: rotate(-8deg);
+}
+[data-motion='full'] .breathe > svg {
+  transform-origin: 50% 92%;
+  animation: breathe 2.6s ease-in-out infinite;
+}
+[data-motion='full'] .breathe.slow > svg {
+  animation-duration: 3.1s;
+  animation-delay: -0.8s;
+}
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.015, 1.035) translateY(-1px);
+  }
+}
+
+/* ---------------------------------------------------------------- battle stage (2.5D) */
+
+.stage {
+  --hill-far: color-mix(in srgb, var(--sky-bottom) 55%, #4f6b52);
+  --hill-near: color-mix(in srgb, var(--sky-bottom) 35%, #3e6a3e);
+  --floor-a: #9dcf7a;
+  --floor-b: #7dba60;
+  position: relative;
+  height: 360px;
+  border-radius: 18px;
   overflow: hidden;
-  min-height: 300px;
+  border: 1px solid var(--line);
+  isolation: isolate;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
 }
-.arena.realm-hearth {
-  color: #3a2a1a;
+.stage.realm-umbra {
+  --hill-far: color-mix(in srgb, var(--sky-bottom) 60%, #120c1c);
+  --hill-near: color-mix(in srgb, var(--sky-bottom) 40%, #0c0814);
+  --floor-a: #3d2f52;
+  --floor-b: #2b2140;
 }
-.arena.realm-umbra {
-  color: #f3eefc;
+.stage-sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 70% at 75% 0%, #ffffff55, transparent 60%),
+    linear-gradient(180deg, var(--sky-top), var(--sky-bottom) 58%);
 }
-
-.arena-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.5rem;
-  font-size: 0.85rem;
+.realm-umbra .stage-sky {
+  background:
+    radial-gradient(60% 40% at 80% 12%, #c48bff33, transparent 70%),
+    linear-gradient(180deg, var(--sky-top), var(--sky-bottom) 58%);
 }
-.zone-name {
-  font-weight: 800;
-  font-size: 1.05rem;
-}
-.boss-tag {
-  font-weight: 800;
-  color: var(--boss);
-}
-
-.field {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: end;
-  gap: 8px;
-  margin-top: 14px;
-  min-height: 220px;
-}
-
-.team-side {
-  display: flex;
-  flex-wrap: wrap-reverse;
-  flex-direction: row-reverse;
-  justify-content: flex-start;
-  align-items: flex-end;
-  gap: 4px;
-}
-
-.fighter {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 76px;
-}
-.fighter .bar {
+.stage-hills {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 96px;
   width: 100%;
+  height: 120px;
+  opacity: 0.9;
 }
-.fighter.down {
-  filter: grayscale(1);
+/* Perspective ground plane: a tiled field tilted away from the camera. */
+.stage-floor {
+  position: absolute;
+  left: -40%;
+  right: -40%;
+  top: 200px;
+  height: 320px;
+  transform-origin: 50% 0;
+  transform: perspective(300px) rotateX(58deg);
+  background:
+    repeating-linear-gradient(90deg, #ffffff14 0 2px, transparent 2px 48px),
+    repeating-linear-gradient(0deg, #ffffff10 0 2px, transparent 2px 48px),
+    linear-gradient(180deg, var(--floor-b), var(--floor-a));
 }
-.fighter.enemy {
-  width: 100%;
-  position: relative;
+.stage::after {
+  /* atmospheric haze over the far half */
+  content: '';
+  position: absolute;
+  inset: 0 0 45% 0;
+  background: linear-gradient(180deg, transparent 40%, #ffffff22);
+  pointer-events: none;
 }
-.enemy-name {
-  font-weight: 700;
-  font-size: 0.85rem;
+.realm-umbra.stage::after {
+  background: linear-gradient(180deg, transparent 40%, #8a6bc022);
 }
-.enemy-hp {
-  font-size: 0.75rem;
-  font-variant-numeric: tabular-nums;
+.boss-stage {
+  box-shadow:
+    0 0 0 2px var(--boss),
+    0 10px 30px rgb(0 0 0 / 0.35);
 }
 
-[data-motion='full'] .sprite {
-  animation: bob 2.4s ease-in-out infinite;
+.spot {
+  position: absolute;
+  display: flex;
+  justify-content: center;
 }
-[data-motion='full'] .fighter:nth-child(2n) .sprite {
-  animation-delay: -1.2s;
+.enemy-spot {
+  right: 4%;
+  top: 84px;
+  width: 170px;
+  height: 160px;
+  z-index: 2;
+}
+.player-spot {
+  left: 0;
+  bottom: -18px;
+  width: 210px;
+  height: 200px;
+  z-index: 3;
+}
+.platform {
+  position: absolute;
+  left: 50%;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, #0000004d, #00000026 70%, transparent);
+  box-shadow: inset 0 -4px 0 #ffffff1f;
+}
+.platform-far {
+  width: 150px;
+  height: 38px;
+  bottom: 10px;
+}
+.platform-near {
+  width: 220px;
+  height: 56px;
+  bottom: 18px;
+}
+.actor {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  translate: -50% 0;
+}
+.player-actor {
+  bottom: 30px;
+}
+.enemy-actor .sprite > svg {
+  filter: saturate(0.95) brightness(0.97);
+}
+.hit-flash {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #fff, #fff0);
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
 }
 [data-motion='full'] .spawn {
-  animation: pop 0.25s ease-out;
+  animation: spawn-in 0.35s ease-out;
 }
-[data-motion='full'] .shake {
-  animation: shake 0.2s;
+@keyframes spawn-in {
+  from {
+    opacity: 0;
+    transform: translateX(30px) scale(0.85);
+  }
 }
-[data-motion='full'] .is-boss .sprite {
-  filter: drop-shadow(0 0 10px var(--boss));
+
+.info-box {
+  position: absolute;
+  z-index: 4;
+  min-width: 170px;
+  max-width: 58%;
+  padding: 8px 10px 7px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.3);
+  color: var(--text);
+}
+.enemy-box {
+  top: 10px;
+  left: 10px;
+}
+.player-box {
+  right: 10px;
+  bottom: 12px;
+  min-width: 150px;
+}
+.info-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.86rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.info-head strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.info-head .lv {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.info-sub {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.num {
+  font-variant-numeric: tabular-nums;
+}
+.el-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: 0 0 0 2px #0004;
+}
+.el-ember {
+  background: #ff7a3c;
+}
+.el-tide {
+  background: #45b4ff;
+}
+.el-grove {
+  background: #6fd16a;
+}
+
+.hp {
+  position: relative;
+  height: 9px;
+  margin: 5px 0 3px;
+  border-radius: 999px;
+  background: #00000059;
+  overflow: hidden;
+}
+.hp-ghost,
+.hp-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+}
+.hp-ghost {
+  background: #ffffffb0;
+  transition: width 0.5s ease-in 0.35s;
+}
+.hp-fill {
+  background: #57d97a;
+  transition: width 0.1s linear;
+}
+.hp-mid .hp-fill {
+  background: #f5c542;
+}
+.hp-low .hp-fill {
+  background: #ef5a5a;
+}
+
+.stage-label {
+  position: absolute;
+  z-index: 4;
+  right: 10px;
+  top: 10px;
+  text-align: right;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  display: grid;
+  color: var(--text);
+  text-shadow: 0 1px 3px #000a;
+}
+.realm-hearth .stage-label {
+  color: #3a2a1a;
+  text-shadow: 0 1px 0 #fff8;
 }
 
 .dmg-layer {
@@ -451,31 +655,72 @@ h3 {
 }
 .dmg {
   position: absolute;
-  top: 30%;
-  font-weight: 800;
-  font-size: 0.9rem;
+  top: 26%;
+  font-weight: 900;
+  font-size: 1rem;
   color: #fff;
-  text-shadow:
-    0 1px 0 #000,
-    0 0 4px #000;
+  -webkit-text-stroke: 3px #1b1626;
+  paint-order: stroke fill;
   animation: float-up 0.9s ease-out forwards;
 }
 .dmg.crit {
   color: var(--warning);
-  font-size: 1.15rem;
+  font-size: 1.3rem;
 }
 
-.battle-controls {
+.bench {
+  list-style: none;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 12px 0 6px;
-  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 4px;
+  margin: 8px 0 2px;
+  overflow-x: auto;
 }
-.synergy {
-  font-size: 0.9rem;
-  margin: 6px 0;
+.bench-slot {
+  position: relative;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(closest-side, var(--card-2) 82%, transparent 84%),
+    conic-gradient(#57d97a calc(var(--hp) * 360deg), #00000055 0);
+  border: 1px solid var(--line);
+}
+.bench-slot.active {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.bench-slot.down .sprite {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+.bench-lv {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  background: var(--primary);
+  color: var(--primary-ink);
+  border-radius: 999px;
+  padding: 0 5px;
+}
+.battle-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.synergy-chip {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
 }
 
 .toggle {
@@ -491,36 +736,19 @@ h3 {
   accent-color: var(--primary);
 }
 
-@keyframes bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
 @keyframes pop {
   from {
     transform: scale(0.6);
     opacity: 0;
   }
 }
-@keyframes shake {
-  25% {
-    transform: translateX(-3px);
-  }
-  75% {
-    transform: translateX(3px);
-  }
-}
 @keyframes float-up {
   from {
-    transform: translateY(0);
+    transform: translateY(0) scale(1.15);
     opacity: 1;
   }
   to {
-    transform: translateY(-48px);
+    transform: translateY(-52px) scale(1);
     opacity: 0;
   }
 }
@@ -938,12 +1166,6 @@ h3 {
   *::after {
     animation: none !important;
     transition: none !important;
-  }
-}
-
-@media (min-width: 420px) {
-  .fighter {
-    width: 84px;
   }
 }
 

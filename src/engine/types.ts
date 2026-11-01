@@ -36,6 +36,7 @@ export interface CreatureDef {
   realm: Realm;
   element: Element;
   rarity: Rarity;
+  archetype: 'bruiser' | 'striker' | 'guardian' | 'support' | 'swift';
   /** Base stats at level 1, 0 stars. */
   baseAtk: number;
   baseHp: number;
@@ -44,25 +45,18 @@ export interface CreatureDef {
   ability: Ability;
   /** Zone index (0-based) that must have been reached before this creature can be summoned. */
   unlockZone: number;
-  /** Deterministic seed for the procedural placeholder sprite. */
-  look: CreatureLook;
-}
-
-export interface CreatureLook {
-  body: 'blob' | 'tall' | 'wide' | 'spiky' | 'round';
-  ears: 'none' | 'cat' | 'bunny' | 'horns' | 'antlers' | 'leaf';
-  eyes: 'dot' | 'big' | 'sleepy' | 'glow' | 'three';
-  hue: number;
-  extra: 'none' | 'tail' | 'wings' | 'flame' | 'mushroom' | 'halo';
 }
 
 export interface EnemyDef {
   id: string;
+  /** The creature species this enemy is a wild member of. */
+  species: string;
+  /** Alphas are boss specimens. */
+  alpha: boolean;
   realm: Realm;
   element: Element;
   hpMult: number;
   atkMult: number;
-  look: CreatureLook;
 }
 
 export interface ZoneDef {
