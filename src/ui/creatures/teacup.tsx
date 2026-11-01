@@ -1,4 +1,4 @@
-import { Blush, Eye, Glow, GroundShadow, Linear, type ArtProps } from './kit';
+import { Blush, Glow, GroundShadow, Linear, type ArtProps } from './kit';
 
 const INK = '#3a2a2a';
 
@@ -53,8 +53,8 @@ export function Teacup({ uid, view }: ArtProps) {
         strokeWidth={3.5}
       />
       {/* blue pattern band */}
-      <path d="M54 134 Q100 146 146 134" fill="none" stroke="#5b8fd6" strokeWidth={4} />
-      <g fill="#5b8fd6">
+      <path d="M54 134 Q100 146 146 134" fill="none" stroke="#cf8a34" strokeWidth={4} />
+      <g fill="#cf8a34">
         <circle cx="70" cy="150" r="3.5" />
         <circle cx="100" cy="156" r="4" />
         <circle cx="130" cy="150" r="3.5" />
@@ -86,15 +86,31 @@ export function Teacup({ uid, view }: ArtProps) {
       <ellipse cx="100" cy="118" rx="44" ry="8" fill="#b97a3f" opacity={0.6} />
       {face ? (
         <g>
-          <Eye cx={84} cy={92} r={8} iris="#5a3418" />
-          <Eye cx={116} cy={92} r={8} iris="#5a3418" />
+          {/* heavy, half-closed eyelids */}
+          <path d="M76 92 Q84 100 92 92 Z" fill="#3a2418" />
+          <path d="M108 92 Q116 100 124 92 Z" fill="#3a2418" />
+          <path d="M74 92 L94 92" stroke={INK} strokeWidth={3} strokeLinecap="round" />
+          <path d="M106 92 L126 92" stroke={INK} strokeWidth={3} strokeLinecap="round" />
           <Blush cx={72} cy={104} rx={6} />
           <Blush cx={128} cy={104} rx={6} />
+          {/* big yawn */}
+          <ellipse cx="100" cy="107" rx="6" ry="7.5" fill="#5a2a22" stroke={INK} strokeWidth={2.2} />
+          <ellipse cx="100" cy="111" rx="3.6" ry="2.4" fill="#e9877e" />
+          {/* drowsy "z" */}
           <path
-            d="M94 104 Q100 110 106 104"
+            d="M138 64 L148 64 L138 74 L148 74"
             fill="none"
-            stroke={INK}
+            stroke="#8a6a5a"
             strokeWidth={2.5}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+          <path
+            d="M150 50 L156 50 L150 56 L156 56"
+            fill="none"
+            stroke="#8a6a5a"
+            strokeWidth={2}
+            strokeLinejoin="round"
             strokeLinecap="round"
           />
           {/* floating leaf */}

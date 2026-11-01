@@ -2,7 +2,7 @@ import { Glow, GroundShadow, Shade, type ArtProps } from './kit';
 
 const INK = '#0b0812';
 
-/** Hexcat – a sitting black cat with three violet-flame tails and a golden rune collar. */
+/** Hexcat – a sitting black cat with three emerald-flame tails and a golden rune collar. */
 export function Hexcat({ uid, view }: ArtProps) {
   const fur = `${uid}-fur`;
   const flame = `${uid}-flame`;
@@ -12,8 +12,8 @@ export function Hexcat({ uid, view }: ArtProps) {
       <Shade id={fur} light="#4b4068" base="#251f36" dark="#100c18" />
       <radialGradient id={flame} cx="50%" cy="65%" r="65%">
         <stop offset="0%" stopColor="#ffffff" />
-        <stop offset="35%" stopColor="#f0c8ff" />
-        <stop offset="100%" stopColor="#9b4dff" />
+        <stop offset="35%" stopColor="#b9ffd9" />
+        <stop offset="100%" stopColor="#14c873" />
       </radialGradient>
       <Glow id={glow} std={3.5} />
     </defs>
@@ -48,8 +48,8 @@ export function Hexcat({ uid, view }: ArtProps) {
     <g stroke={INK} strokeWidth={3.5} strokeLinejoin="round">
       <path d="M60 64 L56 18 L92 46 Z" fill={`url(#${fur})`} />
       <path d="M140 64 L144 18 L108 46 Z" fill={`url(#${fur})`} />
-      <path d="M64 54 L62 30 L82 46 Z" fill="#8a4fd6" stroke="none" />
-      <path d="M136 54 L138 30 L118 46 Z" fill="#8a4fd6" stroke="none" />
+      <path d="M64 54 L62 30 L82 46 Z" fill="#1f9e64" stroke="none" />
+      <path d="M136 54 L138 30 L118 46 Z" fill="#1f9e64" stroke="none" />
     </g>
   );
 
@@ -102,33 +102,41 @@ export function Hexcat({ uid, view }: ArtProps) {
       <ellipse cx="114" cy="176" rx="12" ry="8" fill="#251f36" stroke={INK} strokeWidth={3} />
       {ears}
       <ellipse cx="100" cy="76" rx="44" ry="38" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
-      {/* big yellow eyes with slit pupils */}
+      {/* half-lidded, disdainful eyes: heavy flat lids, slit pupils glancing aside */}
       <g>
-        <ellipse cx="82" cy="78" rx="12" ry="13" fill="#ffd34d" />
-        <ellipse cx="118" cy="78" rx="12" ry="13" fill="#ffd34d" />
-        <ellipse cx="82" cy="78" rx="3.2" ry="10" fill={INK} />
-        <ellipse cx="118" cy="78" rx="3.2" ry="10" fill={INK} />
-        <circle cx="78" cy="72" r="3" fill="#fff" />
-        <circle cx="114" cy="72" r="3" fill="#fff" />
+        <path d="M70 76 Q82 66 94 76 Q82 86 70 76 Z" fill="#7dffb6" />
+        <path d="M106 76 Q118 66 130 76 Q118 86 106 76 Z" fill="#7dffb6" />
+        <ellipse cx="86" cy="78" rx="2" ry="5" fill={INK} />
+        <ellipse cx="122" cy="78" rx="2" ry="5" fill={INK} />
+        <path
+          d="M68 74 L96 72 L94 77 Q82 74 70 77 Z"
+          fill="#251f36"
+          stroke={INK}
+          strokeWidth={2.5}
+          strokeLinejoin="round"
+        />
+        <path
+          d="M132 74 L104 72 L106 77 Q118 74 130 77 Z"
+          fill="#251f36"
+          stroke={INK}
+          strokeWidth={2.5}
+          strokeLinejoin="round"
+        />
       </g>
-      <path d="M96 94 L104 94 L100 99 Z" fill="#c77dff" />
-      <path
-        d="M92 102 Q96 106 100 102 Q104 106 108 102"
-        stroke="#6a5a8a"
-        strokeWidth={2}
-        fill="none"
-        strokeLinecap="round"
-      />
+      {/* nose held high */}
+      <path d="M96 90 L104 90 L100 94 Z" fill="#8a6a7a" />
+      {/* one-sided smirk */}
+      <path d="M98 99 Q104 102 111 96" stroke="#8a7aa8" strokeWidth={2.2} fill="none" strokeLinecap="round" />
       <g stroke="#6a5a8a" strokeWidth={1.5} opacity={0.8}>
-        <path d="M70 94 L52 90" />
-        <path d="M70 98 L52 100" />
-        <path d="M130 94 L148 90" />
-        <path d="M130 98 L148 100" />
+        <path d="M70 90 L52 84" />
+        <path d="M70 94 L52 94" />
+        <path d="M130 90 L148 84" />
+        <path d="M130 94 L148 94" />
       </g>
       {collar}
       {/* rune charm */}
       <circle cx="100" cy="126" r="8" fill="#d4a73a" stroke={INK} strokeWidth={2.5} />
-      <path d="M96 122 L104 130 M104 122 L96 130 M100 120 L100 132" stroke="#5a2d8a" strokeWidth={1.8} />
+      <path d="M96 122 L104 130 M104 122 L96 130 M100 120 L100 132" stroke="#0f6a40" strokeWidth={1.8} />
     </svg>
   );
 }

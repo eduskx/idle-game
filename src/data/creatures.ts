@@ -1,4 +1,4 @@
-import type { Ability, CreatureDef, Element, Rarity, Realm } from '../engine/types';
+import type { Ability, CreatureDef, Element, Rarity, Realm, SizeClass } from '../engine/types';
 
 /** Stat multiplier per rarity, applied to the archetype base stats. */
 export const RARITY_MULT: Record<Rarity, number> = {
@@ -29,6 +29,7 @@ function creature(
   archetype: Archetype,
   ability: Ability,
   unlockZone: number,
+  size: SizeClass,
 ): CreatureDef {
   const a = ARCHETYPES[archetype];
   const m = RARITY_MULT[rarity];
@@ -43,6 +44,7 @@ function creature(
     speed: a.speed,
     ability,
     unlockZone,
+    size,
   };
 }
 
@@ -58,28 +60,55 @@ function round2(n: number): number {
 export const CREATURES: CreatureDef[] = [
   // ---------- HEARTH (cozy) ----------
   // Hedgehog with a moss-and-mushroom back. Round, sturdy, friendly front-liner.
-  creature('mossling', 'hearth', 'grove', 'common', 'guardian', { kind: 'taunt', value: 0.3 }, 0),
+  creature('mossling', 'hearth', 'grove', 'common', 'guardian', { kind: 'taunt', value: 0.3 }, 0, 'S'),
   // Red-panda kit whose ringed tail glows like embers.
-  creature('emberpup', 'hearth', 'ember', 'common', 'striker', { kind: 'crit', value: 0.08 }, 0),
+  creature('emberpup', 'hearth', 'ember', 'common', 'striker', { kind: 'crit', value: 0.08 }, 0, 'S'),
   // Round otter wearing a lily-pad hat, collects shiny pebbles.
-  creature('puddlefin', 'hearth', 'tide', 'rare', 'support', { kind: 'goldFind', value: 0.2 }, 0),
+  creature('puddlefin', 'hearth', 'tide', 'rare', 'support', { kind: 'goldFind', value: 0.2 }, 0, 'M'),
   // Tiny steam spirit living in a teacup.
-  creature('teacup', 'hearth', 'tide', 'epic', 'support', { kind: 'teamHeal', value: 0.45 }, 1),
+  creature('teacup', 'hearth', 'tide', 'epic', 'support', { kind: 'teamHeal', value: 0.45 }, 1, 'XS'),
   // Bear cub in honeycomb armor, escorted by bees.
-  creature('honeybear', 'hearth', 'grove', 'legendary', 'bruiser', { kind: 'lifesteal', value: 0.15 }, 3),
+  creature(
+    'honeybear',
+    'hearth',
+    'grove',
+    'legendary',
+    'bruiser',
+    { kind: 'lifesteal', value: 0.15 },
+    3,
+    'L',
+  ),
 
   // ---------- UMBRA (dark fantasy) ----------
   // Moth-winged will-o'-wisp with a hollow lantern body.
-  creature('gloomwisp', 'umbra', 'ember', 'common', 'swift', { kind: 'haste', value: 0.08 }, 0),
+  creature('gloomwisp', 'umbra', 'ember', 'common', 'swift', { kind: 'haste', value: 0.08 }, 0, 'S'),
   // Crow wearing a skull mask, thorny tail feathers.
-  creature('bonecrow', 'umbra', 'grove', 'common', 'striker', { kind: 'execute', value: 0.4 }, 0),
+  creature('bonecrow', 'umbra', 'grove', 'common', 'striker', { kind: 'execute', value: 0.4 }, 0, 'M'),
   // Black cat with three violet-flame tails and a rune collar.
-  creature('hexcat', 'umbra', 'ember', 'rare', 'striker', { kind: 'rage', value: 0.12 }, 0),
+  creature('hexcat', 'umbra', 'ember', 'rare', 'striker', { kind: 'rage', value: 0.12 }, 0, 'M'),
   // Hermit crab knight living in a sunken helmet.
-  creature('drownedknight', 'umbra', 'tide', 'epic', 'guardian', { kind: 'thorns', value: 0.4 }, 1),
+  creature('drownedknight', 'umbra', 'tide', 'epic', 'guardian', { kind: 'thorns', value: 0.4 }, 1, 'L'),
   // Abyssal sea serpent crowned by an eclipse ring.
-  creature('eclipsewyrm', 'umbra', 'tide', 'legendary', 'striker', { kind: 'bossSlayer', value: 0.8 }, 3),
+  creature(
+    'eclipsewyrm',
+    'umbra',
+    'tide',
+    'legendary',
+    'striker',
+    { kind: 'bossSlayer', value: 0.8 },
+    3,
+    'XL',
+  ),
 ];
+
+/** Rendered scale per size class on the battle stage, relative to M (see CREATURE_BIBLE.md). */
+export const SIZE_SCALE: Record<SizeClass, number> = { XS: 0.6, S: 0.8, M: 1, L: 1.2, XL: 1.35 };
+
+/**
+ * Portraits live in fixed slots, so the spread is compressed and capped at the slot size:
+ * small species still read as small, big ones fill the slot without overflowing.
+ */
+export const PORTRAIT_SCALE: Record<SizeClass, number> = { XS: 0.7, S: 0.82, M: 0.9, L: 1, XL: 1 };
 
 export const CREATURE_BY_ID: Record<string, CreatureDef> = Object.fromEntries(
   CREATURES.map((c) => [c.id, c]),

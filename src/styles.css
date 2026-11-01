@@ -362,8 +362,13 @@ h3 {
 }
 .sprite > svg,
 .sprite > img {
-  width: 100%;
-  height: 100%;
+  /* portraits shrink small species inside a fixed slot, anchored at the feet */
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  translate: -50% 0;
+  width: calc(100% * var(--art-scale, 1));
+  height: calc(100% * var(--art-scale, 1));
   overflow: visible;
 }
 .sprite.dim {
