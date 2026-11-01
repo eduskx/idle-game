@@ -15,7 +15,7 @@ const WILD_STATS: Record<string, { hp: number; atk: number }> = {
 
 export const ENEMIES: EnemyDef[] = CREATURES.flatMap((c) => {
   const w = WILD_STATS[c.archetype]!;
-  const base = { species: c.id, realm: c.realm, element: c.element, hpMult: w.hp, atkMult: w.atk };
+  const base = { species: c.id, realm: c.realm, types: c.types, hpMult: w.hp, atkMult: w.atk };
   return [
     { ...base, id: `wild_${c.id}`, alpha: false },
     { ...base, id: `alpha_${c.id}`, alpha: true },

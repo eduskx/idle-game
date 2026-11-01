@@ -7,7 +7,11 @@
  */
 
 export type Realm = 'umbra' | 'hearth';
-export type Element = 'ember' | 'tide' | 'grove';
+/**
+ * The six creature types (see docs/CREATURE_BIBLE.md). Species have one or two;
+ * the effectiveness chart lives in formulas.ts.
+ */
+export type CreatureType = 'ember' | 'tide' | 'grove' | 'stone' | 'gale' | 'shade';
 /** Visual size class of a species (see docs/CREATURE_BIBLE.md). Purely cosmetic. */
 export type SizeClass = 'XS' | 'S' | 'M' | 'L' | 'XL';
 export type Rarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
@@ -36,7 +40,8 @@ export interface Ability {
 export interface CreatureDef {
   id: string;
   realm: Realm;
-  element: Element;
+  /** One or two types; the first one is the primary type. */
+  types: readonly CreatureType[];
   rarity: Rarity;
   archetype: 'bruiser' | 'striker' | 'guardian' | 'support' | 'swift';
   /** Base stats at level 1, 0 stars. */
@@ -58,7 +63,8 @@ export interface EnemyDef {
   /** Alphas are boss specimens. */
   alpha: boolean;
   realm: Realm;
-  element: Element;
+  /** Inherited from the species. */
+  types: readonly CreatureType[];
   hpMult: number;
   atkMult: number;
 }
@@ -89,7 +95,7 @@ export interface Fighter {
   hp: number;
   atk: number;
   speed: number;
-  element: Element;
+  types: readonly CreatureType[];
   attackTimer: number;
   isBoss?: boolean;
 }
@@ -114,7 +120,15 @@ export interface BattleState {
 }
 
 export type CombatEvent =
-  | { t: 'hit'; target: 'enemy' | string; amount: number; crit: boolean; id: number }
+  | {
+      t: 'hit';
+      target: 'enemy' | string;
+      amount: number;
+      crit: boolean;
+      /** Type effectiveness multiplier of this hit (1 = neutral). */
+      eff: number;
+      id: number;
+    }
   | { t: 'kill'; gold: number; xp: number; essence: number; id: number }
   | { t: 'defeat'; id: number }
   | { t: 'stageClear'; stage: number; id: number }

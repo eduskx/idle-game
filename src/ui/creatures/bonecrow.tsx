@@ -36,6 +36,8 @@ export function Bonecrow({ uid, view }: ArtProps) {
   );
 
   if (view === 'back') {
+    // Seen from behind, but the head stays cocked like the front, so the beak tip, the
+    // mask rim and one glowing slit peek out on the right: it is watching the enemy.
     return (
       <svg viewBox="0 0 200 200">
         {defs}
@@ -43,23 +45,57 @@ export function Bonecrow({ uid, view }: ArtProps) {
         {thornTail}
         {legs}
         <ellipse cx="100" cy="120" rx="46" ry="48" fill={`url(#${feather})`} stroke={INK} strokeWidth={3.5} />
-        {/* folded wings with feather tips */}
+        {/* layered back feathers */}
+        <g fill="none" stroke="#12141f" strokeWidth={2.5} strokeLinecap="round" opacity={0.8}>
+          <path d="M84 104 Q92 112 100 104 Q108 112 116 104" />
+          <path d="M80 124 Q90 134 100 124 Q110 134 120 124" />
+        </g>
+        {/* folded wings, spiky feather tips crossing over the tail */}
         <path
-          d="M56 104 Q46 140 66 166 Q74 150 70 132 Q84 150 86 166 Q92 132 82 100 Z"
+          d="M58 100 Q44 134 62 172 L70 158 L74 170 L80 154 L88 164 Q92 130 84 98 Z"
           fill="#1c2033"
           stroke={INK}
           strokeWidth={3}
+          strokeLinejoin="round"
         />
         <path
-          d="M144 104 Q154 140 134 166 Q126 150 130 132 Q116 150 114 166 Q108 132 118 100 Z"
+          d="M142 100 Q156 134 138 172 L130 158 L126 170 L120 154 L112 164 Q108 130 116 98 Z"
           fill="#1c2033"
           stroke={INK}
           strokeWidth={3}
+          strokeLinejoin="round"
         />
-        <circle cx="100" cy="66" r="32" fill={`url(#${feather})`} stroke={INK} strokeWidth={3.5} />
-        {/* skull strap */}
-        <path d="M70 70 Q100 80 130 70" stroke="#efe6d2" strokeWidth={6} fill="none" />
-        <path d="M86 38 Q92 26 98 36 Q104 22 112 36" stroke={INK} strokeWidth={3} fill="#2a2f48" />
+        <g transform="rotate(-14 100 80)">
+          {/* beak tip and mask rim visible past the cheek */}
+          <path
+            d="M118 72 Q134 70 132 84 L114 116 L112 100 Z"
+            fill={`url(#${bone})`}
+            stroke={INK}
+            strokeWidth={3}
+            strokeLinejoin="round"
+          />
+          <circle cx="100" cy="68" r="32" fill={`url(#${feather})`} stroke={INK} strokeWidth={3.5} />
+          <path
+            d="M120 60 L132 64"
+            stroke="#7dff9a"
+            strokeWidth={3}
+            strokeLinecap="round"
+            filter={`url(#${glow})`}
+          />
+          {/* mask strap tied at the back of the head */}
+          <path d="M68 72 Q100 84 132 70" stroke="#efe6d2" strokeWidth={6} fill="none" />
+          <path d="M68 72 Q100 84 132 70" stroke="#b8aa8c" strokeWidth={1.5} fill="none" />
+          <path
+            d="M96 78 L86 96 L94 94 M104 78 L110 98 L102 94"
+            stroke="#efe6d2"
+            strokeWidth={4}
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <circle cx="100" cy="78" r="4.5" fill="#efe6d2" stroke={INK} strokeWidth={2} />
+          <path d="M84 38 Q90 24 98 36 Q104 20 114 36" stroke={INK} strokeWidth={3} fill="#2a2f48" />
+        </g>
       </svg>
     );
   }

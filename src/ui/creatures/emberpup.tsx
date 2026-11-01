@@ -56,16 +56,28 @@ export function Emberpup({ uid, view }: ArtProps) {
     </g>
   );
 
+  // From behind: no pale insides, but the dark backs red pandas have.
+  const backEars = (
+    <g stroke={INK} strokeWidth={3.5} strokeLinejoin="round">
+      <path d="M58 74 Q50 40 74 46 Q84 56 84 66 Z" fill={`url(#${fur})`} />
+      <path d="M142 74 Q150 40 126 46 Q116 56 116 66 Z" fill={`url(#${fur})`} />
+      <path d="M62 68 Q58 50 72 52 Q78 58 78 64 Z" fill="#6b2410" stroke="none" />
+      <path d="M138 68 Q142 50 128 52 Q122 58 122 64 Z" fill="#6b2410" stroke="none" />
+    </g>
+  );
+
   if (view === 'back') {
     return (
       <svg viewBox="0 0 200 200">
         {defs}
         <GroundShadow rx={50} />
+        {/* seen from behind the tail swings out to the left side (mirrored), never across the back */}
+        <g transform="translate(206 4) scale(-1 1)">{tail(false)}</g>
         {/* body */}
         <ellipse cx="100" cy="150" rx="40" ry="32" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
         <ellipse cx="78" cy="178" rx="12" ry="7" fill="#3a1a12" stroke={INK} strokeWidth={3} />
         <ellipse cx="122" cy="178" rx="12" ry="7" fill="#3a1a12" stroke={INK} strokeWidth={3} />
-        {ears}
+        {backEars}
         <circle cx="100" cy="94" r="44" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
         <path
           d="M70 116 Q100 128 130 116"
@@ -75,8 +87,6 @@ export function Emberpup({ uid, view }: ArtProps) {
           strokeLinecap="round"
           opacity={0.6}
         />
-        {/* the tail sweeps in front when seen from behind */}
-        <g transform="translate(-34 18)">{tail(false)}</g>
       </svg>
     );
   }

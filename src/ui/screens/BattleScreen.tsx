@@ -21,6 +21,7 @@ import { useT } from '../../i18n/useT';
 import { gameStore, useGame } from '../../store/gameStore';
 import { Sprite } from '../components/Sprite';
 import { Tips } from '../components/Tips';
+import { TypeChips } from '../components/TypeChip';
 
 const QUICK: UpgradeId[] = ['sharpen', 'vitality', 'greed', 'wisdom'];
 
@@ -104,13 +105,52 @@ export function BattleScreen() {
   const playerRef = useRef<HTMLDivElement>(null);
   const enemyRef = useRef<HTMLDivElement>(null);
   const enemyFlashRef = useRef<HTMLDivElement>(null);
+  const enemyEffRef = useRef<HTMLDivElement>(null);
+  const playerEffRef = useRef<HTMLDivElement>(null);
+  const lastEff = useRef<Record<'enemy' | 'player', { key: string; at: number }>>({
+    enemy: { key: '', at: 0 },
+    player: { key: '', at: 0 },
+  });
   const lastAnimated = useRef(0);
+  const enemyKey = `${b.stage}-${s.lifetime.kills}`;
   const lastEvent = b.log[b.log.length - 1];
   useEffect(() => {
     if (!lastEvent || lastEvent.id <= lastAnimated.current) return;
     const fresh = b.log.filter((e) => e.id > lastAnimated.current);
     lastAnimated.current = lastEvent.id;
-    if (!motion || typeof Element === 'undefined' || !('animate' in Element.prototype)) return;
+    if (typeof Element === 'undefined' || !('animate' in Element.prototype)) return;
+
+    // Type effectiveness callout: pops once per matchup, refreshed every few seconds.
+    const now = performance.now();
+    for (const side of ['enemy', 'player'] as const) {
+      const hit = fresh.find(
+        (e): e is HitEvent => e.t === 'hit' && e.eff !== 1 && (e.target === 'enemy') === (side === 'enemy'),
+      );
+      const el = side === 'enemy' ? enemyEffRef.current : playerEffRef.current;
+      if (!hit || !el) continue;
+      const good = hit.eff > 1;
+      const key = `${enemyKey}:${hit.target}:${good}`;
+      const prev = lastEff.current[side];
+      if (prev.key === key && now - prev.at < 6000) continue;
+      if (now - prev.at < 1200) continue;
+      lastEff.current[side] = { key, at: now };
+      el.textContent = t(good ? 'battle.superEffective' : 'battle.notEffective');
+      el.className = `eff-pop ${good ? 'super' : 'weak'}`;
+      el.animate(
+        motion
+          ? [
+              { opacity: 0, transform: 'translate(-50%, 6px) scale(0.6)' },
+              { opacity: 1, transform: 'translate(-50%, 0) scale(1.12)', offset: 0.15 },
+              { opacity: 1, transform: 'translate(-50%, 0) scale(1)', offset: 0.3 },
+              { opacity: 1, transform: 'translate(-50%, -4px) scale(1)', offset: 0.8 },
+              { opacity: 0, transform: 'translate(-50%, -12px) scale(1)' },
+            ]
+          : [{ opacity: 0 }, { opacity: 1, offset: 0.1 }, { opacity: 1, offset: 0.85 }, { opacity: 0 }],
+        { duration: 1400, easing: 'ease-out', fill: 'forwards' },
+      );
+    }
+
+    if (!motion) return;
     const playerHit = fresh.find((e): e is HitEvent => e.t === 'hit' && e.target === 'enemy');
     const enemyHit = fresh.find((e) => e.t === 'hit' && e.target !== 'enemy');
     if (playerHit) {
@@ -154,7 +194,7 @@ export function BattleScreen() {
         { duration: 220, delay: 150 },
       );
     }
-  }, [lastEvent, b.log, motion]);
+  }, [lastEvent, b.log, motion, t, enemyKey]);
 
   const hits =
     s.settings.showDamageNumbers && motion
@@ -192,9 +232,9 @@ export function BattleScreen() {
         {enemy && enemyDef && (
           <div className="info-box enemy-box">
             <div className="info-head">
-              <span className={`el-dot el-${enemyDef.element}`} title={t(`element.${enemyDef.element}`)} />
               <strong>{enemyName}</strong>
             </div>
+            <TypeChips types={enemyDef.types} />
             <HpBar value={enemy.hp} max={enemy.maxHp} tone="enemy" />
             <div className="info-sub">
               {boss
@@ -207,7 +247,7 @@ export function BattleScreen() {
         {enemy && enemyDef && (
           <div className="spot enemy-spot">
             <div className="platform platform-far" />
-            <div ref={enemyRef} key={`${b.stage}-${s.lifetime.kills}`} className="actor enemy-actor spawn">
+            <div ref={enemyRef} key={enemyKey} className="actor enemy-actor spawn">
               <Sprite
                 id={enemyDef.species}
                 alpha={enemyDef.alpha}
@@ -222,13 +262,14 @@ export function BattleScreen() {
               {hits.map((h) => (
                 <span
                   key={h.id}
-                  className={`dmg ${h.crit ? 'crit' : ''}`}
+                  className={`dmg ${h.crit ? 'crit' : ''} ${h.eff > 1 ? 'super' : h.eff < 1 ? 'weak' : ''}`}
                   style={{ left: `${20 + ((h.id * 37) % 55)}%` }}
                 >
                   {n(h.amount)}
                 </span>
               ))}
             </div>
+            <div ref={enemyEffRef} className="eff-pop" aria-hidden="true" />
           </div>
         )}
 
@@ -245,16 +286,17 @@ export function BattleScreen() {
                 className="breathe slow"
               />
             </div>
+            <div ref={playerEffRef} className="eff-pop" aria-hidden="true" />
           </div>
         )}
 
         {active && (
           <div className="info-box player-box">
             <div className="info-head">
-              <span className={`el-dot el-${active.element}`} />
               <strong>{t(`creature.${active.defId}`)}</strong>
               <span className="lv">Lv {activeOwned?.level ?? 1}</span>
             </div>
+            <TypeChips types={active.types} />
             <HpBar value={b.teamHp[active.defId] ?? active.maxHp} max={active.maxHp} tone="ally" />
             <div className="info-sub num">
               {n(Math.max(0, b.teamHp[active.defId] ?? active.maxHp))} / {n(active.maxHp)}

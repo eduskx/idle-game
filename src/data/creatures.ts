@@ -1,4 +1,4 @@
-import type { Ability, CreatureDef, Element, Rarity, Realm, SizeClass } from '../engine/types';
+import type { Ability, CreatureDef, CreatureType, Rarity, Realm, SizeClass } from '../engine/types';
 
 /** Stat multiplier per rarity, applied to the archetype base stats. */
 export const RARITY_MULT: Record<Rarity, number> = {
@@ -24,7 +24,7 @@ const ARCHETYPES: Record<Archetype, { atk: number; hp: number; speed: number }> 
 function creature(
   id: string,
   realm: Realm,
-  element: Element,
+  types: readonly CreatureType[],
   rarity: Rarity,
   archetype: Archetype,
   ability: Ability,
@@ -36,7 +36,7 @@ function creature(
   return {
     id,
     realm,
-    element,
+    types,
     rarity,
     archetype,
     baseAtk: round2(5 * a.atk * m),
@@ -60,18 +60,36 @@ function round2(n: number): number {
 export const CREATURES: CreatureDef[] = [
   // ---------- HEARTH (cozy) ----------
   // Hedgehog with a moss-and-mushroom back. Round, sturdy, friendly front-liner.
-  creature('mossling', 'hearth', 'grove', 'common', 'guardian', { kind: 'taunt', value: 0.3 }, 0, 'S'),
+  creature(
+    'mossling',
+    'hearth',
+    ['grove', 'stone'],
+    'common',
+    'guardian',
+    { kind: 'taunt', value: 0.3 },
+    0,
+    'S',
+  ),
   // Red-panda kit whose ringed tail glows like embers.
-  creature('emberpup', 'hearth', 'ember', 'common', 'striker', { kind: 'crit', value: 0.08 }, 0, 'S'),
+  creature('emberpup', 'hearth', ['ember'], 'common', 'striker', { kind: 'crit', value: 0.08 }, 0, 'S'),
   // Round otter wearing a lily-pad hat, collects shiny pebbles.
-  creature('puddlefin', 'hearth', 'tide', 'rare', 'support', { kind: 'goldFind', value: 0.2 }, 0, 'M'),
+  creature('puddlefin', 'hearth', ['tide'], 'rare', 'support', { kind: 'goldFind', value: 0.2 }, 0, 'M'),
   // Tiny steam spirit living in a teacup.
-  creature('teacup', 'hearth', 'tide', 'epic', 'support', { kind: 'teamHeal', value: 0.45 }, 1, 'XS'),
+  creature(
+    'teacup',
+    'hearth',
+    ['tide', 'ember'],
+    'epic',
+    'support',
+    { kind: 'teamHeal', value: 0.45 },
+    1,
+    'XS',
+  ),
   // Bear cub in honeycomb armor, escorted by bees.
   creature(
     'honeybear',
     'hearth',
-    'grove',
+    ['grove', 'gale'],
     'legendary',
     'bruiser',
     { kind: 'lifesteal', value: 0.15 },
@@ -81,18 +99,45 @@ export const CREATURES: CreatureDef[] = [
 
   // ---------- UMBRA (dark fantasy) ----------
   // Moth-winged will-o'-wisp with a hollow lantern body.
-  creature('gloomwisp', 'umbra', 'ember', 'common', 'swift', { kind: 'haste', value: 0.08 }, 0, 'S'),
+  creature(
+    'gloomwisp',
+    'umbra',
+    ['shade', 'ember'],
+    'common',
+    'swift',
+    { kind: 'haste', value: 0.08 },
+    0,
+    'S',
+  ),
   // Crow wearing a skull mask, thorny tail feathers.
-  creature('bonecrow', 'umbra', 'grove', 'common', 'striker', { kind: 'execute', value: 0.4 }, 0, 'M'),
+  creature(
+    'bonecrow',
+    'umbra',
+    ['shade', 'gale'],
+    'common',
+    'striker',
+    { kind: 'execute', value: 0.4 },
+    0,
+    'M',
+  ),
   // Black cat with three violet-flame tails and a rune collar.
-  creature('hexcat', 'umbra', 'ember', 'rare', 'striker', { kind: 'rage', value: 0.12 }, 0, 'M'),
+  creature('hexcat', 'umbra', ['shade'], 'rare', 'striker', { kind: 'rage', value: 0.12 }, 0, 'M'),
   // Hermit crab knight living in a sunken helmet.
-  creature('drownedknight', 'umbra', 'tide', 'epic', 'guardian', { kind: 'thorns', value: 0.4 }, 1, 'L'),
+  creature(
+    'drownedknight',
+    'umbra',
+    ['tide', 'stone'],
+    'epic',
+    'guardian',
+    { kind: 'thorns', value: 0.4 },
+    1,
+    'L',
+  ),
   // Abyssal sea serpent crowned by an eclipse ring.
   creature(
     'eclipsewyrm',
     'umbra',
-    'tide',
+    ['tide', 'shade'],
     'legendary',
     'striker',
     { kind: 'bossSlayer', value: 0.8 },

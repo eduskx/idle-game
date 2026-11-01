@@ -6,7 +6,6 @@ import {
   buyUpgrade,
   canRebloom,
   createInitialState,
-  elementMultiplier,
   enemyHp,
   grantXp,
   levelCap,
@@ -17,6 +16,10 @@ import {
   summon,
   synergyOf,
   toggleTeamMember,
+  typeEffect,
+  typeMultiplier,
+  CREATURE_TYPES,
+  TYPE_STRONG,
   upgradeLevelCost,
   type GameState,
 } from '.';
@@ -58,10 +61,60 @@ describe('formulas', () => {
     expect(enemyHp(100)).toBeGreaterThan(enemyHp(10));
     expect(enemyHp(10, 1, true)).toBeGreaterThan(enemyHp(10));
   });
-  it('applies the element triangle', () => {
-    expect(elementMultiplier('ember', 'grove')).toBeGreaterThan(1);
-    expect(elementMultiplier('grove', 'ember')).toBeLessThan(1);
-    expect(elementMultiplier('tide', 'tide')).toBe(1);
+});
+
+describe('type chart', () => {
+  it('matches the creature bible', () => {
+    expect(typeEffect('ember', 'grove')).toBe(1.5);
+    expect(typeEffect('ember', 'gale')).toBe(1.5);
+    expect(typeEffect('ember', 'tide')).toBe(0.75);
+    expect(typeEffect('ember', 'stone')).toBe(0.75);
+    expect(typeEffect('tide', 'stone')).toBe(1.5);
+    expect(typeEffect('grove', 'shade')).toBe(0.75);
+    expect(typeEffect('gale', 'shade')).toBe(1.5);
+    expect(typeEffect('shade', 'gale')).toBe(0.75);
+    expect(typeEffect('tide', 'tide')).toBe(1);
+    expect(typeEffect('stone', 'shade')).toBe(1);
+  });
+  it('gives every type two strengths and makes Shade strong against itself', () => {
+    for (const t of CREATURE_TYPES) expect(TYPE_STRONG[t]).toHaveLength(2);
+    expect(typeEffect('shade', 'shade')).toBe(1.5);
+  });
+  it('is antisymmetric except for the Shade mirror', () => {
+    for (const a of CREATURE_TYPES) {
+      for (const d of CREATURE_TYPES) {
+        if (a === d) continue;
+        const ad = typeEffect(a, d);
+        const da = typeEffect(d, a);
+        if (ad === 1.5) expect(da, `${d}->${a}`).toBe(0.75);
+        if (ad === 1) expect(da, `${d}->${a}`).toBe(1);
+      }
+    }
+  });
+  it('multiplies dual defender types and uses the best attacking type', () => {
+    expect(typeMultiplier(['ember'], ['grove', 'gale'])).toBeCloseTo(2.25);
+    expect(typeMultiplier(['ember'], ['tide', 'stone'])).toBeCloseTo(0.5625);
+    expect(typeMultiplier(['ember'], ['grove', 'stone'])).toBe(1.125);
+    expect(typeMultiplier(['tide', 'gale'], ['shade'])).toBe(1.5);
+    expect(typeMultiplier([], ['shade'])).toBe(1);
+  });
+  it('gives every species one or two distinct types and lets enemies inherit them', () => {
+    for (const c of CREATURES) {
+      expect(c.types.length, c.id).toBeGreaterThanOrEqual(1);
+      expect(c.types.length, c.id).toBeLessThanOrEqual(2);
+      expect(new Set(c.types).size, c.id).toBe(c.types.length);
+      expect(ENEMY_BY_ID[`wild_${c.id}`]!.types).toEqual(c.types);
+      expect(ENEMY_BY_ID[`alpha_${c.id}`]!.types).toEqual(c.types);
+    }
+    const used = new Set(CREATURES.flatMap((c) => c.types));
+    expect(used.size).toBe(CREATURE_TYPES.length);
+  });
+  it('records the effectiveness on every hit', () => {
+    const s = fresh();
+    simulate(s, 20);
+    const hits = s.battle.log.filter((e) => e.t === 'hit');
+    expect(hits.length).toBeGreaterThan(0);
+    for (const h of hits) if (h.t === 'hit') expect(h.eff).toBeGreaterThan(0);
   });
 });
 

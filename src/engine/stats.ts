@@ -1,8 +1,8 @@
 import { getCreature } from '../data/creatures';
 import { ACHIEVEMENT_BONUS } from '../data/progression';
-import { charmBonus, elementCharmBonus } from './charms';
+import { charmBonus, typeCharmBonus } from './charms';
 import { BALANCE, creatureLevelMult, milestoneMult } from './formulas';
-import type { AbilityKind, Element, GameState, Realm } from './types';
+import type { AbilityKind, CreatureType, GameState, Realm } from './types';
 import { BOSS_TIME } from './types';
 
 export interface GlobalModifiers {
@@ -25,7 +25,7 @@ export type Synergy = { kind: 'none' } | { kind: 'pure'; realm: Realm } | { kind
 
 export interface TeamMemberStats {
   defId: string;
-  element: Element;
+  types: readonly CreatureType[];
   realm: Realm;
   maxHp: number;
   atk: number;
@@ -133,10 +133,10 @@ export function memberStats(s: GameState, defId: string, mods: GlobalModifiers):
   const crit = def.ability.kind === 'crit' ? abilityValue : 0;
   return {
     defId,
-    element: def.element,
+    types: def.types,
     realm: def.realm,
     maxHp: def.baseHp * lv.hp * mods.hp * tauntHp,
-    atk: def.baseAtk * lv.atk * mods.atk * (1 + elementCharmBonus(s, def.element)),
+    atk: def.baseAtk * lv.atk * mods.atk * (1 + typeCharmBonus(s, def.types)),
     speed: def.speed * mods.speed,
     critChance: Math.min(mods.critChance + crit, 0.95),
     ability: def.ability.kind,
@@ -148,7 +148,7 @@ export function teamStats(s: GameState, mods = globalModifiers(s)): TeamMemberSt
   return s.team.filter((id) => s.creatures[id]).map((id) => memberStats(s, id, mods));
 }
 
-/** Rough damage-per-second estimate for UI display (ignores elements and crits variance). */
+/** Rough damage-per-second estimate for UI display (ignores types and crit variance). */
 export function estimatedDps(s: GameState): number {
   const mods = globalModifiers(s);
   return teamStats(s, mods).reduce(

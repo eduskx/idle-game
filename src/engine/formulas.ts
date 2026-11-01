@@ -2,7 +2,7 @@
  * All balancing numbers in one place. Change values here, then run
  * `npm run simulate` to see how the pacing shifts.
  */
-import type { Element, OwnedCreature } from './types';
+import type { CreatureType, OwnedCreature } from './types';
 import { BOSS_EVERY, STAGES_PER_ZONE } from './types';
 
 export const BALANCE = {
@@ -29,8 +29,8 @@ export const BALANCE = {
 
   baseCritChance: 0.05,
   critMult: 2,
-  elementAdvantage: 1.5,
-  elementDisadvantage: 0.75,
+  typeAdvantage: 1.5,
+  typeDisadvantage: 0.75,
   regenPerSecond: 0.02,
 
   levelAtkGrowth: 1.07,
@@ -102,11 +102,36 @@ export function bossEssence(stage: number): number {
   return BALANCE.bossEssence + zoneOf(stage);
 }
 
-export function elementMultiplier(attacker: Element, defender: Element): number {
-  if (attacker === defender) return 1;
-  const beats: Record<Element, Element> = { ember: 'grove', grove: 'tide', tide: 'ember' };
-  if (beats[attacker] === defender) return BALANCE.elementAdvantage;
-  return BALANCE.elementDisadvantage;
+export const CREATURE_TYPES: readonly CreatureType[] = ['ember', 'tide', 'grove', 'stone', 'gale', 'shade'];
+
+/**
+ * Type chart: which defending types each attacking type hits hard. Every type is
+ * strong against two others. The reverse pairs are resisted (see typeEffect).
+ * Shade is strong against itself, so Shade mirror matches hit hard both ways.
+ */
+export const TYPE_STRONG: Record<CreatureType, readonly CreatureType[]> = {
+  ember: ['grove', 'gale'],
+  tide: ['ember', 'stone'],
+  grove: ['tide', 'stone'],
+  stone: ['ember', 'gale'],
+  gale: ['tide', 'shade'],
+  shade: ['shade', 'grove'],
+};
+
+/** Effect of one attacking type on one defending type: 1.5, 1 or 0.75. */
+export function typeEffect(attack: CreatureType, defend: CreatureType): number {
+  if (TYPE_STRONG[attack].includes(defend)) return BALANCE.typeAdvantage;
+  if (TYPE_STRONG[defend].includes(attack)) return BALANCE.typeDisadvantage;
+  return 1;
+}
+
+/**
+ * Damage multiplier of an attacker against a defender. The attacker strikes with its
+ * best type; the defender's types multiply (×1.5·×1.5 = ×2.25, ×0.75·×0.75 ≈ ×0.56).
+ */
+export function typeMultiplier(attacker: readonly CreatureType[], defender: readonly CreatureType[]): number {
+  if (attacker.length === 0) return 1;
+  return Math.max(...attacker.map((a) => defender.reduce((m, d) => m * typeEffect(a, d), 1)));
 }
 
 export function levelCap(stars: number): number {

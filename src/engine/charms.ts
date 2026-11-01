@@ -1,6 +1,6 @@
 import { CHARMS, CHARM_BY_ID, type CharmId } from '../data/charms';
 import { roll } from './rng';
-import type { Element, GameState } from './types';
+import type { CreatureType, GameState } from './types';
 
 export function charmLevel(s: GameState, id: CharmId): number {
   return s.charms[id] ?? 0;
@@ -11,9 +11,12 @@ export function charmBonus(s: GameState, id: CharmId): number {
   return charmLevel(s, id) * CHARM_BY_ID[id].perLevel;
 }
 
-export function elementCharmBonus(s: GameState, element: Element): number {
-  const def = CHARMS.find((c) => c.element === element);
-  return def ? charmBonus(s, def.id) : 0;
+/** Summed bonus of the type cores matching any of a creature's types. */
+export function typeCharmBonus(s: GameState, types: readonly CreatureType[]): number {
+  return CHARMS.filter((c) => c.type && types.includes(c.type)).reduce(
+    (sum, c) => sum + charmBonus(s, c.id),
+    0,
+  );
 }
 
 export function totalCharmLevels(s: GameState): number {

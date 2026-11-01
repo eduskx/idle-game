@@ -14,16 +14,15 @@ after its PR is merged. It does not start other sessions, fire scheduled tasks o
 - Read: `docs/CREATURE_BIBLE.md` (binding vision), `docs/DEVLOG.md` (what happened so far),
   `docs/research/VISUAL_UX_RESEARCH.md` (design research), `docs/ROADMAP.md`.
 
-## 1. Lock check (one iteration at a time)
+## 1. One iteration at a time
 
-- List open PRs whose head branch starts with `loop/`.
-  - If one is open and was updated **less than 3 hours ago**: another iteration is running → stop
-    immediately, do nothing else.
-  - If it is older: take it over. Finish it (fix CI, merge) or close it with a comment, then continue.
+The orchestrator only starts the next session after the previous one has merged, so there is no lock
+check. If an open `loop/` PR from an earlier session is still around, finish it (fix CI, merge) or close
+it with a comment before starting new work.
 
 ## 2. Evaluate
 
-- `npm run art -- /tmp/art` → review the creature contact sheet against the bible **first**.
+- `npm run art -- <dir>` (creates the dir) → review the creature contact sheet against the bible **first**.
 - Build and take Playwright screenshots at 390×844 (fresh game + a mid-game save) of all screens.
 - Write down the 1–3 most valuable improvements. Creature art issues come first when they exist.
 

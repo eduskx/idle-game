@@ -41,3 +41,31 @@ were both violet, Puddlefin and Honeybear were both brown, and everything was dr
 
 Next: Eclipse Wyrm's face and Bonecrow's back view could carry more personality; types (bible
 proposal) need their own iteration; then the Home hub and the 5-tab navigation.
+
+## Iteration 3 – Type system and weak views
+
+Review: the 3-element triangle (Ember/Tide/Grove) didn't match the bible's six types, a creature's
+type was only a 10 px color dot, and four views were weak (see Art below).
+
+- **Six types** (Glut, Flut, Hain, Fels, Sturm, Schatten) replace the element triangle in the engine.
+  Species have one or two types per the bible matrix; wild and alpha enemies inherit them. The attacker
+  uses its best type, defender types multiply (up to ×2.25 / down to ×0.56). One fix to the proposal:
+  Gale now beats Tide instead of Grove so every type has two strengths and two weaknesses. Tests cover
+  the chart, its symmetry, dual types and inheritance. `npm run simulate` pacing is about the same
+  (stage 400 after ~31 h vs ~34 h before).
+- **Type chips** with their own 16 px glyphs (flame, drop+wave, leaf, boulder, wind, crescent) in the
+  battle info boxes, on team cards, in summon results and the summon pool (icon-only there).
+- **Effectiveness callout:** "Sehr effektiv!" / "Nicht sehr effektiv…" pops above the target once per
+  matchup (refreshed every 6 s, never spammy); damage numbers are tinted gold / grey accordingly.
+  Reduced motion gets a plain fade.
+- **Save compatibility:** charm ids are unchanged; element cores now boost every creature that has the
+  matching type (Mossling gets the Grove core as Grove+Stone). Tested with a pre-type save.
+- **Art:** Eclipse Wyrm got a wide wedge skull, heavy angled brow ridges, narrow gold slit eyes, a
+  dropped jaw with four fangs and a bigger corona that frames the head. Bonecrow's back view keeps the
+  cocked head, so the beak tip, mask rim and one glowing slit peek out; the mask strap is knotted at
+  the back, wings have spiky tips. Emberpup's tail now swings out to the side instead of crossing the
+  back, and its ears show their dark backs. Honeybear's back shows the honey cap with rounded drips
+  (no more crack look). `npm run art` now creates its output folder.
+
+Next: Home hub + slimmer navigation (5 tabs), a matchup hint in the team screen (which member is
+strong against the current zone), then the avatar.

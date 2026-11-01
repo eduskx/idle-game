@@ -31,6 +31,8 @@ export const en = {
     bossFailed: 'The boss was too strong. Auto-advance paused.',
     quickUpgrades: 'Quick upgrades',
     wild: 'Wild {name}',
+    superEffective: 'Very effective!',
+    notEffective: 'Not very effective…',
     alpha: 'Alpha {name}',
     farmingHint: 'Farming this stage. Turn on auto-advance to push further.',
     synergyPure: '{realm} kinship: +{bonus}% attack & HP',
@@ -186,10 +188,13 @@ export const en = {
     hearth: 'Hearth',
     umbra: 'Umbra',
   },
-  element: {
+  type: {
     ember: 'Ember',
     tide: 'Tide',
     grove: 'Grove',
+    stone: 'Stone',
+    gale: 'Gale',
+    shade: 'Shade',
   },
   rarity: {
     common: 'Common',

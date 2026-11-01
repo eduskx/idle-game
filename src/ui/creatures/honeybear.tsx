@@ -91,7 +91,16 @@ export function Honeybear({ uid, view }: ArtProps) {
           stroke={INK}
           strokeWidth={3.5}
         />
-        <path d="M84 40 Q92 50 88 60 Q96 54 104 60" fill="#d9790f" stroke="#8a5208" strokeWidth={2} />
+        {/* honey cap seen from behind: same puddle as the front, drips running down the nape */}
+        <path
+          d="M72 46 Q100 34 128 46 Q130 54 124 54 Q122 70 116 70 Q110 70 110 58 Q104 56 98 58 Q98 78 91 78 Q84 78 86 56 Q78 58 76 64 Q70 66 72 46 Z"
+          fill="#d9790f"
+          stroke="#8a5208"
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
+        <path d="M84 45 Q96 40 110 42" stroke="#ffc65a" strokeWidth={3} fill="none" strokeLinecap="round" />
+        <circle cx="91" cy="72" r="2" fill="#ffc65a" />
         {bee(36, 92, 0.9)}
         {bee(166, 70, 0.8)}
       </svg>
