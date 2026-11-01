@@ -32,7 +32,7 @@ export function Gloomwisp({ uid, view }: ArtProps) {
   const wings = (big: boolean) => {
     const s = big ? 1.15 : 1;
     return (
-      <g stroke={INK} strokeWidth={3} strokeLinejoin="round" className="wings">
+      <g stroke={INK} strokeWidth={3} strokeLinejoin="round" className="wings cr-wings">
         <g transform={`translate(100 100) scale(${s}) translate(-100 -100)`}>
           <path
             d="M70 90 Q24 50 14 82 Q8 110 40 116 Q22 136 44 146 Q62 140 72 118 Z"

@@ -23,11 +23,13 @@ export function Honeybear({ uid, view }: ArtProps) {
 
   const bee = (x: number, y: number, s = 1) => (
     <g transform={`translate(${x} ${y}) scale(${s})`} className="bee">
-      <ellipse cx="-4" cy="-8" rx="6" ry="8" fill="#ffffffcc" stroke={INK} strokeWidth={1.5} />
-      <ellipse cx="4" cy="-8" rx="6" ry="8" fill="#ffffffcc" stroke={INK} strokeWidth={1.5} />
-      <ellipse cx="0" cy="0" rx="10" ry="7" fill="#ffcf3f" stroke={INK} strokeWidth={2} />
-      <path d="M-3 -6 L-3 6 M3 -6 L3 6" stroke={INK} strokeWidth={2.5} />
-      <circle cx="6" cy="-1" r="1.4" fill={INK} />
+      <g className="cr-bee">
+        <ellipse cx="-4" cy="-8" rx="6" ry="8" fill="#ffffffcc" stroke={INK} strokeWidth={1.5} />
+        <ellipse cx="4" cy="-8" rx="6" ry="8" fill="#ffffffcc" stroke={INK} strokeWidth={1.5} />
+        <ellipse cx="0" cy="0" rx="10" ry="7" fill="#ffcf3f" stroke={INK} strokeWidth={2} />
+        <path d="M-3 -6 L-3 6 M3 -6 L3 6" stroke={INK} strokeWidth={2.5} />
+        <circle cx="6" cy="-1" r="1.4" fill={INK} />
+      </g>
     </g>
   );
 

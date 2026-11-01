@@ -69,6 +69,9 @@ export const en = {
     hp: 'HP',
     speed: 'SPD',
     filterAll: 'All',
+    zoneFoes: 'Foes in {zone}:',
+    matchStrong: '▲ Strong in this zone',
+    matchWeak: '▼ Weak in this zone',
     hint: 'The front creature takes the hits unless someone has Taunt. Pure-realm teams of 3+ gain kinship; balanced mixed teams gain twilight.',
   },
   summon: {
@@ -84,6 +87,10 @@ export const en = {
     rates: 'Rates',
     lockedHint: 'Reach deeper zones to unlock rarer creatures.',
     unlocksAt: 'Unlocks in zone {zone}',
+    skip: 'Skip',
+    skipAll: 'Show all',
+    tapNext: 'Tap for the next one',
+    tapDone: 'Tap to close',
   },
   upgrades: {
     title: 'Upgrades',

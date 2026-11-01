@@ -31,16 +31,31 @@ export function Hexcat({ uid, view }: ArtProps) {
   // Three tails fanning out behind the body.
   const tails = (
     <g stroke={INK} strokeWidth={3.5} fill="none" strokeLinecap="round">
-      <path d="M120 164 Q166 160 160 112 Q156 90 140 80" stroke={`url(#${fur})`} strokeWidth={12} />
-      <path d="M118 166 Q182 168 180 128 Q178 110 170 100" stroke={`url(#${fur})`} strokeWidth={11} />
-      <path d="M82 166 Q30 166 30 124 Q30 104 42 92" stroke={`url(#${fur})`} strokeWidth={11} />
+      <path
+        className="cr-tail cr-tail-1"
+        d="M120 164 Q166 160 160 112 Q156 90 140 80"
+        stroke={`url(#${fur})`}
+        strokeWidth={12}
+      />
+      <path
+        className="cr-tail cr-tail-2"
+        d="M118 166 Q182 168 180 128 Q178 110 170 100"
+        stroke={`url(#${fur})`}
+        strokeWidth={11}
+      />
+      <path
+        className="cr-tail cr-tail-3"
+        d="M82 166 Q30 166 30 124 Q30 104 42 92"
+        stroke={`url(#${fur})`}
+        strokeWidth={11}
+      />
     </g>
   );
   const tailFlames = (
     <g>
-      {flameTip(140, 78, -20)}
-      {flameTip(170, 98, 10)}
-      {flameTip(42, 90, -10)}
+      <g className="cr-tail cr-tail-1">{flameTip(140, 78, -20)}</g>
+      <g className="cr-tail cr-tail-2">{flameTip(170, 98, 10)}</g>
+      <g className="cr-tail cr-tail-3">{flameTip(42, 90, -10)}</g>
     </g>
   );
 

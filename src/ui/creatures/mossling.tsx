@@ -121,7 +121,13 @@ export function Mossling({ uid, view }: ArtProps) {
         strokeLinecap="round"
       />
       {/* nervous sweat drop */}
-      <path d="M146 120 Q150 128 146 132 Q142 128 146 120 Z" fill="#bfe6ff" stroke={INK} strokeWidth={1.5} />
+      <path
+        className="cr-sweat"
+        d="M146 120 Q150 128 146 132 Q142 128 146 120 Z"
+        fill="#bfe6ff"
+        stroke={INK}
+        strokeWidth={1.5}
+      />
       {mushroom(134, 84, 0.95)}
       <path d="M74 86 Q68 72 80 68 Q82 80 74 86 Z" fill="#8ed65f" stroke={INK} strokeWidth={2} />
     </svg>

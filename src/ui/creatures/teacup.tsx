@@ -64,7 +64,7 @@ export function Teacup({ uid, view }: ArtProps) {
   );
 
   const spirit = (face: boolean) => (
-    <g>
+    <g className="cr-spirit">
       {/* steam ears */}
       <g
         fill="none"
@@ -73,6 +73,7 @@ export function Teacup({ uid, view }: ArtProps) {
         strokeLinecap="round"
         opacity={0.95}
         filter={`url(#${glow})`}
+        className="cr-steam"
       >
         <path d="M76 66 Q62 50 74 36 Q84 26 78 14" />
         <path d="M124 66 Q138 50 126 36 Q116 26 122 14" />
@@ -97,22 +98,24 @@ export function Teacup({ uid, view }: ArtProps) {
           <ellipse cx="100" cy="107" rx="6" ry="7.5" fill="#5a2a22" stroke={INK} strokeWidth={2.2} />
           <ellipse cx="100" cy="111" rx="3.6" ry="2.4" fill="#e9877e" />
           {/* drowsy "z" */}
-          <path
-            d="M138 64 L148 64 L138 74 L148 74"
-            fill="none"
-            stroke="#8a6a5a"
-            strokeWidth={2.5}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
-          <path
-            d="M150 50 L156 50 L150 56 L156 56"
-            fill="none"
-            stroke="#8a6a5a"
-            strokeWidth={2}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
+          <g className="cr-zz">
+            <path
+              d="M138 64 L148 64 L138 74 L148 74"
+              fill="none"
+              stroke="#8a6a5a"
+              strokeWidth={2.5}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+            <path
+              d="M150 50 L156 50 L150 56 L156 56"
+              fill="none"
+              stroke="#8a6a5a"
+              strokeWidth={2}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          </g>
           {/* floating leaf */}
           <path d="M108 70 Q122 62 128 72 Q118 80 108 70 Z" fill="#7cc46a" stroke={INK} strokeWidth={2} />
         </g>

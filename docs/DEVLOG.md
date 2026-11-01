@@ -132,3 +132,36 @@ blue blob) and Drowned Knight (flat helm). The hub had only a dashed "avatar com
 
 Next: locked wardrobe tiles could show only the piece instead of a full silhouette; show the avatar
 small in the battle stage (back view needed); matchup hint in Team.
+
+## Iteration 6 – Personality idles, summon reveal and matchup hints
+
+Review: the art sheet still meets the bible (shape, color, face and size are distinct for all 10).
+Weakest view this time was Emberpup's back: a plain orange ball. The bigger gap was motion: every
+creature idled with the same breathe, so personality only lived in the still drawings.
+
+- **Personality idles** (hub, battle, summon reveal): each species has its own whole-body keyframes on
+  the svg plus part animations on named groups (`cr-*` classes in the art, view-box origins in user
+  units). Mossling breathes, then ducks into its moss and trembles while a sweat drop runs down;
+  Emberpup bounces cockily, its tail swishes and the tail flame flickers; Puddlefin tilts its head
+  dreamily and its pebble glimmers; Teacup nods off and jerks awake while the steam rises and the
+  z's drift up; Honeybear rocks slowly while its bees buzz; Gloomwisp rises, then sags and dims, wings
+  beating; Bonecrow's head snaps from pose to pose (steps timing); Hexcat sits still while the three
+  tails whip one after another; Drowned Knight stays almost motionless, only the visor glow
+  smoulders; Eclipse Wyrm's neck winds and the corona pulses. Only transform/opacity; everything is
+  gated by `data-motion='full'`, so reduced motion keeps the creatures still. Back views carry the
+  same parts, so the own monster in battle moves in character too.
+- **Summon reveal:** full-screen sequence: the circle charges (rarer = longer), flashes in the rarity
+  color, then the creature hops out with rarity, name, type chips and New/Star/Shard tag. ×10
+  reveals one after another (counter "3 / 10"), tap advances, "Alle zeigen"/"Überspringen" jumps to
+  the result grid. Not shown with reduced motion. Timing in `src/ui/summonReveal.ts` (tested).
+- **Matchup hint in Team:** "Gegner in <Zone>:" lists the zone's enemy types; cards get "▲ Stark in
+  dieser Zone" / "▼ Schwach in dieser Zone". Score = average damage multiplier dealt to the zone's
+  species (incl. boss) ÷ average taken; ≥ 1.15 strong, ≤ 0.87 weak (`src/engine/matchup.ts`,
+  tested; thresholds give every label across the roster).
+- **Button feedback:** deeper press (scale + slight drop + dim, primary brightens) and a springy
+  release; nav buttons squeeze on press.
+- **Art:** Emberpup's back shows white cheek ruffs past the head and a darker saddle down the back.
+
+Next: the hub leader (Eclipse Wyrm XL) hides members behind it, so the hub layout should space by
+size class; the small summon circle on the Summon screen looks like a blank blob and should become a
+real 2.5D circle; locked wardrobe tiles could show only the piece.
