@@ -3,7 +3,7 @@ import {
   applyOfflineProgress,
   checkAchievements,
   createInitialState,
-  tick,
+  simulate,
   type GameState,
   type OfflineReport,
 } from '../engine';
@@ -13,7 +13,7 @@ import { createDefaultRepository, type SaveRepository } from '../persistence/rep
 const TICK_MS = 100;
 const AUTOSAVE_MS = 15_000;
 /** Gaps longer than this (tab in background, device asleep) count as offline time. */
-const MAX_LIVE_GAP_S = 5;
+const MAX_LIVE_GAP_S = 60;
 
 export interface Toast {
   id: number;
@@ -111,8 +111,14 @@ class GameStore {
 
   /** Applies offline progress after a long pause (e.g. phone screen was off). */
   private catchUp(): void {
-    const report = applyOfflineProgress(this.state);
-    if (report) this.ui.offlineReport = report;
+    const away = Math.max(0, (Date.now() - this.state.lastSeen) / 1000);
+    if (away <= MAX_LIVE_GAP_S) {
+      simulate(this.state, away, TICK_MS / 1000);
+      this.state.lastSeen = Date.now();
+    } else {
+      const report = applyOfflineProgress(this.state);
+      if (report) this.ui.offlineReport = report;
+    }
     this.lastTick = performance.now();
     this.emit();
   }
@@ -125,7 +131,9 @@ class GameStore {
       this.catchUp();
       return;
     }
-    tick(this.state, gap);
+    // Short hiccups (throttled timers, brief screen lock) are simulated at full speed
+    // in fixed steps; only real absences go through the offline calculation.
+    simulate(this.state, gap, TICK_MS / 1000);
     this.state.lastSeen = Date.now();
     this.reportCombatEvents();
     this.afterChange();

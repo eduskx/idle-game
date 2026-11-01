@@ -16,7 +16,7 @@ export interface OfflineReport {
 /** Max real seconds we actually simulate; the rest is extrapolated. Keeps load time low. */
 const MAX_SIMULATED_SECONDS = 300;
 /** Ignore tiny gaps (tab switches); the live loop covers those. */
-const MIN_OFFLINE_SECONDS = 30;
+const MIN_OFFLINE_SECONDS = 60;
 
 /**
  * Applies progress for the time the game was closed. The team farms the stage it
