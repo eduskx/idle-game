@@ -19,7 +19,8 @@ import {
 import { useT } from '../../i18n/useT';
 import { gameStore, useGame } from '../../store/gameStore';
 import { Avatar } from '../avatar/Avatar';
-import { Backdrop } from '../components/Backdrop';
+import { ZoneBanner } from '../components/ZoneBanner';
+import { ZoneScenery } from '../components/ZoneScenery';
 import { Sprite } from '../components/Sprite';
 import { Tips } from '../components/Tips';
 import { TypeChips } from '../components/TypeChip';
@@ -293,10 +294,13 @@ export function BattleScreen() {
     <div className="battle">
       <Tips state={s} />
 
-      <div className={`stage realm-${zone.realm} ${boss ? 'boss-stage' : ''}`} style={stageStyle}>
+      <div
+        className={`stage realm-${zone.realm} zone-${zone.id} ${boss ? 'boss-stage' : ''}`}
+        style={stageStyle}
+      >
         <div className="stage-sky" />
-        <Backdrop realm={zone.realm} />
-        <div className="stage-floor" />
+        <ZoneScenery zoneId={zone.id} />
+        <ZoneBanner zoneIndex={zoneIdx} />
 
         {enemy && enemyDef && (
           <div className="info-box enemy-box">
