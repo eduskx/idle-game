@@ -27,13 +27,40 @@ afterEach(() => {
 });
 
 describe('App', () => {
-  it('renders the battle screen and navigation', () => {
+  it('opens on the home hub with five nav tabs', () => {
     render(<App />);
     expect(screen.getByText('Hollowbloom')).toBeTruthy();
     expect(screen.getByText('Buttercup Meadow')).toBeTruthy();
-    expect(
-      screen.getAllByRole('button', { name: /Team|Summon|Upgrades|Rebloom|More/ }).length,
-    ).toBeGreaterThan(4);
+    const nav = within(screen.getByRole('navigation'));
+    expect(nav.getAllByRole('button').map((b) => b.textContent?.replace(/\W/g, ''))).toEqual([
+      'Home',
+      'Team',
+      'Summon',
+      'Upgrades',
+      'More',
+    ]);
+    // Locked features stay visible with their condition.
+    expect(screen.getByText('Rebloom')).toBeTruthy();
+    expect(screen.getAllByText(/Unlocks at stage/).length).toBe(2);
+  });
+
+  it('opens the battle from the hub and returns home', async () => {
+    render(<App />);
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /Keep fighting/ }));
+    });
+    expect(await screen.findByText(/Auto-advance/)).toBeTruthy();
+    expect(localStorage.getItem('hollowbloom.tab')).toBe('home');
+    await act(async () => {
+      fireEvent.click(within(screen.getByRole('navigation')).getByRole('button', { name: 'Home' }));
+    });
+    expect(screen.getByRole('button', { name: /Keep fighting/ })).toBeTruthy();
+  });
+
+  it.each(['battle', 'rebloom', 'nonsense'])('falls back to the hub for stored tab %s', (stored) => {
+    localStorage.setItem('hollowbloom.tab', stored);
+    render(<App />);
+    expect(screen.getByRole('button', { name: /Keep fighting/ })).toBeTruthy();
   });
 
   it('navigates to the team screen', async () => {

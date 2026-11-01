@@ -1,0 +1,19 @@
+/*
+ * Self-hosted fonts (SIL OFL 1.1, via Fontsource npm packages, no external CDN):
+ * Fredoka for headings and numbers, Nunito for body text. Only the Latin subset
+ * (covers German umlauts and ß) is bundled to keep the app small.
+ */
+@font-face {
+  font-family: 'Fredoka Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url('@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'Nunito Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url('@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2') format('woff2-variations');
+}

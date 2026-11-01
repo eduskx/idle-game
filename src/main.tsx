@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { gameStore } from './store/gameStore';
 import { App } from './ui/App';
 import { ErrorBoundary } from './ui/components/ErrorBoundary';
+import './fonts.css';
 import './styles.css';
 
 const root = createRoot(document.getElementById('root')!);

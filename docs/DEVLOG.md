@@ -69,3 +69,33 @@ type was only a 10 px color dot, and four views were weak (see Art below).
 
 Next: Home hub + slimmer navigation (5 tabs), a matchup hint in the team screen (which member is
 strong against the current zone), then the avatar.
+
+## Iteration 4 – Home hub, 5-tab navigation, realm themes and fonts
+
+Review: the art sheet still holds up against the bible (silhouettes, colors, faces and sizes all
+distinct). Weakest views remain the backs of Puddlefin (plain blob) and Drowned Knight; not touched
+this time. The bigger problem was structure: the game opened straight into the battle, six nav tabs
+were crammed side by side, and nothing showed the team as "yours".
+
+- **Home hub** is the new start screen: a 2.5D scene in the current zone's palette with the team in
+  front view, staggered in depth (leader up front, others smaller and dimmer behind, own idle bob
+  per member), a big primary CTA "Weiterkämpfen · Stufe X · Zone", and three status cards: zone
+  progress (+ stages to the next boss), expeditions (away / ready / idle) and Rebloom (ready + seeds).
+  Locked features stay visible as dashed cards with their condition and a progress bar
+  ("Ab Stufe 25 freigeschaltet"). A dashed placeholder marks where the avatar will stand.
+- **5 tabs:** Home · Team · Beschwören · Upgrades · Mehr. Battle and Rebloom open from the hub,
+  Expeditions from the hub card or Team; sub-screens get a "‹ Home/Team" back button and keep their
+  parent tab highlighted. Active tab = filled pill. Only badge left: Team dot when an expedition is
+  actually ready.
+- **Saved tab:** `parseStoredTab` (`src/ui/navigation.ts`, tested) maps legacy ids `battle` and
+  `rebloom` to Home, `expeditions` to Team, and anything unknown to Home.
+- **Realm themes:** `data-realm` on `<html>` follows the current zone. Hearth = warm cream surfaces,
+  cocoa text, apricot primary; Umbra = ink violet, ghost-violet primary, spectral-mint accent.
+  Hard-coded chip/track/tab colors became tokens; rarity colors are darker on light surfaces.
+  `theme-color` follows the realm.
+- **Fonts:** Fredoka (headings, numbers, nav) and Nunito (body), SIL OFL 1.1, self-hosted from the
+  Fontsource npm packages; only the Latin subset is bundled (~69 KB total). Licenses listed in Legal.
+- Toasts show at most two at a time so a burst of achievements doesn't cover the hub.
+
+Next: Puddlefin and Drowned Knight back views; hub juice (tap a creature for a reaction); a matchup
+hint in Team (who is strong against the current zone); then the avatar.

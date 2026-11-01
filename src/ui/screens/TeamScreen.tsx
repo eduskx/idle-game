@@ -20,17 +20,17 @@ import { Sprite } from '../components/Sprite';
 import { TypeChips } from '../components/TypeChip';
 
 type Filter = 'all' | Realm;
-type View = 'creatures' | 'expeditions' | 'charms';
+export type View = 'creatures' | 'expeditions' | 'charms';
 
 function abilityPercent(kind: string, value: number): number | string {
   return kind === 'thorns' ? (value * 3).toFixed(1) : Math.round(value * 100);
 }
 
-export function TeamScreen() {
+export function TeamScreen({ initialView = 'creatures' }: { initialView?: View }) {
   const s = useGame();
   const { t, n } = useT();
   const [filter, setFilter] = useState<Filter>('all');
-  const [view, setView] = useState<View>('creatures');
+  const [view, setView] = useState<View>(initialView);
   const mods = globalModifiers(s);
   const readyCount = s.expeditions.filter((e) => expeditionRemaining(e) <= 0).length;
 

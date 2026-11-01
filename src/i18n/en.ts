@@ -5,6 +5,7 @@ export const en = {
     loading: 'Waking the grove…',
   },
   nav: {
+    home: 'Home',
     battle: 'Battle',
     team: 'Team',
     summon: 'Summon',
@@ -16,6 +17,19 @@ export const en = {
     gold: 'Gold',
     essence: 'Essence',
     seeds: 'Seeds',
+  },
+  home: {
+    continue: 'Keep fighting',
+    zoneProgress: 'Zone progress',
+    bossIn: 'Boss in {count} stages',
+    bossNow: 'Boss fight now!',
+    expeditionsIdle: 'Nobody is out. Send spare creatures exploring.',
+    expeditionsAway: '{used}/{max} away · next in {time}',
+    expeditionsReady: '{count} back with loot – collect now',
+    rebloomReady: 'Ready: rebloom for {seeds} seeds',
+    rebloomTalents: '{seeds} seeds · talents',
+    unlockAt: 'Unlocks at stage {stage}',
+    avatarSoon: 'Your avatar – coming soon',
   },
   battle: {
     stage: 'Stage {stage}',
