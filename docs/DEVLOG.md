@@ -232,3 +232,39 @@ were checked against silhouette, grayscale and 48 px and hold up; Emberpup's bac
 
 Next: Emberpup's back could read stronger (tail rings from behind); the tamer could react to wins and
 boss fights; Hearth damage numbers need a darker outline on light skies.
+
+## Iteration 9 – Emberpup's tail from behind, Honeybear's arms, tamer reactions, Dependabot
+
+Review: the art sheet still meets the bible for shape, color, face and size. Two weak spots:
+Emberpup's back hid the tail behind the body (only a thin strip with two faint rings), and Honeybear's
+front was a box with a head and no arms.
+
+- **Emberpup back:** the tail now grows from the rump in front of the body (it is the part closest to
+  the camera), sweeps out to the left past the head and ends in a glowing coal tip with a flame and
+  sparks. Three bold dark rings (clipped to the tail) and a lit outer edge read at 48 px. Own idle
+  classes `cr-tail-back` / `cr-flame-back` with matching origins (swish + flicker).
+- **Honeybear front:** arms that hug the block: the left hangs at the side with a pale-padded paw
+  and blunt claws, the right paw rests on the belly (calm gentle giant). The square silhouette stays.
+  The back view gets matching arm backs so both views share one silhouette.
+- **Tamer reactions** (`src/ui/tamerReaction.ts`, tested): a cleared stage → two happy hops and a
+  sparkle; a beaten boss → a big leap with a wiggle and a gold star burst; a defeat or failed boss →
+  recoil, shake and a sweat drop. A loss outranks a win in the same tick; hits and kills get no
+  reaction (they come every second). During boss fights the tamer leans in and eggs the monster on
+  (`.trainer.rally`). Reduced motion: no body motion, the emote only fades in and out.
+- **Damage numbers in Hearth:** heavier, darker outline (4.5 px) plus a dark halo on the light skies;
+  "weak" numbers get a lighter fill so they keep contrast against the outline.
+- **Dependabot:**
+  - #5 `actions/setup-node` 4 → 7: CI green, only the action version changed → merged.
+  - #2 `actions/deploy-pages` 4 → 5 and #3 `actions/upload-pages-artifact` 3 → 5: only used by the
+    manual Pages workflow (not run by CI); they are a matched pair, the build output has no dotfiles
+    that the newer upload would drop → merged together.
+  - #4 `actions/checkout` 4 → 7: CI green, but it conflicted with #5 (adjacent line) after that
+    merge, so the bump is applied in this iteration's PR, where CI exercises it; Dependabot closes
+    #4 on its own once main has v7.
+  - #6 `typescript` 6 → 7: CI red at `npm ci`: `typescript-eslint@8.72.1` requires
+    `typescript <6.1.0`. A major update with no concrete benefit yet → closed with a comment.
+    Revisit when typescript-eslint supports TS 7.
+
+Next: the tamer could also react when a new creature is summoned on the Summon screen; Puddlefin's
+back is now the plainest view on the sheet; check the hub's leader spacing with Honeybear's wider
+silhouette.

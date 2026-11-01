@@ -514,6 +514,8 @@ h3 {
  * opacity are animated; everything is gated by data-motion='full' (reduced motion = still).
  */
 .breathe .cr-tail,
+.breathe .cr-tail-back,
+.breathe .cr-flame-back,
 .breathe .cr-flame,
 .breathe .cr-steam,
 .breathe .cr-spirit,
@@ -590,6 +592,14 @@ h3 {
 }
 [data-motion='full'] .breathe[data-creature='emberpup'] .cr-flame {
   transform-origin: 162px 72px;
+  animation: idle-flicker 0.5s ease-in-out infinite alternate;
+}
+[data-motion='full'] .breathe[data-creature='emberpup'] .cr-tail-back {
+  transform-origin: 100px 170px;
+  animation: idle-swish 1.8s ease-in-out infinite;
+}
+[data-motion='full'] .breathe[data-creature='emberpup'] .cr-flame-back {
+  transform-origin: 44px 66px;
   animation: idle-flicker 0.5s ease-in-out infinite alternate;
 }
 @keyframes idle-emberpup {
@@ -1033,10 +1043,41 @@ h3 {
 .realm-umbra .trainer {
   filter: drop-shadow(0 0 1.5px rgb(214 200 255 / 0.55));
 }
-.trainer svg {
+.trainer {
+  transform-origin: 50% 96%;
+}
+.trainer > svg {
   width: 100%;
   height: 100%;
   overflow: visible;
+}
+/* emotes over the tamer's head (cheer, triumph, flinch); animated from BattleScreen */
+.trainer .tamer-emote {
+  position: absolute;
+  left: 58%;
+  top: -14px;
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+  overflow: visible;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35));
+}
+.trainer .tamer-emote.big {
+  width: 40px;
+  height: 40px;
+  top: -24px;
+}
+/* during a boss fight the tamer leans in and eggs the monster on */
+[data-motion='full'] .trainer.rally {
+  animation: tamer-rally 0.9s ease-in-out infinite alternate;
+}
+@keyframes tamer-rally {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translate(3px, -4px) rotate(4deg);
+  }
 }
 .enemy-actor .sprite > svg {
   filter: saturate(0.95) brightness(0.97);
@@ -1266,6 +1307,16 @@ h3 {
 .dmg.weak {
   color: #b9b2cc;
   font-size: 0.86rem;
+}
+/* light Hearth skies: a heavier, darker outline plus a soft halo keeps numbers readable */
+.realm-hearth .dmg {
+  -webkit-text-stroke: 4.5px #120b1c;
+  text-shadow:
+    0 2px 0 #120b1c,
+    0 0 8px rgb(18 11 28 / 0.45);
+}
+.realm-hearth .dmg.weak {
+  color: #e4def0;
 }
 
 .bench {

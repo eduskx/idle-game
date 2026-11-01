@@ -63,6 +63,21 @@ export function Honeybear({ uid, view }: ArtProps) {
           stroke={INK}
           strokeWidth={3.5}
         />
+        {/* arm backs hanging at the sides, matching the front silhouette */}
+        <g stroke={INK} strokeWidth={3.5} strokeLinejoin="round">
+          <path d="M42 108 Q22 116 20 144 Q20 162 30 170 L50 170 Q56 148 54 122 Z" fill={`url(#${fur})`} />
+          <path
+            d="M158 108 Q178 116 180 144 Q180 162 170 170 L150 170 Q144 148 146 122 Z"
+            fill={`url(#${fur})`}
+          />
+        </g>
+        <path
+          d="M30 150 Q38 156 48 150 M152 150 Q162 156 170 150"
+          stroke="#a5641a"
+          strokeWidth={2.5}
+          fill="none"
+          strokeLinecap="round"
+        />
         {/* honeycomb back plate */}
         <path
           d="M60 116 Q100 100 140 116 L136 158 Q100 170 64 158 Z"
@@ -139,6 +154,31 @@ export function Honeybear({ uid, view }: ArtProps) {
         ],
         10,
       )}
+      {/* arms: the left hangs at the side, the right paw rests on the belly. Both hug the block,
+          so the square silhouette stays intact. */}
+      <g stroke={INK} strokeWidth={3.5} strokeLinejoin="round">
+        <path d="M44 112 Q24 118 22 146 Q21 162 30 170 L52 170 Q58 150 56 126 Z" fill={`url(#${fur})`} />
+        <path
+          d="M156 112 Q178 120 176 146 Q174 166 150 166 Q128 166 124 154 Q126 144 140 144 Q154 140 146 124 Z"
+          fill={`url(#${fur})`}
+        />
+      </g>
+      {/* paws: pale pads and blunt claws; the right one cups the belly */}
+      <ellipse cx="40" cy="166" rx="14" ry="9" fill={`url(#${fur})`} stroke={INK} strokeWidth={3} />
+      <ellipse cx="40" cy="168" rx="7" ry="3.8" fill="#fff0c8" />
+      <path
+        d="M31 172 L30 176 M40 174 L40 178 M49 172 L50 176"
+        stroke={INK}
+        strokeWidth={2.5}
+        strokeLinecap="round"
+      />
+      <ellipse cx="134" cy="153" rx="12" ry="10" fill={`url(#${fur})`} stroke={INK} strokeWidth={3} />
+      <path
+        d="M124 148 L120 147 M123 154 L119 155 M125 160 L122 162"
+        stroke={INK}
+        strokeWidth={2.5}
+        strokeLinecap="round"
+      />
       {/* shoulder pads */}
       <path d={hexPath(52, 118, 16)} fill={`url(#${comb})`} stroke={INK} strokeWidth={3} />
       <path d={hexPath(148, 118, 16)} fill={`url(#${comb})`} stroke={INK} strokeWidth={3} />

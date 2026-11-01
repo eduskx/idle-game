@@ -67,15 +67,45 @@ export function Emberpup({ uid, view }: ArtProps) {
     </g>
   );
 
+  // From behind the tail is the part closest to the camera: it grows from the rump, sweeps out to
+  // the left past the head and ends in the glowing coal tip. Three bold rings read even at 48 px.
+  const tailClip = `${uid}-tailclip`;
+  const TAIL_D = 'M112 178 Q46 192 22 142 Q8 104 28 68 Q36 52 52 62 Q38 88 44 118 Q54 156 104 156 Z';
+  const backTail = (
+    <g className="cr-tail-back">
+      <clipPath id={tailClip}>
+        <path d={TAIL_D} />
+      </clipPath>
+      <path d={TAIL_D} fill={`url(#${fur})`} />
+      <g clipPath={`url(#${tailClip})`}>
+        {/* dark rings, perpendicular to the sweep */}
+        <path d="M62 146 L58 196" stroke="#5e1f0c" strokeWidth={13} />
+        <path d="M0 132 L54 112" stroke="#5e1f0c" strokeWidth={13} />
+        <path d="M8 84 L54 96" stroke="#5e1f0c" strokeWidth={11} />
+        {/* lit outer edge */}
+        <path d="M96 180 Q46 186 26 140" stroke="#ffb27a" strokeWidth={4} fill="none" opacity={0.7} />
+        {/* the tip smoulders like a coal */}
+        <circle cx="38" cy="62" r="17" fill={`url(#${ember})`} />
+      </g>
+      <path d={TAIL_D} fill="none" stroke={INK} strokeWidth={3.5} strokeLinejoin="round" />
+      <g className="cr-flame-back">
+        <path
+          d="M40 66 Q24 46 38 26 Q42 42 54 42 Q58 58 48 68 Z"
+          fill={`url(#${ember})`}
+          filter={`url(#${glow})`}
+        />
+      </g>
+      <circle cx="30" cy="24" r="2.6" fill="#ffd36b" filter={`url(#${glow})`} />
+      <circle cx="56" cy="32" r="1.9" fill="#ffd36b" filter={`url(#${glow})`} />
+      <circle cx="22" cy="44" r="1.5" fill="#ffd36b" filter={`url(#${glow})`} />
+    </g>
+  );
+
   if (view === 'back') {
     return (
       <svg viewBox="0 0 200 200">
         {defs}
         <GroundShadow rx={50} />
-        {/* seen from behind the tail swings out to the left side (mirrored), never across the back */}
-        <g transform="translate(206 4) scale(-1 1)">
-          <g className="cr-tail">{tail(false)}</g>
-        </g>
         {/* body */}
         <ellipse cx="100" cy="150" rx="40" ry="32" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
         <ellipse cx="78" cy="178" rx="12" ry="7" fill="#3a1a12" stroke={INK} strokeWidth={3} />
@@ -95,6 +125,7 @@ export function Emberpup({ uid, view }: ArtProps) {
           strokeLinecap="round"
           opacity={0.6}
         />
+        {backTail}
       </svg>
     );
   }
