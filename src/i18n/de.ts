@@ -103,6 +103,19 @@ export const de: Dictionary = {
     max: 'MAX',
     buy: 'Kaufen',
     buyMax: 'Max',
+    then: 'danach',
+    nextDouble: '×2 bei St. {level}',
+    toGo: 'noch {count}',
+    doubleNext: 'Nächste Stufe verdoppelt!',
+    effect: {
+      atk: 'Angriff',
+      hp: 'LP',
+      gold: 'Gold',
+      xp: 'EP',
+      crit: 'Krit-Chance',
+      speed: 'Tempo',
+      slots: 'Teamplätze',
+    },
   },
   rebloom: {
     title: 'Neublüte',
@@ -293,6 +306,10 @@ export const de: Dictionary = {
     star5: 'Bringe eine Kreatur auf 5 Sterne',
     pureHearth: 'Stelle ein reines Herd-Team auf',
     pureUmbra: 'Stelle ein reines Umbra-Team auf',
+  },
+  zoneBanner: {
+    reached: 'Neue Zone',
+    skip: 'Tippen zum Überspringen',
   },
   zone: {
     meadow: 'Butterblumenwiese',

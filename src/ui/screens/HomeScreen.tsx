@@ -16,7 +16,8 @@ import {
 import { formatDuration } from '../../i18n';
 import { useT } from '../../i18n/useT';
 import { useGame } from '../../store/gameStore';
-import { Backdrop } from '../components/Backdrop';
+import { ZoneBanner } from '../components/ZoneBanner';
+import { ZoneScenery } from '../components/ZoneScenery';
 import { ProgressBar } from '../components/common';
 import { Sprite } from '../components/Sprite';
 import { Avatar } from '../avatar/Avatar';
@@ -100,10 +101,10 @@ export function HomeScreen({ onOpen }: { onOpen: (target: HubTarget) => void }) 
 
   return (
     <div className="home">
-      <div className={`hub-scene stage realm-${zone.realm}`} style={sceneStyle}>
+      <div className={`hub-scene stage realm-${zone.realm} zone-${zone.id}`} style={sceneStyle}>
         <div className="stage-sky" />
-        <Backdrop realm={zone.realm} />
-        <div className="stage-floor" />
+        <ZoneScenery zoneId={zone.id} />
+        <ZoneBanner zoneIndex={zoneOf(stage)} />
         <div className="hub-zone">
           <strong>{t(`zone.${zone.id}`)}</strong>
           <span>{t(`realm.${zone.realm}`)}</span>

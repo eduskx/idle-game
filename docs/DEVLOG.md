@@ -268,3 +268,38 @@ front was a box with a head and no arms.
 Next: the tamer could also react when a new creature is summoned on the Summon screen; Puddlefin's
 back is now the plainest view on the sheet; check the hub's leader spacing with Honeybear's wider
 silhouette.
+
+## Iteration 10 – a world per zone, the zone-arrival banner, upgrade cards
+
+Review: the art sheet still meets the bible for shape, color, face and size; no creature showed a
+clear weakness this round (Puddlefin's back, flagged last time, already carries the ringed tail,
+dorsal stripe, tufts and pebble glow and reads at 48 px), so the iteration went into the worlds.
+
+- **Zone scenery** (`src/ui/components/ZoneScenery.tsx`, replaces `Backdrop.tsx`): every one of the
+  12 zones has its own backdrop, in the battle stage and the home hub. Layers: sky (sun, moon,
+  stars, light rays), a far and a mid band that drift against each other (ambient parallax, 70 s /
+  44 s), flat ground decor on the perspective floor, a per-zone floor texture and a small particle
+  pool (3–10 spans). Landmarks: windmill with turning sails and a fence (Butterblumenwiese), dead
+  trees and fog (Flüstersenke), water, reeds, a jetty and lily pads with ripples (Seerosenteich),
+  mausoleum, iron fence and gravestones with will-o'-wisps (Versunkene Gruft), cottages with
+  chimney smoke and a lantern string (Herdhausen), a glowing volcano, charred stumps, lava cracks
+  and embers (Aschefelder), skep beehives, sunflowers, an apple tree and bees (Honiggarten), sunken
+  towers, a toppled column, swaying kelp and bubbles (Ertrunkene Stadt), snowy peaks, pines, the
+  cocoa hut and snowfall (Kakaogipfel), floating rock islands over a void with twinkling stars
+  (Der Abgrund), glowing mushrooms and fireflies (Sternenlichtung), the eclipse, spires, banners
+  and the throne on its dais (Finsternisthron). The bands keep their aspect ratio (no squashed
+  shapes on wide screens). Only transform/opacity animate, all gated by `data-motion='full'`.
+  Sternenlichtung is a night-time Hearth zone, so its labels switch to light text.
+- **Zone-arrival banner** (`ZoneBanner.tsx`, logic in `src/ui/zoneArrival.ts`, tested): reaching a
+  new zone shows a ribbon with "New zone · realm · zone n" and the zone name for 2.8 s. Tap skips
+  it. It survives switching between hub and battle while it runs; a rebloom or a fresh launch shows
+  nothing. Reduced motion: no slide, it just appears and goes.
+- **Upgrade cards:** own two-tone SVG icons instead of emojis (claw slashes, steaming bowl, pouch
+  with coin, scroll, target, gusts, paw), an effect line "now → after the next level" (×2.40 →
+  ×2.60, +7% → +8%, +1 → +2) and, for the four multiplier upgrades, a progress bar to the next ×2
+  milestone ("×2 at Lv 25 · 18 to go", highlighted one level before). Logic in
+  `src/ui/upgradeView.ts` (tested, mirrors `engine/stats.ts`).
+
+Next: the hub team stands in front of the mid band, so some landmarks (throne, hut) hide behind
+the creatures there; a subtle depth fade or moving the landmarks to the flanks could help. The
+currency pills still use emojis; own coin/essence/seed icons would match the new upgrade icons.

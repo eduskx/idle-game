@@ -100,6 +100,19 @@ export const en = {
     max: 'MAX',
     buy: 'Buy',
     buyMax: 'Max',
+    then: 'then',
+    nextDouble: '×2 at Lv {level}',
+    toGo: '{count} to go',
+    doubleNext: 'Next level doubles it!',
+    effect: {
+      atk: 'Attack',
+      hp: 'HP',
+      gold: 'Gold',
+      xp: 'XP',
+      crit: 'Crit chance',
+      speed: 'Speed',
+      slots: 'Team slots',
+    },
   },
   rebloom: {
     title: 'Rebloom',
@@ -285,6 +298,10 @@ export const en = {
     star5: 'Raise a creature to 5 stars',
     pureHearth: 'Field a pure Hearth team',
     pureUmbra: 'Field a pure Umbra team',
+  },
+  zoneBanner: {
+    reached: 'New zone',
+    skip: 'Tap to skip',
   },
   zone: {
     meadow: 'Buttercup Meadow',
