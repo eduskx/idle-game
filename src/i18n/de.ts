@@ -32,6 +32,7 @@ export const de: Dictionary = {
     rebloomTalents: '{seeds} Samen · Talente',
     unlockAt: 'Ab Stufe {stage} freigeschaltet',
     avatarHint: 'Kleiderschrank',
+    leader: 'Anführer',
   },
   battle: {
     stage: 'Stufe {stage}',

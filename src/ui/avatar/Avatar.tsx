@@ -33,11 +33,14 @@ export function Avatar({
   viewBox = SLOT_VIEWBOX.full,
   className,
   label,
+  only,
 }: {
   avatar: AvatarState;
   viewBox?: string;
   className?: string;
   label?: string;
+  /** Draw just this slot's piece, without body, face or other clothes (locked wardrobe tiles). */
+  only?: AvatarSlot;
 }) {
   const skin = AVATAR_SKIN_TONES[avatar.skin] ?? AVATAR_SKIN_TONES[0]!;
   const hair = AVATAR_HAIR_COLORS[avatar.hairColor] ?? AVATAR_HAIR_COLORS[0]!;
@@ -53,13 +56,20 @@ export function Avatar({
     colors.forEach((col, i) => (vars[`--av-${slot}-${i + 1}`] = col));
   }
 
-  const hatOn = avatar.items.hat !== 'none';
-  const parts: PartArt[] = [
-    HAIR_PARTS[avatar.items.hair]?.(hatOn) ?? {},
-    ...(['top', 'bottom', 'shoes', 'hat', 'accessory'] as const).map(
-      (slot) => PARTS_BY_SLOT[slot][avatar.items[slot]] ?? {},
-    ),
-  ];
+  const hatOn = avatar.items.hat !== 'none' && only !== 'hair';
+  const parts: PartArt[] = only
+    ? [
+        only === 'hair'
+          ? (HAIR_PARTS[avatar.items.hair]?.(false) ?? {})
+          : (PARTS_BY_SLOT[only][avatar.items[only]] ?? {}),
+      ]
+    : [
+        HAIR_PARTS[avatar.items.hair]?.(hatOn) ?? {},
+        ...(['top', 'bottom', 'shoes', 'hat', 'accessory'] as const).map(
+          (slot) => PARTS_BY_SLOT[slot][avatar.items[slot]] ?? {},
+        ),
+      ];
+  const body = !only;
   const layer = (name: Layer) => parts.map((p, i) => p[name] && <g key={`${name}${i}`}>{p[name]}</g>);
 
   return (
@@ -73,15 +83,15 @@ export function Avatar({
     >
       {layer('topBack')}
       {layer('hairBack')}
-      <BodyBack />
+      {body && <BodyBack />}
       {layer('bottom')}
       {layer('shoes')}
-      <Torso />
+      {body && <Torso />}
       {layer('top')}
-      <Hands />
+      {body && <Hands />}
       {layer('neck')}
-      <Head />
-      <Face />
+      {body && <Head />}
+      {body && <Face />}
       {layer('hairFront')}
       {layer('hat')}
       {layer('face')}

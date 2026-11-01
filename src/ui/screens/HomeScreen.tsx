@@ -20,21 +20,9 @@ import { Backdrop } from '../components/Backdrop';
 import { ProgressBar } from '../components/common';
 import { Sprite } from '../components/Sprite';
 import { Avatar } from '../avatar/Avatar';
+import { hubLayout } from '../hubLayout';
 
 export type HubTarget = 'battle' | 'expeditions' | 'rebloom' | 'wardrobe';
-
-/**
- * Where each team member stands in the hub scene: the leader up front in the middle,
- * the rest staggered behind it (higher = further away = smaller). The player avatar
- * stands front-left, so the team is shifted to the right.
- */
-const SLOTS: { x: number; y: number; size: number; z: number }[] = [
-  { x: 60, y: 12, size: 136, z: 5 },
-  { x: 38, y: 74, size: 108, z: 4 },
-  { x: 84, y: 66, size: 108, z: 4 },
-  { x: 50, y: 142, size: 80, z: 3 },
-  { x: 74, y: 140, size: 80, z: 3 },
-];
 
 /** The player's avatar standing in the scene; opens the wardrobe. */
 function HubAvatar({ onOpen }: { onOpen: () => void }) {
@@ -95,7 +83,7 @@ export function HomeScreen({ onOpen }: { onOpen: (target: HubTarget) => void }) 
   const inZone = stageInZone(stage);
   const nextBoss = Math.ceil(stage / BOSS_EVERY) * BOSS_EVERY;
   const sceneStyle = { '--sky-top': zone.palette[0], '--sky-bottom': zone.palette[1] } as CSSProperties;
-  const team = s.team.slice(0, SLOTS.length);
+  const placements = hubLayout(s.team);
 
   // Expeditions
   const expUnlocked = expeditionsUnlocked(s);
@@ -120,35 +108,34 @@ export function HomeScreen({ onOpen }: { onOpen: (target: HubTarget) => void }) 
           <strong>{t(`zone.${zone.id}`)}</strong>
           <span>{t(`realm.${zone.realm}`)}</span>
         </div>
-        {team.map((id, i) => {
-          const slot = SLOTS[i]!;
+        {placements.map(({ id, index: i, x, bottom, size, zIndex, depth }) => {
           const react = reaction?.id === id ? (REACTIONS[id] ?? { anim: 'hop', emote: '!' }) : null;
           return (
             <button
               key={id}
-              className={`hub-member depth-${i === 0 ? 'front' : i < 3 ? 'mid' : 'back'}`}
+              className={`hub-member depth-${depth}`}
               style={
                 {
-                  left: `${slot.x}%`,
-                  bottom: slot.y,
-                  zIndex: slot.z,
+                  left: `${x}%`,
+                  bottom,
+                  zIndex,
                   '--delay': `${-i * 0.7}s`,
                 } as CSSProperties
               }
-              aria-label={t(`creature.${id}`)}
+              aria-label={i === 0 ? `${t(`creature.${id}`)} · ${t('home.leader')}` : t(`creature.${id}`)}
               onClick={() => setReaction((r) => ({ id, n: (r?.n ?? 0) + 1 }))}
             >
               <div className="hub-shadow" />
+              {i === 0 && (
+                <span className="hub-leader" aria-hidden="true">
+                  ★
+                </span>
+              )}
               <div
                 key={react ? reaction!.n : 0}
                 className={react ? `hub-react react-${react.anim}` : 'hub-react'}
               >
-                <Sprite
-                  id={id}
-                  size={slot.size}
-                  scale="stage"
-                  className={`breathe hub-idle ${i === 0 ? 'leader' : ''}`}
-                />
+                <Sprite id={id} size={size} scale="stage" className="breathe hub-idle" />
               </div>
               {react && (
                 <span key={reaction!.n} className="hub-emote" aria-hidden="true">

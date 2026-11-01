@@ -3,7 +3,7 @@ import type { CreatureType } from '../../engine';
 import { useT } from '../../i18n/useT';
 
 /** Small original glyphs, drawn on a 16×16 grid, filled with currentColor. */
-const ICONS: Record<CreatureType, ReactNode> = {
+export const TYPE_GLYPHS: Record<CreatureType, ReactNode> = {
   // Flame with an inner tongue
   ember: (
     <path d="M8.4 1.2c.4 2.2 3.9 3.9 3.9 7.6A4.3 4.3 0 0 1 8 13.2a4.3 4.3 0 0 1-4.3-4.4c0-2 1.1-3.3 2-4.1.1 1.2.6 2 1.4 2.3-.4-2.2.2-4.3 1.3-5.8Zm-.3 6.6c-.9.9-1.5 1.7-1.5 2.7a1.5 1.5 0 0 0 3 0c0-1-.6-1.8-1.5-2.7Z" />
@@ -37,7 +37,7 @@ const ICONS: Record<CreatureType, ReactNode> = {
 export function TypeIcon({ type, size = 12 }: { type: CreatureType; size?: number }) {
   return (
     <svg className="type-icon" viewBox="0 0 16 16" width={size} height={size} aria-hidden="true">
-      <g fill="currentColor">{ICONS[type]}</g>
+      <g fill="currentColor">{TYPE_GLYPHS[type]}</g>
     </svg>
   );
 }

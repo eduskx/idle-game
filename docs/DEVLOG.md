@@ -165,3 +165,34 @@ creature idled with the same breathe, so personality only lived in the still dra
 Next: the hub leader (Eclipse Wyrm XL) hides members behind it, so the hub layout should space by
 size class; the small summon circle on the Summon screen looks like a blank blob and should become a
 real 2.5D circle; locked wardrobe tiles could show only the piece.
+
+## Iteration 7 – Hub depth by size, 2.5D summoning circle, wardrobe silhouettes, card polish
+
+Review: the art sheet still meets the bible. Weakest view was Teacup's back (a plain amber egg).
+On screen, the hub was the biggest problem: the leader stood front-center at full size, so an
+Eclipse Wyrm (XL) covered half the team and Drowned Knight vanished behind it.
+
+- **Hub layout by size class** (`src/ui/hubLayout.ts`, tested): the team stands like a group photo.
+  Members are sorted by size class, the biggest get the back row (central slots first), the smallest
+  stand in front. Slot sets for 1–6 members (2 or 3 rows, staggered), back rows are smaller
+  (perspective), rows are far enough apart that a creature right in front covers at most the lower
+  third of the one behind it, and within a row the smaller creature is drawn on top. Sprites are
+  clamped inside the scene. Team slot 1 (who fights first) gets a small ★ badge at its feet instead of
+  the front spot. Tests cover order, depth rule, z-order, bounds and overlap for seven mixed teams.
+- **Summoning circle** (`SummonCircle.tsx`): a rune ring on a stone slab in real perspective
+  (`rotateX(64deg)`), with the six type glyphs in their colors set in sockets, six original runes,
+  a double hexagram, a light column and rising motes. Idle: rune band turns, star counter-turns, glow
+  breathes. On the Summon screen it glows in the best rarity currently in the pool; the reveal reuses
+  it in the rarity color and spins it up while charging. Replaces the dashed blob and the flat rings.
+- **Wardrobe:** locked tiles show only the piece itself as a silhouette (no avatar body, `Avatar
+only=<slot>`), the condition and progress; the name stays for screen readers only.
+- **Team cards:** 96 px portrait on a gradient of the creature's types (dual types blend), name in
+  the display font, "Rarity · Realm" as one colored line instead of two chips, level with bar on one
+  line, ATK/HP/SPD as three stat tiles. Less text noise, clearer hierarchy.
+- **Upgrade cards:** icon on a colored tile per upgrade (attack red, life green, gold, XP blue …),
+  tighter text, wide buy button; maxed cards fade.
+- **Art:** Teacup's back shows a tea swirl, the leaf from behind, a drifting "z", a tea bag tag over
+  the rim and a small chip in the cup (the "uncool flaw").
+
+Next: the brooch silhouette in the wardrobe is tiny (crop per piece instead of per slot); Summon pool
+tiles could use the same type-tinted portrait as Team; Hexcat's back is still a dark blob.
