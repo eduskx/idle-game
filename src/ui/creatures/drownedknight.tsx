@@ -177,6 +177,7 @@ export function Drownedknight({ uid, view }: ArtProps) {
         strokeLinecap="round"
         opacity={0.95}
         filter={`url(#${glow})`}
+        className="cr-glow"
       />
       <path
         d="M114 83.5 L134 83.5"
@@ -185,6 +186,7 @@ export function Drownedknight({ uid, view }: ArtProps) {
         strokeLinecap="round"
         opacity={0.95}
         filter={`url(#${glow})`}
+        className="cr-glow"
       />
       {/* rust bleeding from the slits */}
       <path

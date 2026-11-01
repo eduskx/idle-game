@@ -165,6 +165,7 @@ export function Puddlefin({ uid, view }: ArtProps) {
       {hat}
       {/* its favorite shiny pebble, hugged close */}
       <ellipse
+        className="cr-pebble"
         cx="100"
         cy="128"
         rx="13"

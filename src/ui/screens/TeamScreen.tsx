@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CREATURE_BY_ID, RARITY_ORDER } from '../../data/creatures';
+import { getZone } from '../../data/world';
 import {
   globalModifiers,
   levelCap,
@@ -10,6 +11,9 @@ import {
   STAR_SHARDS,
   toggleTeamMember,
   xpToNextLevel,
+  zoneEnemyTypes,
+  zoneMatchup,
+  zoneOf,
   type Realm,
 } from '../../engine';
 import { useT } from '../../i18n/useT';
@@ -32,6 +36,9 @@ export function TeamScreen({ initialView = 'creatures' }: { initialView?: View }
   const [filter, setFilter] = useState<Filter>('all');
   const [view, setView] = useState<View>(initialView);
   const mods = globalModifiers(s);
+  const zoneIndex = zoneOf(s.battle.stage);
+  const zone = getZone(zoneIndex);
+  const foeTypes = zoneEnemyTypes(zoneIndex);
   const readyCount = s.expeditions.filter((e) => expeditionRemaining(e) <= 0).length;
 
   const owned = Object.values(s.creatures)
@@ -86,6 +93,10 @@ export function TeamScreen({ initialView = 'creatures' }: { initialView?: View }
               </button>
             ))}
           </div>
+          <div className="zone-foes">
+            <span className="small">{t('team.zoneFoes', { zone: t(`zone.${zone.id}`) })}</span>
+            <TypeChips types={foeTypes} compact />
+          </div>
           <ul className="card-list">
             {owned.map((c) => {
               const def = CREATURE_BY_ID[c.defId]!;
@@ -94,6 +105,7 @@ export function TeamScreen({ initialView = 'creatures' }: { initialView?: View }
               const inTeam = pos >= 0;
               const away = s.expeditions.some((e) => e.defId === c.defId);
               const cap = levelCap(c.stars);
+              const matchup = zoneMatchup(def.types, zoneIndex);
               const needShards = c.stars < MAX_STARS ? STAR_SHARDS[c.stars]! : 0;
               return (
                 <li
@@ -117,6 +129,11 @@ export function TeamScreen({ initialView = 'creatures' }: { initialView?: View }
                       <span className={`tag realm-${def.realm}`}>{t(`realm.${def.realm}`)}</span>
                       <TypeChips types={def.types} />
                     </div>
+                    {matchup !== 'neutral' && (
+                      <div className={`matchup matchup-${matchup}`}>
+                        {t(matchup === 'strong' ? 'team.matchStrong' : 'team.matchWeak')}
+                      </div>
+                    )}
                     <div className="small">
                       {t('team.level', { level: c.level, cap })}
                       <ProgressBar

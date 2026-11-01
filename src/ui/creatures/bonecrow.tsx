@@ -65,36 +65,38 @@ export function Bonecrow({ uid, view }: ArtProps) {
           strokeWidth={3}
           strokeLinejoin="round"
         />
-        <g transform="rotate(-14 100 80)">
-          {/* beak tip and mask rim visible past the cheek */}
-          <path
-            d="M118 72 Q134 70 132 84 L114 116 L112 100 Z"
-            fill={`url(#${bone})`}
-            stroke={INK}
-            strokeWidth={3}
-            strokeLinejoin="round"
-          />
-          <circle cx="100" cy="68" r="32" fill={`url(#${feather})`} stroke={INK} strokeWidth={3.5} />
-          <path
-            d="M120 60 L132 64"
-            stroke="#7dff9a"
-            strokeWidth={3}
-            strokeLinecap="round"
-            filter={`url(#${glow})`}
-          />
-          {/* mask strap tied at the back of the head */}
-          <path d="M68 72 Q100 84 132 70" stroke="#efe6d2" strokeWidth={6} fill="none" />
-          <path d="M68 72 Q100 84 132 70" stroke="#b8aa8c" strokeWidth={1.5} fill="none" />
-          <path
-            d="M96 78 L86 96 L94 94 M104 78 L110 98 L102 94"
-            stroke="#efe6d2"
-            strokeWidth={4}
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle cx="100" cy="78" r="4.5" fill="#efe6d2" stroke={INK} strokeWidth={2} />
-          <path d="M84 38 Q90 24 98 36 Q104 20 114 36" stroke={INK} strokeWidth={3} fill="#2a2f48" />
+        <g className="cr-head">
+          <g transform="rotate(-14 100 80)">
+            {/* beak tip and mask rim visible past the cheek */}
+            <path
+              d="M118 72 Q134 70 132 84 L114 116 L112 100 Z"
+              fill={`url(#${bone})`}
+              stroke={INK}
+              strokeWidth={3}
+              strokeLinejoin="round"
+            />
+            <circle cx="100" cy="68" r="32" fill={`url(#${feather})`} stroke={INK} strokeWidth={3.5} />
+            <path
+              d="M120 60 L132 64"
+              stroke="#7dff9a"
+              strokeWidth={3}
+              strokeLinecap="round"
+              filter={`url(#${glow})`}
+            />
+            {/* mask strap tied at the back of the head */}
+            <path d="M68 72 Q100 84 132 70" stroke="#efe6d2" strokeWidth={6} fill="none" />
+            <path d="M68 72 Q100 84 132 70" stroke="#b8aa8c" strokeWidth={1.5} fill="none" />
+            <path
+              d="M96 78 L86 96 L94 94 M104 78 L110 98 L102 94"
+              stroke="#efe6d2"
+              strokeWidth={4}
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <circle cx="100" cy="78" r="4.5" fill="#efe6d2" stroke={INK} strokeWidth={2} />
+            <path d="M84 38 Q90 24 98 36 Q104 20 114 36" stroke={INK} strokeWidth={3} fill="#2a2f48" />
+          </g>
         </g>
       </svg>
     );
@@ -113,37 +115,39 @@ export function Bonecrow({ uid, view }: ArtProps) {
       <path d="M58 104 Q40 132 52 158 Q66 146 68 124 Z" fill="#1c2033" stroke={INK} strokeWidth={3} />
       <path d="M142 104 Q160 132 148 158 Q134 146 132 124 Z" fill="#1c2033" stroke={INK} strokeWidth={3} />
       {/* head, cocked to one side with a smug tilt */}
-      <g transform="rotate(-14 100 80)">
-        <circle cx="100" cy="68" r="32" fill={`url(#${feather})`} stroke={INK} strokeWidth={3.5} />
-        <path d="M84 38 Q90 24 98 36 Q104 20 114 36" stroke={INK} strokeWidth={3} fill="#2a2f48" />
-        {/* skull mask with beak */}
-        <path
-          d="M72 66 Q72 44 100 44 Q128 44 128 66 Q128 80 116 84 L108 108 L100 118 L92 108 L84 84 Q72 80 72 66 Z"
-          fill={`url(#${bone})`}
-          stroke={INK}
-          strokeWidth={3}
-        />
-        <path d="M94 92 L100 112 L106 92" fill="none" stroke="#b8aa8c" strokeWidth={2} />
-        {/* narrow, slanted sockets with slit-like glowing eyes */}
-        <path d="M78 62 L98 68 Q94 74 82 70 Z" fill="#14101a" />
-        <path d="M122 62 L102 68 Q106 74 118 70 Z" fill="#14101a" />
-        <path
-          d="M84 66 L95 68.5"
-          stroke="#7dff9a"
-          strokeWidth={3}
-          strokeLinecap="round"
-          filter={`url(#${glow})`}
-        />
-        <path
-          d="M116 66 L105 68.5"
-          stroke="#7dff9a"
-          strokeWidth={3}
-          strokeLinecap="round"
-          filter={`url(#${glow})`}
-        />
-        <path d="M96 82 L100 86 L104 82" stroke="#b8aa8c" strokeWidth={2} fill="none" />
-        {/* crack */}
-        <path d="M108 46 L104 54 L110 58" stroke="#8e8068" strokeWidth={1.8} fill="none" />
+      <g className="cr-head">
+        <g transform="rotate(-14 100 80)">
+          <circle cx="100" cy="68" r="32" fill={`url(#${feather})`} stroke={INK} strokeWidth={3.5} />
+          <path d="M84 38 Q90 24 98 36 Q104 20 114 36" stroke={INK} strokeWidth={3} fill="#2a2f48" />
+          {/* skull mask with beak */}
+          <path
+            d="M72 66 Q72 44 100 44 Q128 44 128 66 Q128 80 116 84 L108 108 L100 118 L92 108 L84 84 Q72 80 72 66 Z"
+            fill={`url(#${bone})`}
+            stroke={INK}
+            strokeWidth={3}
+          />
+          <path d="M94 92 L100 112 L106 92" fill="none" stroke="#b8aa8c" strokeWidth={2} />
+          {/* narrow, slanted sockets with slit-like glowing eyes */}
+          <path d="M78 62 L98 68 Q94 74 82 70 Z" fill="#14101a" />
+          <path d="M122 62 L102 68 Q106 74 118 70 Z" fill="#14101a" />
+          <path
+            d="M84 66 L95 68.5"
+            stroke="#7dff9a"
+            strokeWidth={3}
+            strokeLinecap="round"
+            filter={`url(#${glow})`}
+          />
+          <path
+            d="M116 66 L105 68.5"
+            stroke="#7dff9a"
+            strokeWidth={3}
+            strokeLinecap="round"
+            filter={`url(#${glow})`}
+          />
+          <path d="M96 82 L100 86 L104 82" stroke="#b8aa8c" strokeWidth={2} fill="none" />
+          {/* crack */}
+          <path d="M108 46 L104 54 L110 58" stroke="#8e8068" strokeWidth={1.8} fill="none" />
+        </g>
       </g>
     </svg>
   );

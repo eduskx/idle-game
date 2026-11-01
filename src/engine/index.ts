@@ -9,3 +9,4 @@ export * from './rng';
 export * from './charms';
 export * from './expeditions';
 export * from './avatar';
+export * from './matchup';

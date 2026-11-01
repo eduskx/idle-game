@@ -71,6 +71,9 @@ export const de: Dictionary = {
     hp: 'LP',
     speed: 'TMP',
     filterAll: 'Alle',
+    zoneFoes: 'Gegner in {zone}:',
+    matchStrong: '▲ Stark in dieser Zone',
+    matchWeak: '▼ Schwach in dieser Zone',
     hint: 'Die vorderste Kreatur steckt die Treffer ein, außer jemand hat Spott. Reine Reich-Teams ab 3 erhalten Verwandtschaft, ausgeglichene gemischte Teams Zwielicht.',
   },
   summon: {
@@ -87,6 +90,10 @@ export const de: Dictionary = {
     rates: 'Chancen',
     lockedHint: 'Erreiche tiefere Zonen, um seltenere Kreaturen freizuschalten.',
     unlocksAt: 'Ab Zone {zone}',
+    skip: 'Überspringen',
+    skipAll: 'Alle zeigen',
+    tapNext: 'Tippen für die nächste',
+    tapDone: 'Tippen zum Schließen',
   },
   upgrades: {
     title: 'Upgrades',

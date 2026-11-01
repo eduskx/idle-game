@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CREATURES, CREATURE_BY_ID, RARITY_ORDER } from '../../data/creatures';
 import { canSummon, RARITY_WEIGHTS, summon, summonCost, summonPool, type SummonResult } from '../../engine';
 import { useT } from '../../i18n/useT';
@@ -6,11 +6,13 @@ import { gameStore, useGame } from '../../store/gameStore';
 import { Currency, Section } from '../components/common';
 import { Sprite } from '../components/Sprite';
 import { TypeChips } from '../components/TypeChip';
+import { chargeMs, FLASH_MS } from '../summonReveal';
 
 export function SummonScreen() {
   const s = useGame();
   const { t } = useT();
   const [results, setResults] = useState<SummonResult[]>([]);
+  const [revealing, setRevealing] = useState(false);
   const pool = summonPool(s);
   const poolIds = new Set(pool.map((c) => c.id));
   const availableRarities = RARITY_ORDER.filter((r) => pool.some((c) => c.rarity === r));
@@ -27,6 +29,9 @@ export function SummonScreen() {
       return list;
     });
     setResults(out);
+    const reduced =
+      s.settings.reducedMotion || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    setRevealing(out.length > 0 && !reduced);
   }
 
   return (
@@ -46,7 +51,9 @@ export function SummonScreen() {
         </button>
       </div>
 
-      {results.length > 0 && (
+      {revealing && <SummonReveal results={results} onDone={() => setRevealing(false)} />}
+
+      {results.length > 0 && !revealing && (
         <ul className="summon-results" aria-live="polite">
           {results.map((r, i) => {
             const def = CREATURE_BY_ID[r.defId]!;
@@ -100,5 +107,97 @@ export function SummonScreen() {
         })}
       </ul>
     </Section>
+  );
+}
+
+type Phase = 'charge' | 'flash' | 'show';
+
+/**
+ * Full-screen summoning sequence: the circle charges up, flashes in the rarity color and the
+ * creature hops out with its name and types. A ×10 batch reveals one after another; tap
+ * advances, "Skip" jumps to the result grid. Not rendered at all with reduced motion.
+ */
+function SummonReveal({ results, onDone }: { results: SummonResult[]; onDone: () => void }) {
+  const { t } = useT();
+  const [index, setIndex] = useState(0);
+  const [phase, setPhase] = useState<Phase>('charge');
+  const multi = results.length > 1;
+  const current = results[index]!;
+  const def = CREATURE_BY_ID[current.defId]!;
+
+  useEffect(() => {
+    if (phase === 'show') return;
+    const ms = phase === 'charge' ? chargeMs(def.rarity, multi) : FLASH_MS;
+    const timer = window.setTimeout(() => setPhase(phase === 'charge' ? 'flash' : 'show'), ms);
+    return () => window.clearTimeout(timer);
+  }, [phase, def.rarity, multi]);
+
+  function advance() {
+    if (phase !== 'show') {
+      setPhase('show');
+      return;
+    }
+    if (index + 1 < results.length) {
+      setIndex(index + 1);
+      setPhase('charge');
+    } else {
+      onDone();
+    }
+  }
+
+  const last = index + 1 >= results.length;
+  return (
+    <div
+      className={`summon-reveal rarity-${def.rarity} phase-${phase}`}
+      role="dialog"
+      aria-modal="true"
+      aria-label={t('summon.title')}
+      onClick={advance}
+    >
+      {multi && (
+        <span className="reveal-count">
+          {index + 1} / {results.length}
+        </span>
+      )}
+      <button
+        className="btn reveal-skip"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDone();
+        }}
+      >
+        {multi ? t('summon.skipAll') : t('summon.skip')}
+      </button>
+
+      <div className="reveal-stage" aria-hidden={phase !== 'show'}>
+        <div className="reveal-circle">
+          <div className="reveal-ring" />
+          <div className="reveal-ring inner" />
+          <div className="reveal-core" />
+        </div>
+        <div className="reveal-flash" />
+        {phase === 'show' && (
+          <div key={index} className="reveal-creature">
+            <div className="reveal-pop">
+              <Sprite id={def.id} size={168} className="breathe" label={t(`creature.${def.id}`)} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="reveal-info-slot" aria-live="polite">
+        {phase === 'show' && (
+          <div key={`info-${index}`} className="reveal-info">
+            <span className="reveal-rarity">{t(`rarity.${def.rarity}`)}</span>
+            <strong className="reveal-name">{t(`creature.${def.id}`)}</strong>
+            <TypeChips types={def.types} />
+            <span className={`tag ${current.isNew ? 'new' : ''}`}>
+              {current.isNew ? t('summon.new') : current.starUp ? t('summon.starUp') : t('summon.shard')}
+            </span>
+            <span className="reveal-hint">{last ? t('summon.tapDone') : t('summon.tapNext')}</span>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

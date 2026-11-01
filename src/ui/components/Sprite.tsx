@@ -85,7 +85,7 @@ export const Sprite = memo(function Sprite({
     '--art-scale': scale === 'portrait' ? factor : 1,
   } as CSSProperties;
   return (
-    <span className={classes} role="img" aria-label={label} style={style}>
+    <span className={classes} role="img" aria-label={label} style={style} data-creature={id}>
       {file ? (
         <img src={file} width={size} height={size} alt="" draggable={false} />
       ) : Art ? (

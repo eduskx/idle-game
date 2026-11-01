@@ -38,6 +38,7 @@ export function Emberpup({ uid, view }: ArtProps) {
       />
       <path d="M160 102 Q170 92 166 80" stroke="#6b2410" strokeWidth={8} fill="none" strokeLinecap="round" />
       <path
+        className="cr-flame"
         d="M156 66 Q148 46 160 34 Q164 48 174 50 Q172 66 162 74 Z"
         fill={`url(#${ember})`}
         filter={`url(#${glow})`}
@@ -72,13 +73,20 @@ export function Emberpup({ uid, view }: ArtProps) {
         {defs}
         <GroundShadow rx={50} />
         {/* seen from behind the tail swings out to the left side (mirrored), never across the back */}
-        <g transform="translate(206 4) scale(-1 1)">{tail(false)}</g>
+        <g transform="translate(206 4) scale(-1 1)">
+          <g className="cr-tail">{tail(false)}</g>
+        </g>
         {/* body */}
         <ellipse cx="100" cy="150" rx="40" ry="32" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
         <ellipse cx="78" cy="178" rx="12" ry="7" fill="#3a1a12" stroke={INK} strokeWidth={3} />
         <ellipse cx="122" cy="178" rx="12" ry="7" fill="#3a1a12" stroke={INK} strokeWidth={3} />
+        {/* white cheek ruffs peeking past the head, like the front's mask */}
+        <path d="M60 96 Q44 104 52 120 Q62 116 70 112 Z" fill="#fff1df" stroke={INK} strokeWidth={3} />
+        <path d="M140 96 Q156 104 148 120 Q138 116 130 112 Z" fill="#fff1df" stroke={INK} strokeWidth={3} />
         {backEars}
         <circle cx="100" cy="94" r="44" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
+        {/* darker saddle down the nape and back */}
+        <path d="M86 132 Q100 126 114 132 Q112 160 100 170 Q88 160 86 132 Z" fill="#8a2f12" opacity={0.55} />
         <path
           d="M70 116 Q100 128 130 116"
           stroke="#b5461c"
@@ -95,7 +103,7 @@ export function Emberpup({ uid, view }: ArtProps) {
     <svg viewBox="0 0 200 200">
       {defs}
       <GroundShadow rx={50} />
-      {tail(false)}
+      <g className="cr-tail">{tail(false)}</g>
       {/* body + legs */}
       <ellipse cx="100" cy="150" rx="36" ry="30" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
       <ellipse cx="100" cy="154" rx="20" ry="18" fill="#3a1a12" opacity={0.85} />
