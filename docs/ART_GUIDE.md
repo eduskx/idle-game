@@ -14,7 +14,8 @@ Custom art replaces them **without code changes**:
 
 ## Style direction
 
-- **Hearth**: warm pastel, round shapes, blush cheeks, big eyes, soft outlines. Cozy, Ghibli-ish, readable at 48 px.
+- **Hearth**: warm pastel, soft outlines, cozy and readable at 48 px. Not every Hearth creature is round or happy:
+  shape, expression and size follow the diversity matrix in `CREATURE_BIBLE.md`.
 - **Umbra**: desaturated purples/teals, glowing eyes, sharper silhouettes, a little creepy but never gory.
 - Both realms should feel like they belong to the same world (same outline thickness, same lighting direction).
 - Facing: front views look at the viewer, slightly turned left; back views show the creature from behind, facing up-right.

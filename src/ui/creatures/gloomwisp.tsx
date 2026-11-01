@@ -67,17 +67,21 @@ export function Gloomwisp({ uid, view }: ArtProps) {
       />
       {face && (
         <g>
-          <ellipse cx="92" cy="106" rx="4" ry="6" fill="#2a0f3f" />
-          <ellipse cx="108" cy="106" rx="4" ry="6" fill="#2a0f3f" />
-          <circle cx="91" cy="104" r="1.5" fill="#fff" />
-          <circle cx="107" cy="104" r="1.5" fill="#fff" />
+          {/* droopy, sorrowful eyes: outer corners sag, inner brows lift */}
+          <path d="M86 104 Q92 100 97 106 Q92 112 86 104 Z" fill="#2a0f3f" />
+          <path d="M114 104 Q108 100 103 106 Q108 112 114 104 Z" fill="#2a0f3f" />
+          <path d="M85 99 L95 96" stroke="#2a0f3f" strokeWidth={2} strokeLinecap="round" />
+          <path d="M115 99 L105 96" stroke="#2a0f3f" strokeWidth={2} strokeLinecap="round" />
+          {/* small frown */}
           <path
-            d="M96 116 Q100 119 104 116"
+            d="M95 120 Q100 116 105 120"
             stroke="#2a0f3f"
             strokeWidth={2}
             fill="none"
             strokeLinecap="round"
           />
+          {/* a single tear */}
+          <path d="M89 111 Q92 117 89 121 Q86 117 89 111 Z" fill="#bfe9ff" stroke="#2a0f3f" strokeWidth={1} />
         </g>
       )}
       {/* frame bars */}

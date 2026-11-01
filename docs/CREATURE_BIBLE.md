@@ -35,8 +35,8 @@ Each column must have **no duplicates** among the 10 creatures where marked (uni
 | L     | 1.2         | heavy, fills the platform         |
 | XL    | 1.35        | towers, may overflow the platform |
 
-Implement as a `size` field in `src/data/creatures.ts` and apply it wherever sprites are drawn
-(battle actors, alpha bosses, portraits may clamp).
+Implemented (iteration 2): `size` field in `src/data/creatures.ts`, `SIZE_SCALE` for the battle stage
+(`<Sprite scale="stage">`) and a compressed `PORTRAIT_SCALE` (0.7–1) for fixed portrait slots.
 
 ## Types (proposal, implement in a dedicated iteration)
 

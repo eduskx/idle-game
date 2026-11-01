@@ -1,4 +1,4 @@
-import { Blush, Eye, GroundShadow, Shade, type ArtProps } from './kit';
+import { Blush, GroundShadow, Shade, type ArtProps } from './kit';
 
 const INK = '#3a2210';
 
@@ -16,8 +16,8 @@ export function Honeybear({ uid, view }: ArtProps) {
   const comb = `${uid}-comb`;
   const defs = (
     <defs>
-      <Shade id={fur} light="#d99a62" base="#a8673a" dark="#6b3c1e" />
-      <Shade id={comb} light="#ffe08a" base="#f4b740" dark="#c27c10" />
+      <Shade id={fur} light="#ffd98a" base="#e6a63a" dark="#a5641a" />
+      <Shade id={comb} light="#ffbe4a" base="#d4780f" dark="#8f4508" />
     </defs>
   );
 
@@ -35,8 +35,8 @@ export function Honeybear({ uid, view }: ArtProps) {
     <g stroke={INK} strokeWidth={3.5}>
       <circle cx="58" cy="54" r="16" fill={`url(#${fur})`} />
       <circle cx="142" cy="54" r="16" fill={`url(#${fur})`} />
-      <circle cx="58" cy="56" r="8" fill="#f1d3a6" stroke="none" />
-      <circle cx="142" cy="56" r="8" fill="#f1d3a6" stroke="none" />
+      <circle cx="58" cy="56" r="8" fill="#fff0c8" stroke="none" />
+      <circle cx="142" cy="56" r="8" fill="#fff0c8" stroke="none" />
     </g>
   );
 
@@ -53,10 +53,10 @@ export function Honeybear({ uid, view }: ArtProps) {
       <svg viewBox="0 0 200 200">
         {defs}
         <GroundShadow rx={60} />
-        <ellipse cx="70" cy="176" rx="18" ry="10" fill="#6b3c1e" stroke={INK} strokeWidth={3} />
-        <ellipse cx="130" cy="176" rx="18" ry="10" fill="#6b3c1e" stroke={INK} strokeWidth={3} />
+        <ellipse cx="70" cy="176" rx="18" ry="10" fill="#8a4f14" stroke={INK} strokeWidth={3} />
+        <ellipse cx="130" cy="176" rx="18" ry="10" fill="#8a4f14" stroke={INK} strokeWidth={3} />
         <path
-          d="M42 150 Q36 100 100 94 Q164 100 158 150 Q154 184 100 184 Q46 184 42 150 Z"
+          d="M34 116 Q34 96 54 96 L146 96 Q166 96 166 116 L168 168 Q168 184 150 184 L50 184 Q32 184 32 168 Z"
           fill={`url(#${fur})`}
           stroke={INK}
           strokeWidth={3.5}
@@ -64,7 +64,7 @@ export function Honeybear({ uid, view }: ArtProps) {
         {/* honeycomb back plate */}
         <path
           d="M60 116 Q100 100 140 116 L136 158 Q100 170 64 158 Z"
-          fill="#c27c10"
+          fill="#4a2a10"
           stroke={INK}
           strokeWidth={3}
         />
@@ -79,10 +79,19 @@ export function Honeybear({ uid, view }: ArtProps) {
           ],
           10,
         )}
-        <circle cx="100" cy="176" r="7" fill="#a8673a" stroke={INK} strokeWidth={2.5} />
+        <circle cx="100" cy="176" r="7" fill="#e6a63a" stroke={INK} strokeWidth={2.5} />
         {ears}
-        <ellipse cx="100" cy="76" rx="46" ry="40" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
-        <path d="M84 40 Q92 50 88 60 Q96 54 104 60" fill="#f4b740" stroke="#8a5208" strokeWidth={2} />
+        <rect
+          x="52"
+          y="38"
+          width="96"
+          height="76"
+          rx="30"
+          fill={`url(#${fur})`}
+          stroke={INK}
+          strokeWidth={3.5}
+        />
+        <path d="M84 40 Q92 50 88 60 Q96 54 104 60" fill="#d9790f" stroke="#8a5208" strokeWidth={2} />
         {bee(36, 92, 0.9)}
         {bee(166, 70, 0.8)}
       </svg>
@@ -93,11 +102,11 @@ export function Honeybear({ uid, view }: ArtProps) {
     <svg viewBox="0 0 200 200">
       {defs}
       <GroundShadow rx={60} />
-      <ellipse cx="72" cy="178" rx="18" ry="10" fill="#6b3c1e" stroke={INK} strokeWidth={3} />
-      <ellipse cx="128" cy="178" rx="18" ry="10" fill="#6b3c1e" stroke={INK} strokeWidth={3} />
+      <ellipse cx="72" cy="178" rx="18" ry="10" fill="#8a4f14" stroke={INK} strokeWidth={3} />
+      <ellipse cx="128" cy="178" rx="18" ry="10" fill="#8a4f14" stroke={INK} strokeWidth={3} />
       {/* body */}
       <path
-        d="M44 150 Q38 104 100 98 Q162 104 156 150 Q152 184 100 184 Q48 184 44 150 Z"
+        d="M36 120 Q36 100 56 100 L144 100 Q164 100 164 120 L166 168 Q166 184 148 184 L52 184 Q34 184 34 168 Z"
         fill={`url(#${fur})`}
         stroke={INK}
         strokeWidth={3.5}
@@ -105,7 +114,7 @@ export function Honeybear({ uid, view }: ArtProps) {
       {/* honeycomb chest plate */}
       <path
         d="M68 118 Q100 108 132 118 L128 162 Q100 172 72 162 Z"
-        fill="#c27c10"
+        fill="#4a2a10"
         stroke={INK}
         strokeWidth={3}
       />
@@ -124,18 +133,34 @@ export function Honeybear({ uid, view }: ArtProps) {
       <path d={hexPath(148, 118, 16)} fill={`url(#${comb})`} stroke={INK} strokeWidth={3} />
       {ears}
       {/* head */}
-      <ellipse cx="100" cy="80" rx="46" ry="40" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
-      <ellipse cx="100" cy="96" rx="22" ry="16" fill="#f1d3a6" />
-      <Eye cx={80} cy={78} r={8} />
-      <Eye cx={120} cy={78} r={8} />
+      <rect
+        x="52"
+        y="42"
+        width="96"
+        height="76"
+        rx="30"
+        fill={`url(#${fur})`}
+        stroke={INK}
+        strokeWidth={3.5}
+      />
+      <ellipse cx="100" cy="96" rx="22" ry="16" fill="#fff0c8" />
+      {/* eyes closed in calm contentment */}
+      <path d="M72 80 Q80 72 88 80" fill="none" stroke={INK} strokeWidth={3.5} strokeLinecap="round" />
+      <path d="M112 80 Q120 72 128 80" fill="none" stroke={INK} strokeWidth={3.5} strokeLinecap="round" />
       <Blush cx={68} cy={94} rx={7} />
       <Blush cx={132} cy={94} rx={7} />
       <ellipse cx="100" cy="90" rx="8" ry="6" fill="#2a1608" />
-      <path d="M92 100 Q100 106 108 100" fill="none" stroke={INK} strokeWidth={2.5} strokeLinecap="round" />
+      <path
+        d="M88 99 Q94 106 100 100 Q106 106 112 99"
+        fill="none"
+        stroke={INK}
+        strokeWidth={2.5}
+        strokeLinecap="round"
+      />
       {/* honey drip on the head */}
       <path
         d="M76 46 Q100 36 124 46 Q124 54 118 52 Q116 62 110 58 Q106 54 100 56 Q92 64 88 54 Q80 56 76 46 Z"
-        fill="#f6b52e"
+        fill="#d9790f"
         stroke="#8a5208"
         strokeWidth={2}
       />

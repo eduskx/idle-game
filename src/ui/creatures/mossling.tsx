@@ -38,71 +38,92 @@ export function Mossling({ uid, view }: ArtProps) {
     return (
       <svg viewBox="0 0 200 200">
         {defs}
-        <GroundShadow rx={56} />
-        <ellipse cx="70" cy="176" rx="14" ry="9" fill="#8a5130" stroke={INK} strokeWidth={3} />
-        <ellipse cx="130" cy="176" rx="14" ry="9" fill="#8a5130" stroke={INK} strokeWidth={3} />
-        <ellipse cx="100" cy="132" rx="62" ry="48" fill={`url(#${body})`} stroke={INK} strokeWidth={3.5} />
-        {/* the moss covers almost the whole back */}
-        <path
-          d="M38 150 Q24 128 36 110 Q30 86 52 76 Q56 52 80 52 Q94 36 114 44 Q136 36 146 58 Q170 64 168 88 Q182 104 168 124 Q176 142 160 154 Q130 166 100 166 Q66 166 38 150 Z"
-          fill={`url(#${moss})`}
-          stroke={INK}
-          strokeWidth={3.5}
-        />
-        <g fill="#a6e07a" opacity={0.75}>
-          <circle cx="70" cy="80" r="6" />
-          <circle cx="112" cy="64" r="5" />
-          <circle cx="140" cy="100" r="6" />
-          <circle cx="84" cy="122" r="5" />
-          <circle cx="124" cy="140" r="4" />
+        <GroundShadow rx={62} />
+        {/* same low mound as the front view */}
+        <g transform="translate(100 182) scale(1.1 0.8) translate(-100 -182)">
+          <ellipse cx="70" cy="176" rx="14" ry="9" fill="#8a5130" stroke={INK} strokeWidth={3} />
+          <ellipse cx="130" cy="176" rx="14" ry="9" fill="#8a5130" stroke={INK} strokeWidth={3} />
+          <ellipse cx="100" cy="132" rx="62" ry="48" fill={`url(#${body})`} stroke={INK} strokeWidth={3.5} />
+          {/* the moss covers almost the whole back */}
+          <path
+            d="M38 150 Q24 128 36 110 Q30 86 52 76 Q56 52 80 52 Q94 36 114 44 Q136 36 146 58 Q170 64 168 88 Q182 104 168 124 Q176 142 160 154 Q130 166 100 166 Q66 166 38 150 Z"
+            fill={`url(#${moss})`}
+            stroke={INK}
+            strokeWidth={3.5}
+          />
+          <g fill="#a6e07a" opacity={0.75}>
+            <circle cx="70" cy="80" r="6" />
+            <circle cx="112" cy="64" r="5" />
+            <circle cx="140" cy="100" r="6" />
+            <circle cx="84" cy="122" r="5" />
+            <circle cx="124" cy="140" r="4" />
+          </g>
+          <g fill="#2f6b24" opacity={0.5}>
+            <circle cx="96" cy="96" r="4" />
+            <circle cx="60" cy="128" r="4" />
+            <circle cx="150" cy="128" r="3" />
+          </g>
+          <ellipse cx="100" cy="170" rx="8" ry="6" fill="#c4834f" stroke={INK} strokeWidth={2.5} />
         </g>
-        <g fill="#2f6b24" opacity={0.5}>
-          <circle cx="96" cy="96" r="4" />
-          <circle cx="60" cy="128" r="4" />
-          <circle cx="150" cy="128" r="3" />
-        </g>
-        <ellipse cx="100" cy="170" rx="8" ry="6" fill="#c4834f" stroke={INK} strokeWidth={2.5} />
-        {mushroom(128, 54, 1.05)}
-        {mushroom(70, 66, 0.65)}
+        {mushroom(131, 80, 1)}
+        {mushroom(67, 89, 0.62)}
       </svg>
     );
   }
 
+  // Front: a low, wide mound. The moss grows down over the face like a fringe, so the
+  // shy little eyes only peek out from underneath it.
   return (
     <svg viewBox="0 0 200 200">
       {defs}
-      <GroundShadow rx={54} />
-      <path d={mantle} fill={`url(#${moss})`} stroke={INK} strokeWidth={3.5} />
-      <g fill="#a6e07a" opacity={0.8}>
-        <circle cx="60" cy="84" r="5" />
-        <circle cx="86" cy="60" r="4" />
-        <circle cx="146" cy="76" r="5" />
+      <GroundShadow rx={62} />
+      <g transform="translate(100 182) scale(1.12 0.8) translate(-100 -182)">
+        <path d={mantle} fill={`url(#${moss})`} stroke={INK} strokeWidth={3.5} />
       </g>
       {/* feet */}
-      <ellipse cx="74" cy="176" rx="14" ry="9" fill="#8a5130" stroke={INK} strokeWidth={3} />
-      <ellipse cx="126" cy="176" rx="14" ry="9" fill="#8a5130" stroke={INK} strokeWidth={3} />
-      {/* body */}
-      <ellipse cx="100" cy="138" rx="56" ry="44" fill={`url(#${body})`} stroke={INK} strokeWidth={3.5} />
+      <ellipse cx="70" cy="177" rx="14" ry="8" fill="#8a5130" stroke={INK} strokeWidth={3} />
+      <ellipse cx="130" cy="177" rx="14" ry="8" fill="#8a5130" stroke={INK} strokeWidth={3} />
+      {/* body: wide, low dome */}
+      <ellipse cx="100" cy="148" rx="64" ry="34" fill={`url(#${body})`} stroke={INK} strokeWidth={3.5} />
       {/* face patch */}
       <path
-        d="M62 140 Q60 106 100 102 Q140 106 138 140 Q134 172 100 174 Q66 172 62 140 Z"
+        d="M66 150 Q66 122 100 120 Q134 122 134 150 Q130 176 100 177 Q70 176 66 150 Z"
         fill="#f7e4c6"
         stroke={INK}
         strokeWidth={2.5}
       />
-      {/* little arms */}
-      <path d="M52 146 Q44 156 54 162 Q62 160 62 150" fill="#c4834f" stroke={INK} strokeWidth={3} />
-      <path d="M148 146 Q156 156 146 162 Q138 160 138 150" fill="#c4834f" stroke={INK} strokeWidth={3} />
-      <Eye cx={84} cy={132} r={9} />
-      <Eye cx={116} cy={132} r={9} />
-      <Blush cx={72} cy={150} />
-      <Blush cx={128} cy={150} />
-      {/* nose + smile */}
-      <ellipse cx="100" cy="146" rx="6" ry="4.5" fill="#3d2619" />
-      <ellipse cx="98" cy="144.5" rx="2" ry="1.2" fill="#fff" opacity={0.7} />
-      <path d="M93 154 Q100 160 107 154" fill="none" stroke={INK} strokeWidth={2.5} strokeLinecap="round" />
-      {mushroom(132, 56, 1)}
-      <path d="M78 52 Q72 38 84 34 Q86 46 78 52 Z" fill="#8ed65f" stroke={INK} strokeWidth={2} />
+      {/* paws held up nervously in front of the chest */}
+      <path d="M78 170 Q72 160 80 156 Q88 158 88 168" fill="#c4834f" stroke={INK} strokeWidth={2.5} />
+      <path d="M122 170 Q128 160 120 156 Q112 158 112 168" fill="#c4834f" stroke={INK} strokeWidth={2.5} />
+      {/* eyes: small, glancing sideways */}
+      <Eye cx={87} cy={141} r={7} look={-2.5} lookY={1} pupil={0.75} />
+      <Eye cx={113} cy={141} r={7} look={-2.5} lookY={1} pupil={0.75} />
+      {/* moss fringe hanging over the brow */}
+      <path
+        d="M58 140 Q62 112 100 108 Q138 112 142 140 Q134 132 126 136 Q120 128 110 134 Q100 126 90 134 Q80 128 74 136 Q66 132 58 140 Z"
+        fill={`url(#${moss})`}
+        stroke={INK}
+        strokeWidth={3}
+        strokeLinejoin="round"
+      />
+      {/* worried brows: inner ends raised */}
+      <path d="M80 131 L92 128" stroke={INK} strokeWidth={2.5} strokeLinecap="round" />
+      <path d="M120 131 L108 128" stroke={INK} strokeWidth={2.5} strokeLinecap="round" />
+      <Blush cx={74} cy={156} rx={6} />
+      <Blush cx={126} cy={156} rx={6} />
+      {/* nose + tiny wobbly mouth */}
+      <ellipse cx="100" cy="153" rx="4.5" ry="3.5" fill="#3d2619" />
+      <path
+        d="M95 162 Q97.5 160 100 162 Q102.5 164 105 162"
+        fill="none"
+        stroke={INK}
+        strokeWidth={2}
+        strokeLinecap="round"
+      />
+      {/* nervous sweat drop */}
+      <path d="M146 120 Q150 128 146 132 Q142 128 146 120 Z" fill="#bfe6ff" stroke={INK} strokeWidth={1.5} />
+      {mushroom(134, 84, 0.95)}
+      <path d="M74 86 Q68 72 80 68 Q82 80 74 86 Z" fill="#8ed65f" stroke={INK} strokeWidth={2} />
     </svg>
   );
 }

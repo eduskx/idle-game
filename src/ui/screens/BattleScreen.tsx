@@ -212,6 +212,7 @@ export function BattleScreen() {
                 id={enemyDef.species}
                 alpha={enemyDef.alpha}
                 size={enemyDef.alpha ? 146 : 122}
+                scale="stage"
                 label={enemyName}
                 className="breathe"
               />
@@ -239,6 +240,7 @@ export function BattleScreen() {
                 id={active.defId}
                 view="back"
                 size={176}
+                scale="stage"
                 label={t(`creature.${active.defId}`)}
                 className="breathe slow"
               />

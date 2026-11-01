@@ -1,4 +1,4 @@
-import { Blush, Eye, Glow, GroundShadow, Shade, type ArtProps } from './kit';
+import { Glow, GroundShadow, Shade, type ArtProps } from './kit';
 
 const INK = '#4a1a0e';
 
@@ -110,12 +110,27 @@ export function Emberpup({ uid, view }: ArtProps) {
         fill="none"
         strokeLinecap="round"
       />
-      <Eye cx={82} cy={98} r={10} iris="#3a1408" />
-      <Eye cx={118} cy={98} r={10} iris="#3a1408" />
-      <Blush cx={70} cy={116} rx={6} />
-      <Blush cx={130} cy={116} rx={6} />
-      <path d="M95 112 Q100 108 105 112 Q100 118 95 112 Z" fill="#2a0e06" />
-      <path d="M92 120 Q100 126 108 120" fill="none" stroke={INK} strokeWidth={2.5} strokeLinecap="round" />
+      {/* squinted, confident eyes: flat upper lids, one brow cocked */}
+      <path d="M71 100 Q82 92 93 100 Q82 106 71 100 Z" fill="#fff" />
+      <path d="M107 100 Q118 92 129 100 Q118 106 107 100 Z" fill="#fff" />
+      <circle cx="85" cy="100" r="4.2" fill="#3a1408" />
+      <circle cx="121" cy="100" r="4.2" fill="#3a1408" />
+      <circle cx="86.5" cy="98.5" r="1.4" fill="#fff" />
+      <circle cx="122.5" cy="98.5" r="1.4" fill="#fff" />
+      <path d="M69 98 Q82 90 95 97" fill="none" stroke={INK} strokeWidth={3.5} strokeLinecap="round" />
+      <path d="M105 97 Q118 90 131 98" fill="none" stroke={INK} strokeWidth={3.5} strokeLinecap="round" />
+      <path d="M72 88 L92 90" stroke={INK} strokeWidth={3.5} strokeLinecap="round" />
+      <path d="M108 86 Q118 78 130 84" fill="none" stroke={INK} strokeWidth={3.5} strokeLinecap="round" />
+      <path d="M95 110 Q100 106 105 110 Q100 116 95 110 Z" fill="#2a0e06" />
+      {/* lopsided grin with a single fang */}
+      <path d="M90 119 Q102 124 114 114" fill="none" stroke={INK} strokeWidth={2.8} strokeLinecap="round" />
+      <path
+        d="M106 120 L109 128 L112 117 Z"
+        fill="#fff"
+        stroke={INK}
+        strokeWidth={1.6}
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

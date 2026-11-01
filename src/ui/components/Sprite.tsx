@@ -1,4 +1,5 @@
-import { memo, useId } from 'react';
+import { memo, useId, type CSSProperties } from 'react';
+import { CREATURE_BY_ID, PORTRAIT_SCALE, SIZE_SCALE } from '../../data/creatures';
 import { CREATURE_ART, type View } from '../creatures';
 
 /**
@@ -31,6 +32,20 @@ interface SpriteProps {
   dim?: boolean;
   label?: string;
   className?: string;
+  /**
+   * How the species' size class is applied (see CREATURE_BIBLE.md):
+   * - `portrait` (default): fixed slot, art shrinks inside it for small species
+   * - `stage`: the whole sprite grows/shrinks (battle actors), may overflow the platform
+   * - `none`: always fill the slot
+   */
+  scale?: 'portrait' | 'stage' | 'none';
+}
+
+/** Pure helper so the scaling rule can be tested without rendering. */
+export function spriteScale(id: string, mode: 'portrait' | 'stage' | 'none'): number {
+  const def = CREATURE_BY_ID[id];
+  if (!def || mode === 'none') return 1;
+  return mode === 'stage' ? SIZE_SCALE[def.size] : PORTRAIT_SCALE[def.size];
 }
 
 function Crown() {
@@ -56,13 +71,21 @@ export const Sprite = memo(function Sprite({
   dim,
   label,
   className,
+  scale = 'portrait',
 }: SpriteProps) {
   const uid = useId().replace(/:/g, '');
   const file = FILES[view === 'back' ? `${id}-back` : id];
   const Art = CREATURE_ART[id];
   const classes = ['sprite', alpha ? 'is-alpha' : '', dim ? 'dim' : '', className ?? ''].join(' ').trim();
+  const factor = spriteScale(id, scale);
+  const box = scale === 'stage' ? Math.round(size * factor) : size;
+  const style = {
+    width: box,
+    height: box,
+    '--art-scale': scale === 'portrait' ? factor : 1,
+  } as CSSProperties;
   return (
-    <span className={classes} role="img" aria-label={label} style={{ width: size, height: size }}>
+    <span className={classes} role="img" aria-label={label} style={style}>
       {file ? (
         <img src={file} width={size} height={size} alt="" draggable={false} />
       ) : Art ? (

@@ -66,13 +66,18 @@ export function GroundShadow({ rx = 46, y = 184 }: { rx?: number; y?: number }) 
   return <ellipse cx="100" cy={y} rx={rx} ry={rx * 0.16} fill="#000" opacity={0.22} />;
 }
 
-/** Big glossy cartoon eye. `look` shifts the pupil horizontally. */
+/**
+ * Round cartoon eye. `look`/`lookY` shift the pupil, `pupil` scales it (small pupils read
+ * as nervous or startled). Use sparingly: the bible wants varied eye shapes across the roster.
+ */
 export function Eye({
   cx,
   cy,
   r = 9,
   iris = '#2a1d16',
   look = 0,
+  lookY = 0,
+  pupil = 1,
   sclera = '#fff',
 }: {
   cx: number;
@@ -80,14 +85,17 @@ export function Eye({
   r?: number;
   iris?: string;
   look?: number;
+  lookY?: number;
+  pupil?: number;
   sclera?: string;
 }) {
+  const px = cx + look;
+  const py = cy + r * 0.12 + lookY;
   return (
     <g>
       <ellipse cx={cx} cy={cy} rx={r} ry={r * 1.12} fill={sclera} />
-      <ellipse cx={cx + look} cy={cy + r * 0.12} rx={r * 0.68} ry={r * 0.8} fill={iris} />
-      <circle cx={cx + look - r * 0.25} cy={cy - r * 0.3} r={r * 0.28} fill="#fff" />
-      <circle cx={cx + look + r * 0.25} cy={cy + r * 0.35} r={r * 0.12} fill="#fff" opacity={0.8} />
+      <ellipse cx={px} cy={py} rx={r * 0.68 * pupil} ry={r * 0.8 * pupil} fill={iris} />
+      <circle cx={px - r * 0.25 * pupil} cy={py - r * 0.42 * pupil} r={r * 0.28 * pupil} fill="#fff" />
     </g>
   );
 }

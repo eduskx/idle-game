@@ -10,7 +10,7 @@ export function Drownedknight({ uid, view }: ArtProps) {
   const plume = `${uid}-plume`;
   const defs = (
     <defs>
-      <Shade id={metal} light="#a9bcc2" base="#64767e" dark="#2c3a40" />
+      <Shade id={metal} light="#9fd0c6" base="#4f8580" dark="#1f3f3e" />
       <Shade id={shell} light="#ff8a6e" base="#c9473a" dark="#7e2219" />
       <Linear id={plume} from="#7a2a3a" to="#3a1420" />
       <Glow id={glow} std={3} />
@@ -100,11 +100,43 @@ export function Drownedknight({ uid, view }: ArtProps) {
         opacity={0.5}
         strokeLinecap="round"
       />
-      {/* visor slit with glowing eyes on stalks */}
-      <rect x="60" y="78" width="80" height="18" rx="6" fill="#0a1215" stroke={INK} strokeWidth={3} />
-      <circle cx="84" cy="87" r="5" fill="#7ff7ff" filter={`url(#${glow})`} />
-      <circle cx="116" cy="87" r="5" fill="#7ff7ff" filter={`url(#${glow})`} />
-      <path d="M100 98 L100 150" stroke="#3a4a50" strokeWidth={4} />
+      {/* two narrow visor slits: no eyes, no mouth, just a faint glow from inside */}
+      <rect x="58" y="80" width="36" height="7" rx="2" fill="#061012" stroke={INK} strokeWidth={2.5} />
+      <rect x="106" y="80" width="36" height="7" rx="2" fill="#061012" stroke={INK} strokeWidth={2.5} />
+      <path
+        d="M66 83.5 L86 83.5"
+        stroke="#ffd98a"
+        strokeWidth={3}
+        strokeLinecap="round"
+        opacity={0.95}
+        filter={`url(#${glow})`}
+      />
+      <path
+        d="M114 83.5 L134 83.5"
+        stroke="#ffd98a"
+        strokeWidth={3}
+        strokeLinecap="round"
+        opacity={0.95}
+        filter={`url(#${glow})`}
+      />
+      {/* rust bleeding from the slits */}
+      <path
+        d="M70 88 Q68 100 72 110"
+        stroke="#b5622a"
+        strokeWidth={3.5}
+        fill="none"
+        opacity={0.75}
+        strokeLinecap="round"
+      />
+      <path
+        d="M128 88 Q131 98 127 104"
+        stroke="#b5622a"
+        strokeWidth={3}
+        fill="none"
+        opacity={0.7}
+        strokeLinecap="round"
+      />
+      <path d="M100 90 L100 150" stroke="#3a4a50" strokeWidth={4} />
       {/* breathing holes */}
       <g fill="#0a1215">
         <circle cx="80" cy="118" r="3" />

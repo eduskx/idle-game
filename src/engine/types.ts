@@ -8,6 +8,8 @@
 
 export type Realm = 'umbra' | 'hearth';
 export type Element = 'ember' | 'tide' | 'grove';
+/** Visual size class of a species (see docs/CREATURE_BIBLE.md). Purely cosmetic. */
+export type SizeClass = 'XS' | 'S' | 'M' | 'L' | 'XL';
 export type Rarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
 
 export type AbilityKind =
@@ -45,6 +47,8 @@ export interface CreatureDef {
   ability: Ability;
   /** Zone index (0-based) that must have been reached before this creature can be summoned. */
   unlockZone: number;
+  /** How big the species is drawn (battle stage and portraits). */
+  size: SizeClass;
 }
 
 export interface EnemyDef {
