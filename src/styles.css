@@ -590,21 +590,92 @@ h3 {
 .num {
   font-variant-numeric: tabular-nums;
 }
-.el-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+.type-ember {
+  --type: #ff7a3c;
+}
+.type-tide {
+  --type: #45b4ff;
+}
+.type-grove {
+  --type: #6fd16a;
+}
+.type-stone {
+  --type: #b8a07a;
+}
+.type-gale {
+  --type: #9fe3ff;
+}
+.type-shade {
+  --type: #a77bff;
+}
+.type-chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.info-box .type-chips {
+  display: flex;
+  margin: 3px 0 4px;
+}
+.type-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+  padding: 0 7px 0 2px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: color-mix(in srgb, var(--type) 55%, #fff);
+  background: color-mix(in srgb, var(--type) 20%, rgb(0 0 0 / 0.35));
+  border: 1px solid color-mix(in srgb, var(--type) 70%, transparent);
+  white-space: nowrap;
+}
+.type-chip .type-icon {
   flex: none;
-  box-shadow: 0 0 0 2px #0004;
+  box-sizing: content-box;
+  padding: 1.5px;
+  border-radius: 50%;
+  background: var(--type);
+  color: #1b1626;
 }
-.el-ember {
-  background: #ff7a3c;
+.type-chip.compact {
+  padding: 0;
+  height: auto;
+  border: 0;
+  background: none;
+  box-shadow: 0 0 0 1.5px #1b1626;
+  border-radius: 50%;
 }
-.el-tide {
-  background: #45b4ff;
+
+.eff-pop {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  z-index: 6;
+  opacity: 0;
+  transform: translateX(-50%);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.35);
 }
-.el-grove {
-  background: #6fd16a;
+.eff-pop.super {
+  background: #ffd36b;
+  color: #3a1e00;
+}
+.eff-pop.weak {
+  background: #3b3552;
+  color: #c9c1de;
+  border: 1px solid var(--line);
+}
+.player-spot .eff-pop {
+  top: 8px;
 }
 
 .hp {
@@ -671,6 +742,14 @@ h3 {
 .dmg.crit {
   color: var(--warning);
   font-size: 1.3rem;
+}
+.dmg.super {
+  color: #ffd36b;
+  font-size: 1.12rem;
+}
+.dmg.weak {
+  color: #b9b2cc;
+  font-size: 0.86rem;
 }
 
 .bench {
@@ -837,15 +916,6 @@ h3 {
 }
 .tag.realm-umbra {
   color: var(--umbra);
-}
-.tag.element-ember {
-  color: #ff8a5c;
-}
-.tag.element-tide {
-  color: #6cc7ff;
-}
-.tag.element-grove {
-  color: #7fd48a;
 }
 .tag.new {
   background: var(--primary);

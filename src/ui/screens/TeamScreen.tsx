@@ -17,6 +17,7 @@ import { gameStore, useGame } from '../../store/gameStore';
 import { ProgressBar, Section } from '../components/common';
 import { CharmsPanel, ExpeditionsPanel } from './ExpeditionsPanel';
 import { Sprite } from '../components/Sprite';
+import { TypeChips } from '../components/TypeChip';
 
 type Filter = 'all' | Realm;
 type View = 'creatures' | 'expeditions' | 'charms';
@@ -114,7 +115,7 @@ export function TeamScreen() {
                     <div className="tags">
                       <span className={`tag rarity rarity-${def.rarity}`}>{t(`rarity.${def.rarity}`)}</span>
                       <span className={`tag realm-${def.realm}`}>{t(`realm.${def.realm}`)}</span>
-                      <span className={`tag element-${def.element}`}>{t(`element.${def.element}`)}</span>
+                      <TypeChips types={def.types} />
                     </div>
                     <div className="small">
                       {t('team.level', { level: c.level, cap })}

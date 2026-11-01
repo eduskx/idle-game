@@ -38,21 +38,25 @@ Each column must have **no duplicates** among the 10 creatures where marked (uni
 Implemented (iteration 2): `size` field in `src/data/creatures.ts`, `SIZE_SCALE` for the battle stage
 (`<Sprite scale="stage">`) and a compressed `PORTRAIT_SCALE` (0.7–1) for fixed portrait slots.
 
-## Types (proposal, implement in a dedicated iteration)
+## Types (implemented in iteration 3)
 
-Six types, each creature has one or two:
+Six types, each creature has one or two (column "Type(s)" above). Enemies inherit their species' types.
 
-| Type (en / de)   | Color   | Strong against | Weak against |
-| ---------------- | ------- | -------------- | ------------ |
-| Ember / Glut     | #ff7a3c | Grove, Gale    | Tide, Stone  |
-| Tide / Flut      | #45b4ff | Ember, Stone   | Grove, Gale  |
-| Grove / Hain     | #6fd16a | Tide, Stone    | Ember, Shade |
-| Stone / Fels     | #b8a07a | Ember, Gale    | Tide, Grove  |
-| Gale / Sturm     | #9fe3ff | Grove, Shade   | Stone, Ember |
-| Shade / Schatten | #a77bff | Shade, Grove   | Gale, Ember  |
+| Type (en / de)   | Color   | Icon            | Strong against (×1.5) | Resisted by (×0.75) |
+| ---------------- | ------- | --------------- | --------------------- | ------------------- |
+| Ember / Glut     | #ff7a3c | flame           | Grove, Gale           | Tide, Stone         |
+| Tide / Flut      | #45b4ff | drop over wave  | Ember, Stone          | Grove, Gale         |
+| Grove / Hain     | #6fd16a | leaf            | Tide, Stone           | Ember, Shade        |
+| Stone / Fels     | #b8a07a | faceted boulder | Ember, Gale           | Tide, Grove         |
+| Gale / Sturm     | #9fe3ff | three swooshes  | Tide, Shade           | Ember, Stone        |
+| Shade / Schatten | #a77bff | crescent + star | Shade, Grove          | Gale                |
 
-Dual types multiply (×1.5 · ×1.5 = ×2.25, ×0.75 · ×0.75 ≈ ×0.56). Show type chips with icon + color
-everywhere a creature appears. Keep the chart in `src/engine/formulas.ts` and test it.
+Rules: "resisted by" is always the mirror of "strong against", so every type has exactly two strengths
+and (except Shade) two weaknesses. Shade hits Shade hard both ways. Changed from the first proposal:
+Gale is strong against Tide instead of Grove (Grove had three weaknesses, Tide only one).
+The attacker strikes with its best type; the defender's types multiply
+(×1.5 · ×1.5 = ×2.25, ×0.75 · ×0.75 ≈ ×0.56). Chart and tests: `src/engine/formulas.ts`
+(`TYPE_STRONG`, `typeEffect`, `typeMultiplier`). UI: `src/ui/components/TypeChip.tsx`.
 
 ## Art rules
 

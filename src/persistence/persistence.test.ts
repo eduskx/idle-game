@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState, simulate } from '../engine';
+import { createInitialState, globalModifiers, memberStats, simulate, typeCharmBonus } from '../engine';
 import { exportSave, fromUnknown, importSave, SaveError, toSaveData } from './serialize';
 import { MemoryRepository } from './repository';
 
@@ -43,6 +43,19 @@ describe('persistence', () => {
     const s = fromUnknown(data);
     expect(s.team).toEqual(['mossling', 'gloomwisp']);
     expect(Object.keys(s.creatures).sort()).toEqual(['gloomwisp', 'mossling']);
+  });
+
+  it('loads saves from before the type system (element cores keep working)', () => {
+    const data = toSaveData(createInitialState(1000, 9));
+    data.charms = { groveCore: 2, emberCore: 1, tideCore: 0 };
+    data.battle = { stage: 14, autoAdvance: true };
+    const s = fromUnknown(JSON.parse(JSON.stringify(data)));
+    // Mossling is Grove + Stone, Gloomwisp is Shade + Ember.
+    expect(typeCharmBonus(s, ['grove', 'stone'])).toBeCloseTo(0.12);
+    expect(typeCharmBonus(s, ['shade', 'ember'])).toBeCloseTo(0.06);
+    expect(memberStats(s, 'mossling', globalModifiers(s)).types).toEqual(['grove', 'stone']);
+    simulate(s, 10);
+    expect(s.battle.enemy?.types.length).toBeGreaterThan(0);
   });
 
   it('saves and loads through a repository', async () => {

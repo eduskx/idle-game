@@ -3,7 +3,7 @@
  * Usage: npx tsx scripts/art-sheet.tsx <out-dir>
  * Used during development to review art quickly without running the app.
  */
-import { writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -25,6 +25,7 @@ body{margin:0;background:#2a2238;font-family:sans-serif;color:#eee;display:grid;
 .row{display:flex;align-items:flex-end;gap:6px}.big svg{width:200px;height:200px}.small svg{width:56px;height:56px}
 p{margin:0;text-align:center;color:#222;font-weight:700}.cell:nth-child(n+6) p{color:#eee}
 </style></head><body>${cells}</body></html>`;
+mkdirSync(out, { recursive: true });
 writeFileSync(`${out}/sheet.html`, html);
 
 const require = createRequire(import.meta.url);

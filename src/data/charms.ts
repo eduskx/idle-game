@@ -1,4 +1,4 @@
-import type { Element } from '../engine/types';
+import type { CreatureType } from '../engine/types';
 
 export type CharmId =
   | 'wolfFang'
@@ -17,7 +17,8 @@ export interface CharmDef {
   /** Effect per level. */
   perLevel: number;
   maxLevel: number;
-  element?: Element;
+  /** Boosts the attack of creatures that have this type. */
+  type?: CreatureType;
 }
 
 /** Charms drop from bosses and expeditions and are kept forever (also through rebloom). */
@@ -28,9 +29,9 @@ export const CHARMS: CharmDef[] = [
   { id: 'owlFeather', icon: '🪶', perLevel: 0.04, maxLevel: 100 },
   { id: 'moonstone', icon: '🌙', perLevel: 0.03, maxLevel: 100 },
   { id: 'hourglass', icon: '⏳', perLevel: 1, maxLevel: 30 },
-  { id: 'emberCore', icon: '🔥', perLevel: 0.06, maxLevel: 100, element: 'ember' },
-  { id: 'tideCore', icon: '💧', perLevel: 0.06, maxLevel: 100, element: 'tide' },
-  { id: 'groveCore', icon: '🌿', perLevel: 0.06, maxLevel: 100, element: 'grove' },
+  { id: 'emberCore', icon: '🔥', perLevel: 0.06, maxLevel: 100, type: 'ember' },
+  { id: 'tideCore', icon: '💧', perLevel: 0.06, maxLevel: 100, type: 'tide' },
+  { id: 'groveCore', icon: '🌿', perLevel: 0.06, maxLevel: 100, type: 'grove' },
 ];
 
 export const CHARM_BY_ID = Object.fromEntries(CHARMS.map((c) => [c.id, c])) as Record<CharmId, CharmDef>;

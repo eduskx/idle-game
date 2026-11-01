@@ -33,6 +33,8 @@ export const de: Dictionary = {
     bossFailed: 'Der Boss war zu stark. Automatisches Vorrücken pausiert.',
     quickUpgrades: 'Schnell-Upgrades',
     wild: '{name} (wild)',
+    superEffective: 'Sehr effektiv!',
+    notEffective: 'Nicht sehr effektiv…',
     alpha: 'Alpha-{name}',
     farmingHint: 'Du farmst diese Stufe. Aktiviere automatisches Vorrücken, um weiterzukommen.',
     synergyPure: '{realm}-Verwandtschaft: +{bonus}% Angriff & LP',
@@ -191,10 +193,13 @@ export const de: Dictionary = {
     hearth: 'Herd',
     umbra: 'Umbra',
   },
-  element: {
+  type: {
     ember: 'Glut',
     tide: 'Flut',
     grove: 'Hain',
+    stone: 'Fels',
+    gale: 'Sturm',
+    shade: 'Schatten',
   },
   rarity: {
     common: 'Gewöhnlich',

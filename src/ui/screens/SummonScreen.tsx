@@ -5,6 +5,7 @@ import { useT } from '../../i18n/useT';
 import { gameStore, useGame } from '../../store/gameStore';
 import { Currency, Section } from '../components/common';
 import { Sprite } from '../components/Sprite';
+import { TypeChips } from '../components/TypeChip';
 
 export function SummonScreen() {
   const s = useGame();
@@ -57,6 +58,7 @@ export function SummonScreen() {
               >
                 <Sprite id={def.id} size={56} label={t(`creature.${def.id}`)} />
                 <span className="small">{t(`creature.${def.id}`)}</span>
+                <TypeChips types={def.types} compact />
                 <span className={`tag ${r.isNew ? 'new' : ''}`}>
                   {r.isNew ? t('summon.new') : r.starUp ? t('summon.starUp') : t('summon.shard')}
                 </span>
@@ -89,6 +91,7 @@ export function SummonScreen() {
               title={unlocked ? t(`creature.${c.id}`) : t('summon.unlocksAt', { zone: c.unlockZone + 1 })}
             >
               <Sprite id={c.id} size={44} dim={!owned} label={unlocked ? t(`creature.${c.id}`) : '?'} />
+              {unlocked && <TypeChips types={c.types} compact />}
               <span className="tiny">
                 {unlocked ? t(`creature.${c.id}`) : t('summon.unlocksAt', { zone: c.unlockZone + 1 })}
               </span>

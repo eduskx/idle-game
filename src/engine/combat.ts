@@ -2,13 +2,13 @@ import { getEnemy, getZone } from '../data/world';
 import {
   BALANCE,
   bossEssence,
-  elementMultiplier,
   enemyAtk,
   enemyHp,
   essencePerDrop,
   isBossStage,
   killGold,
   killXp,
+  typeMultiplier,
   zoneOf,
 } from './formulas';
 import { BOSS_CHARM_CHANCE } from '../data/charms';
@@ -51,7 +51,7 @@ export function spawnEnemy(s: GameState): Fighter {
     hp: maxHp,
     atk: enemyAtk(stage, def.atkMult, boss),
     speed: BALANCE.enemySpeed,
-    element: def.element,
+    types: def.types,
     attackTimer: 0,
     isBoss: boss,
   };
@@ -117,12 +117,13 @@ export function tick(s: GameState, dt: number, mods: GlobalModifiers = globalMod
     while (b.attackTimers[m.defId]! >= 1 && enemy.hp > 0) {
       b.attackTimers[m.defId]! -= 1;
       const crit = roll(s) < m.critChance;
-      let dmg = m.atk * elementMultiplier(m.element, enemy.element) * (crit ? BALANCE.critMult : 1);
+      const eff = typeMultiplier(m.types, enemy.types);
+      let dmg = m.atk * eff * (crit ? BALANCE.critMult : 1);
       if (m.ability === 'bossSlayer' && enemy.isBoss) dmg *= 1 + m.abilityValue;
       if (m.ability === 'rage') dmg *= 1 + Math.min(3, m.abilityValue * b.enemyAge);
       if (m.ability === 'execute' && enemy.hp < enemy.maxHp * 0.3) dmg *= 1 + m.abilityValue;
       enemy.hp -= dmg;
-      pushEvent(s, { t: 'hit', target: 'enemy', amount: dmg, crit });
+      pushEvent(s, { t: 'hit', target: 'enemy', amount: dmg, crit, eff });
       if (m.ability === 'lifesteal') {
         b.teamHp[m.defId] = Math.min(m.maxHp, b.teamHp[m.defId]! + dmg * m.abilityValue);
       }
@@ -201,9 +202,10 @@ export function tick(s: GameState, dt: number, mods: GlobalModifiers = globalMod
     enemy.attackTimer -= 1;
     const target = pickTarget(team, b.teamHp);
     if (!target) break;
-    const dmg = enemy.atk * elementMultiplier(enemy.element, target.element);
+    const eff = typeMultiplier(enemy.types, target.types);
+    const dmg = enemy.atk * eff;
     b.teamHp[target.defId] = b.teamHp[target.defId]! - dmg;
-    pushEvent(s, { t: 'hit', target: target.defId, amount: dmg, crit: false });
+    pushEvent(s, { t: 'hit', target: target.defId, amount: dmg, crit: false, eff });
     if (target.ability === 'thorns') {
       enemy.hp -= dmg * target.abilityValue * 3;
     }
