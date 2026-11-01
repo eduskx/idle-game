@@ -23,6 +23,7 @@ import { Backdrop } from '../components/Backdrop';
 import { Sprite } from '../components/Sprite';
 import { Tips } from '../components/Tips';
 import { TypeChips } from '../components/TypeChip';
+import { TAMER_REACTION_MS, tamerReaction, type TamerReaction } from '../tamerReaction';
 
 const QUICK: UpgradeId[] = ['sharpen', 'vitality', 'greed', 'wisdom'];
 
@@ -45,6 +46,92 @@ function HpBar({ value, max, tone }: { value: number; max: number; tone: 'enemy'
 
 type HitEvent = Extract<CombatEvent, { t: 'hit' }>;
 
+/** Whole-body motion of the tamer per reaction (transform only; origin at the feet via CSS). */
+const TAMER_KEYFRAMES: Record<TamerReaction, Keyframe[]> = {
+  // two happy hops with a squash on landing
+  cheer: [
+    { transform: 'none' },
+    { transform: 'translateY(-14px) scale(0.96, 1.06)', offset: 0.2 },
+    { transform: 'translateY(0) scale(1.06, 0.93)', offset: 0.38 },
+    { transform: 'translateY(-9px) scale(0.98, 1.03)', offset: 0.58 },
+    { transform: 'translateY(0) scale(1.03, 0.97)', offset: 0.76 },
+    { transform: 'none' },
+  ],
+  // one big leap with a spin-wiggle, then a proud stretch
+  triumph: [
+    { transform: 'none' },
+    { transform: 'translateY(4px) scale(1.06, 0.92)', offset: 0.1 },
+    { transform: 'translateY(-24px) rotate(-8deg) scale(0.95, 1.08)', offset: 0.3 },
+    { transform: 'translateY(-20px) rotate(8deg)', offset: 0.45 },
+    { transform: 'translateY(0) scale(1.08, 0.9)', offset: 0.6 },
+    { transform: 'translateY(-4px) scale(0.98, 1.05)', offset: 0.78 },
+    { transform: 'none' },
+  ],
+  // recoil away from the hit, shake, then slowly straighten up
+  flinch: [
+    { transform: 'none' },
+    { transform: 'translate(-7px, 3px) rotate(-7deg) scale(1.04, 0.94)', offset: 0.12 },
+    { transform: 'translate(-3px, 2px) rotate(-4deg)', offset: 0.24 },
+    { transform: 'translate(-6px, 2px) rotate(-6deg)', offset: 0.34 },
+    { transform: 'translate(-4px, 2px) rotate(-5deg) scale(1.02, 0.96)', offset: 0.55 },
+    { transform: 'none' },
+  ],
+};
+
+/** Small emote icons over the tamer's head; hidden until a reaction animates one. */
+function TamerEmotes({ refs }: { refs: { current: Partial<Record<TamerReaction, SVGSVGElement | null>> } }) {
+  const set = (r: TamerReaction) => (el: SVGSVGElement | null) => {
+    refs.current[r] = el;
+  };
+  const ink = '#2b1d17';
+  return (
+    <>
+      <svg ref={set('cheer')} className="tamer-emote" viewBox="0 0 40 40">
+        <path
+          d="M20 4 L23.5 15.5 L35 19 L23.5 22.5 L20 34 L16.5 22.5 L5 19 L16.5 15.5 Z"
+          fill="#ffd36b"
+          stroke={ink}
+          strokeWidth={2.2}
+          strokeLinejoin="round"
+        />
+        <path
+          d="M33 4 L34.5 8 L38 9 L34.5 10.5 L33 14 L31.5 10.5 L28 9 L31.5 8 Z"
+          fill="#fff3c4"
+          stroke={ink}
+          strokeWidth={1.4}
+        />
+      </svg>
+      <svg ref={set('triumph')} className="tamer-emote big" viewBox="0 0 40 40">
+        <path
+          d="M4 9 L8 4 M36 9 L32 4 M2 21 L7 21 M38 21 L33 21"
+          stroke="#ffd36b"
+          strokeWidth={2.6}
+          strokeLinecap="round"
+        />
+        <path
+          d="M20 5 L24 15 L35 15.5 L26.5 22.5 L29.5 33.5 L20 27 L10.5 33.5 L13.5 22.5 L5 15.5 L16 15 Z"
+          fill="#ffc23a"
+          stroke={ink}
+          strokeWidth={2.2}
+          strokeLinejoin="round"
+        />
+        <path d="M17 17 L19 15.5" stroke="#fff3c4" strokeWidth={2} strokeLinecap="round" />
+      </svg>
+      <svg ref={set('flinch')} className="tamer-emote" viewBox="0 0 40 40">
+        <path d="M6 8 L11 13 M3 18 L9 19 M10 3 L13 9" stroke={ink} strokeWidth={2.4} strokeLinecap="round" />
+        <path
+          d="M26 6 Q35 18 35 25 Q35 33 27 33 Q19 33 19 25 Q19 18 26 6 Z"
+          fill="#9fdcff"
+          stroke={ink}
+          strokeWidth={2.2}
+          strokeLinejoin="round"
+        />
+        <path d="M23 24 Q23 20 25 17" stroke="#fff" strokeWidth={2} fill="none" strokeLinecap="round" />
+      </svg>
+    </>
+  );
+}
+
 export function BattleScreen() {
   const s = useGame();
   const { t, n } = useT();
@@ -66,6 +153,8 @@ export function BattleScreen() {
   const enemyFlashRef = useRef<HTMLDivElement>(null);
   const enemyEffRef = useRef<HTMLDivElement>(null);
   const playerEffRef = useRef<HTMLDivElement>(null);
+  const trainerRef = useRef<HTMLDivElement>(null);
+  const emoteRefs = useRef<Partial<Record<TamerReaction, SVGSVGElement | null>>>({});
   const lastEff = useRef<Record<'enemy' | 'player', { key: string; at: number }>>({
     enemy: { key: '', at: 0 },
     player: { key: '', at: 0 },
@@ -107,6 +196,27 @@ export function BattleScreen() {
           : [{ opacity: 0 }, { opacity: 1, offset: 0.1 }, { opacity: 1, offset: 0.85 }, { opacity: 0 }],
         { duration: 1400, easing: 'ease-out', fill: 'forwards' },
       );
+    }
+
+    // The tamer reacts to wins, beaten bosses and defeats (body motion + a small emote).
+    const reaction = tamerReaction(fresh);
+    if (reaction) {
+      const ms = TAMER_REACTION_MS[reaction];
+      const emote = emoteRefs.current[reaction];
+      emote?.animate(
+        motion
+          ? [
+              { opacity: 0, transform: 'translate(-50%, 8px) scale(0.5)' },
+              { opacity: 1, transform: 'translate(-50%, -2px) scale(1.15)', offset: 0.18 },
+              { opacity: 1, transform: 'translate(-50%, 0) scale(1)', offset: 0.32 },
+              { opacity: 1, transform: 'translate(-50%, -6px) scale(1)', offset: 0.8 },
+              { opacity: 0, transform: 'translate(-50%, -12px) scale(0.9)' },
+            ]
+          : [{ opacity: 0 }, { opacity: 1, offset: 0.1 }, { opacity: 1, offset: 0.8 }, { opacity: 0 }],
+        { duration: ms, easing: 'ease-out' },
+      );
+      if (motion)
+        trainerRef.current?.animate(TAMER_KEYFRAMES[reaction], { duration: ms, easing: 'ease-out' });
     }
 
     if (!motion) return;
@@ -236,8 +346,9 @@ export function BattleScreen() {
           <div className="spot player-spot">
             <div className="platform platform-near" />
             {/* the tamer stands just behind the own monster, seen from behind like it */}
-            <div className="trainer" aria-hidden="true">
+            <div ref={trainerRef} className={`trainer ${boss ? 'rally' : ''}`} aria-hidden="true">
               <Avatar avatar={s.avatar} view="back" className="breathe-av" />
+              <TamerEmotes refs={emoteRefs} />
             </div>
             <div ref={playerRef} className="actor player-actor">
               <Sprite
