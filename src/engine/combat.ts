@@ -11,11 +11,13 @@ import {
   killXp,
   zoneOf,
 } from './formulas';
+import { BOSS_CHARM_CHANCE } from '../data/charms';
+import { charmDropChance, grantRandomCharm } from './charms';
 import { grantXp } from './progression';
 import { roll } from './rng';
 import { globalModifiers, teamStats, type GlobalModifiers, type TeamMemberStats } from './stats';
 import type { CombatEvent, Fighter, GameState } from './types';
-import { BOSS_TIME, KILLS_PER_STAGE } from './types';
+import { KILLS_PER_STAGE } from './types';
 
 const MAX_LOG = 24;
 let eventId = 0;
@@ -59,20 +61,20 @@ function healTeam(s: GameState, team: TeamMemberStats[]): void {
   s.battle.teamHp = Object.fromEntries(team.map((m) => [m.defId, m.maxHp]));
 }
 
-function startStage(s: GameState, team: TeamMemberStats[]): void {
+function startStage(s: GameState, team: TeamMemberStats[], bossTime: number): void {
   s.battle.kills = 0;
   s.battle.enemy = spawnEnemy(s);
   s.battle.enemyAge = 0;
-  s.battle.bossTimer = isBossStage(s.battle.stage) ? BOSS_TIME : null;
+  s.battle.bossTimer = isBossStage(s.battle.stage) ? bossTime : null;
   healTeam(s, team);
 }
 
 /** Moves the team one stage back after a defeat and stops auto-advance. */
-function retreat(s: GameState, team: TeamMemberStats[], bossFail: boolean): void {
+function retreat(s: GameState, team: TeamMemberStats[], bossFail: boolean, bossTime: number): void {
   pushEvent(s, bossFail ? { t: 'bossFail' } : { t: 'defeat' });
   s.battle.stage = Math.max(1, s.battle.stage - 1);
   s.battle.autoAdvance = false;
-  startStage(s, team);
+  startStage(s, team, bossTime);
 }
 
 function pickTarget(team: TeamMemberStats[], hp: Record<string, number>): TeamMemberStats | undefined {
@@ -96,7 +98,7 @@ export function tick(s: GameState, dt: number, mods: GlobalModifiers = globalMod
     b.teamHp[m.defId] = Math.min(b.teamHp[m.defId]!, m.maxHp);
     if (b.attackTimers[m.defId] === undefined) b.attackTimers[m.defId] = 0;
   }
-  if (!b.enemy) startStage(s, team);
+  if (!b.enemy) startStage(s, team, mods.bossTime);
   const enemy = b.enemy!;
 
   b.enemyAge += dt;
@@ -152,7 +154,13 @@ export function tick(s: GameState, dt: number, mods: GlobalModifiers = globalMod
     s.currencies.essence += essence;
     s.lifetime.goldEarned += gold;
     s.lifetime.kills += 1;
-    if (boss) s.lifetime.bossKills += 1;
+    if (boss) {
+      s.lifetime.bossKills += 1;
+      if (roll(s) < charmDropChance(s, BOSS_CHARM_CHANCE)) {
+        const charm = grantRandomCharm(s);
+        if (charm) pushEvent(s, { t: 'charm', charm });
+      }
+    }
     for (const m of team) grantXp(s, m.defId, xp);
     result.gold += gold;
     result.xp += xp;
@@ -170,7 +178,7 @@ export function tick(s: GameState, dt: number, mods: GlobalModifiers = globalMod
         if (b.stage > s.lifetime.highestStage) s.lifetime.highestStage = b.stage;
       }
       // Recompute stats: levels may have changed from the XP above.
-      startStage(s, teamStats(s, mods));
+      startStage(s, teamStats(s, mods), mods.bossTime);
     } else {
       b.enemy = spawnEnemy(s);
       b.enemyAge = 0;
@@ -182,7 +190,7 @@ export function tick(s: GameState, dt: number, mods: GlobalModifiers = globalMod
   if (b.bossTimer !== null) {
     b.bossTimer -= dt;
     if (b.bossTimer <= 0) {
-      retreat(s, team, true);
+      retreat(s, team, true, mods.bossTime);
       return result;
     }
   }
@@ -202,7 +210,7 @@ export function tick(s: GameState, dt: number, mods: GlobalModifiers = globalMod
   }
 
   if (team.every((m) => (b.teamHp[m.defId] ?? 0) <= 0)) {
-    retreat(s, team, Boolean(enemy.isBoss));
+    retreat(s, team, Boolean(enemy.isBoss), mods.bossTime);
   }
 
   return result;

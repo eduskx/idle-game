@@ -21,7 +21,10 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
     return (
       <div className="crash">
         <h1>Hollowbloom</h1>
-        <p>Something went wrong. Your save is kept on this device. / Etwas ist schiefgelaufen. Dein Spielstand bleibt erhalten.</p>
+        <p>
+          Something went wrong. Your save is kept on this device. / Etwas ist schiefgelaufen. Dein Spielstand
+          bleibt erhalten.
+        </p>
         <button className="btn primary" onClick={() => location.reload()}>
           Reload / Neu laden
         </button>

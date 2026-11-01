@@ -12,7 +12,13 @@ const overrides = import.meta.glob<string>('../../assets/creatures/*.{svg,png,we
 });
 
 const ART: Record<string, string> = Object.fromEntries(
-  Object.entries(overrides).map(([path, url]) => [path.split('/').pop()!.replace(/\.\w+$/, ''), url]),
+  Object.entries(overrides).map(([path, url]) => [
+    path
+      .split('/')
+      .pop()!
+      .replace(/\.\w+$/, ''),
+    url,
+  ]),
 );
 
 interface SpriteProps {
@@ -73,7 +79,14 @@ function Ears({ ears, fill, stroke }: { ears: CreatureLook['ears']; fill: string
         </g>
       );
     case 'leaf':
-      return <path d="M50 34 C44 22 48 10 60 6 C62 18 58 28 50 34 Z" fill="#6cbf5a" stroke={stroke} strokeWidth={2} />;
+      return (
+        <path
+          d="M50 34 C44 22 48 10 60 6 C62 18 58 28 50 34 Z"
+          fill="#6cbf5a"
+          stroke={stroke}
+          strokeWidth={2}
+        />
+      );
     case 'none':
     default:
       return null;
@@ -141,7 +154,14 @@ function Extra({
 }) {
   switch (extra) {
     case 'tail':
-      return <path d="M82 82 C96 80 98 64 90 58 C92 70 86 76 78 76 Z" fill={fill} stroke={stroke} strokeWidth={2.5} />;
+      return (
+        <path
+          d="M82 82 C96 80 98 64 90 58 C92 70 86 76 78 76 Z"
+          fill={fill}
+          stroke={stroke}
+          strokeWidth={2.5}
+        />
+      );
     case 'wings':
       return (
         <g fill={fill} fillOpacity={0.6} stroke={stroke} strokeWidth={2}>
@@ -150,7 +170,14 @@ function Extra({
         </g>
       );
     case 'flame':
-      return <path d="M50 30 C42 22 46 12 52 4 C54 14 62 16 58 26 C56 30 54 31 50 30 Z" fill="#ff8a3c" stroke="#c4421a" strokeWidth={2} />;
+      return (
+        <path
+          d="M50 30 C42 22 46 12 52 4 C54 14 62 16 58 26 C56 30 54 31 50 30 Z"
+          fill="#ff8a3c"
+          stroke="#c4421a"
+          strokeWidth={2}
+        />
+      );
     case 'mushroom':
       return (
         <g stroke={stroke} strokeWidth={2.5}>
@@ -202,7 +229,15 @@ export const Sprite = memo(function Sprite({ id, look, realm, size = 96, flip, d
         </filter>
       </defs>
       <ellipse cx="50" cy="94" rx="30" ry="4" fill="#000" opacity={0.18} />
-      <Extra extra={look.extra === 'halo' || look.extra === 'flame' || look.extra === 'mushroom' ? 'none' : look.extra} fill={fill} stroke={stroke} glow={glow} gf={gf} />
+      <Extra
+        extra={
+          look.extra === 'halo' || look.extra === 'flame' || look.extra === 'mushroom' ? 'none' : look.extra
+        }
+        fill={fill}
+        stroke={stroke}
+        glow={glow}
+        gf={gf}
+      />
       <Ears ears={look.ears} fill={fill} stroke={stroke} />
       <path d={bodyPath(look.body)} fill={fill} stroke={stroke} strokeWidth={3} strokeLinejoin="round" />
       <ellipse cx="50" cy="78" rx="18" ry="10" fill={belly} opacity={0.8} />

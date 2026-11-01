@@ -1,16 +1,41 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { useT } from '../../i18n/useT';
 
-export function ProgressBar({ value, max, tone = 'hp', label }: { value: number; max: number; tone?: 'hp' | 'xp' | 'boss' | 'enemy'; label?: string }) {
+export function ProgressBar({
+  value,
+  max,
+  tone = 'hp',
+  label,
+}: {
+  value: number;
+  max: number;
+  tone?: 'hp' | 'xp' | 'boss' | 'enemy';
+  label?: string;
+}) {
   const pct = max > 0 ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;
   return (
-    <div className={`bar bar-${tone}`} role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pct)} aria-label={label}>
+    <div
+      className={`bar bar-${tone}`}
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(pct)}
+      aria-label={label}
+    >
       <div className="bar-fill" style={{ width: `${pct}%` }} />
     </div>
   );
 }
 
-export function Modal({ title, children, onClose }: { title: string; children: ReactNode; onClose?: () => void }) {
+export function Modal({
+  title,
+  children,
+  onClose,
+}: {
+  title: string;
+  children: ReactNode;
+  onClose?: () => void;
+}) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const dialog = ref.current;
@@ -33,7 +58,17 @@ export function Modal({ title, children, onClose }: { title: string; children: R
   );
 }
 
-export function ConfirmDialog({ text, onConfirm, onCancel, danger }: { text: string; onConfirm: () => void; onCancel: () => void; danger?: boolean }) {
+export function ConfirmDialog({
+  text,
+  onConfirm,
+  onCancel,
+  danger,
+}: {
+  text: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  danger?: boolean;
+}) {
   const { t } = useT();
   return (
     <Modal title={t('common.confirm')} onClose={onCancel}>
@@ -63,7 +98,15 @@ export function Currency({ kind, amount }: { kind: keyof typeof ICONS; amount: n
   );
 }
 
-export function Section({ title, children, aside }: { title: string; children: ReactNode; aside?: ReactNode }) {
+export function Section({
+  title,
+  children,
+  aside,
+}: {
+  title: string;
+  children: ReactNode;
+  aside?: ReactNode;
+}) {
   return (
     <section className="section">
       <header className="section-head">

@@ -138,6 +138,12 @@ class GameStore {
       if (e.id <= this.lastEventId) continue;
       if (e.t === 'defeat') this.toast(translate(lang, 'battle.defeated'), 'warning');
       if (e.t === 'bossFail') this.toast(translate(lang, 'battle.bossFailed'), 'warning');
+      if (e.t === 'charm') {
+        this.toast(
+          translate(lang, 'charm.found', { name: translate(lang, `charm.${e.charm}.name`) }),
+          'success',
+        );
+      }
     }
     const last = this.state.battle.log[this.state.battle.log.length - 1];
     if (last) this.lastEventId = last.id;

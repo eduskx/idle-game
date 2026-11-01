@@ -21,7 +21,9 @@ describe('persistence', () => {
     expect(() => importSave('hello')).toThrow(SaveError);
     const data = toSaveData(createInitialState(1000, 9)) as Record<string, unknown>;
     expect(() => fromUnknown({ ...data, currencies: { gold: -1, essence: 0, seeds: 0 } })).toThrow(SaveError);
-    expect(() => fromUnknown({ ...data, currencies: { gold: Infinity, essence: 0, seeds: 0 } })).toThrow(SaveError);
+    expect(() => fromUnknown({ ...data, currencies: { gold: Infinity, essence: 0, seeds: 0 } })).toThrow(
+      SaveError,
+    );
     expect(() => fromUnknown({ ...data, team: [] })).toThrow(SaveError);
     expect(() => fromUnknown(null)).toThrow(SaveError);
   });

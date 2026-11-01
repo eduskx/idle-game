@@ -6,3 +6,5 @@ export * from './combat';
 export * from './progression';
 export * from './offline';
 export * from './rng';
+export * from './charms';
+export * from './expeditions';

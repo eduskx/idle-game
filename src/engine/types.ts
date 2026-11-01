@@ -120,7 +120,15 @@ export type CombatEvent =
   | { t: 'kill'; gold: number; xp: number; essence: number; id: number }
   | { t: 'defeat'; id: number }
   | { t: 'stageClear'; stage: number; id: number }
-  | { t: 'bossFail'; id: number };
+  | { t: 'bossFail'; id: number }
+  | { t: 'charm'; charm: string; id: number };
+
+export interface Expedition {
+  defId: string;
+  durationId: 'short' | 'medium' | 'long' | 'epic';
+  /** Unix ms when the expedition started. */
+  startedAt: number;
+}
 
 export type UpgradeId = 'sharpen' | 'vitality' | 'greed' | 'focus' | 'swiftness' | 'wisdom' | 'pack';
 export type TalentId =
@@ -170,6 +178,9 @@ export interface GameState {
   upgrades: Record<UpgradeId, number>;
   talents: Record<TalentId, number>;
   achievements: string[];
+  /** Charm levels, keyed by charm id. Kept through rebloom. */
+  charms: Record<string, number>;
+  expeditions: Expedition[];
   battle: BattleState;
   /** Highest stage reached in the current run (resets on rebloom). */
   runHighestStage: number;

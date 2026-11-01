@@ -43,7 +43,11 @@ export function formatNumber(n: number, lang: Language = 'en'): string {
   if (tier < SUFFIXES.length) {
     const scaled = abs / 1000 ** tier;
     const digits = scaled < 10 ? 2 : scaled < 100 ? 1 : 0;
-    return sign + scaled.toLocaleString(lang, { maximumFractionDigits: digits, minimumFractionDigits: digits }) + SUFFIXES[tier];
+    return (
+      sign +
+      scaled.toLocaleString(lang, { maximumFractionDigits: digits, minimumFractionDigits: digits }) +
+      SUFFIXES[tier]
+    );
   }
   return sign + abs.toExponential(2).replace('+', '');
 }

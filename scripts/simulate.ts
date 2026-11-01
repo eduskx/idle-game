@@ -50,7 +50,9 @@ function bot(): void {
     if (!options.some((t) => buyTalent(s, t.id))) break;
   }
   const slots = globalModifiers(s).teamSlots;
-  const best = Object.keys(s.creatures).sort((a, b) => power(b) - power(a)).slice(0, slots);
+  const best = Object.keys(s.creatures)
+    .sort((a, b) => power(b) - power(a))
+    .slice(0, slots);
   setTeam(s, best);
   checkAchievements(s);
 }
@@ -87,7 +89,8 @@ for (let t = 0; t < total; t += step) {
 
 const fmt = (sec: number) => `${(sec / 3600).toFixed(2)}h`;
 console.log('\nMilestones (highest stage -> time):');
-for (const m of milestones) console.log(`  ${String(m).padStart(5)}: ${reached[m] !== undefined ? fmt(reached[m]) : '-'}`);
+for (const m of milestones)
+  console.log(`  ${String(m).padStart(5)}: ${reached[m] !== undefined ? fmt(reached[m]) : '-'}`);
 console.log('\nFinal:', {
   highest: s.lifetime.highestStage,
   stage: s.battle.stage,

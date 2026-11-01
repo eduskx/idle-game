@@ -1,3 +1,4 @@
+import { CHARM_BY_ID, type CharmId } from '../data/charms';
 import { CREATURE_BY_ID } from '../data/creatures';
 import { emptyTalents, emptyUpgrades, newBattle, SAVE_VERSION } from '../engine/state';
 import type { GameState } from '../engine/types';
@@ -15,6 +16,8 @@ export function toSaveData(s: GameState): SaveData {
     upgrades: { ...s.upgrades },
     talents: { ...s.talents },
     achievements: [...s.achievements],
+    charms: { ...s.charms },
+    expeditions: s.expeditions.map((e) => ({ ...e })),
     battle: { stage: s.battle.stage, autoAdvance: s.battle.autoAdvance },
     runHighestStage: s.runHighestStage,
     lifetime: { ...s.lifetime },
@@ -43,7 +46,7 @@ export function fromUnknown(raw: unknown): GameState {
   const creatures = Object.fromEntries(
     Object.entries(d.creatures).filter(([key, c]) => CREATURE_BY_ID[key] && c.defId === key),
   );
-  const team = d.team.filter((tid) => creatures[tid]);
+  const team = d.team.filter((tid) => creatures[tid] && !d.expeditions.some((e) => e.defId === tid));
   if (team.length === 0) throw new SaveError('Save has no valid team');
 
   const upgrades = emptyUpgrades();
@@ -63,6 +66,15 @@ export function fromUnknown(raw: unknown): GameState {
     upgrades,
     talents,
     achievements: [...new Set(d.achievements)],
+    charms: Object.fromEntries(
+      Object.entries(d.charms)
+        .filter(([key]) => key in CHARM_BY_ID)
+        .map(([key, lvl]) => [key, Math.min(lvl, CHARM_BY_ID[key as CharmId].maxLevel)]),
+    ),
+    // Expeditions of creatures that no longer exist are dropped; at most one per creature.
+    expeditions: d.expeditions.filter(
+      (e, i, all) => creatures[e.defId] && all.findIndex((o) => o.defId === e.defId) === i,
+    ),
     battle,
     runHighestStage: d.runHighestStage,
     lifetime: d.lifetime,

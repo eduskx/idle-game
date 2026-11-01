@@ -31,6 +31,7 @@ export const de: Dictionary = {
     dps: '~{dps} SPS',
     defeated: 'Dein Team hat sich zurückgezogen. Werde stärker und versuch es erneut.',
     bossFailed: 'Der Boss war zu stark. Automatisches Vorrücken pausiert.',
+    quickUpgrades: 'Schnell-Upgrades',
     farmingHint: 'Du farmst diese Stufe. Aktiviere automatisches Vorrücken, um weiterzukommen.',
     synergyPure: '{realm}-Verwandtschaft: +{bonus}% Angriff & LP',
     synergyTwilight: 'Zwielicht-Gleichgewicht: +{bonus}% Gold & EP',
@@ -56,7 +57,8 @@ export const de: Dictionary = {
   },
   summon: {
     title: 'Beschwörungskreis',
-    description: 'Gib Essenz aus, um eine Kreatur zu rufen. Duplikate werden zu Splittern und erhöhen ihre Sterne.',
+    description:
+      'Gib Essenz aus, um eine Kreatur zu rufen. Duplikate werden zu Splittern und erhöhen ihre Sterne.',
     one: 'Beschwören ×1',
     ten: 'Beschwören ×10',
     cost: '{cost} Essenz',
@@ -130,6 +132,55 @@ export const de: Dictionary = {
     capped: 'Offline-Zeit ist auf {hours} h begrenzt. Talente können sie verlängern.',
     collect: 'Einsammeln',
   },
+  expedition: {
+    title: 'Expeditionen',
+    description:
+      'Kreaturen außerhalb deines Teams erkunden auf eigene Faust und bringen Gold, Essenz und Talismane zurück – auch wenn das Spiel geschlossen ist.',
+    locked: 'Erreiche Stufe {stage}, um Expeditionen freizuschalten.',
+    slots: '{used}/{max} unterwegs',
+    send: 'Losschicken',
+    pick: 'Kreatur wählen',
+    remaining: 'noch {time}',
+    ready: 'Fertig!',
+    claim: 'Einsammeln',
+    recall: 'Zurückrufen',
+    reward: '≈ 🪙{gold} · ✨{essence} · {chance}% Talisman',
+    none: 'Keine freien Kreaturen. Kreaturen im Team können nicht los.',
+    away: 'Auf Expedition',
+    result: 'Expedition: +{gold} Gold, +{essence} Essenz',
+    short: '15 Min.',
+    medium: '1 Std.',
+    long: '4 Std.',
+    epic: '8 Std.',
+  },
+  charm: {
+    title: 'Talismane',
+    hint: 'Seltene Funde von Bossen und Expeditionen. Dauerhaft, auch nach der Neublüte.',
+    found: 'Talisman gefunden: {name}!',
+    empty: 'Noch keine Talismane. Besiege Bosse oder schicke Expeditionen los.',
+    wolfFang: { name: 'Wolfszahn', desc: '+5% Angriff pro Stufe.' },
+    amberHeart: { name: 'Bernsteinherz', desc: '+5% LP pro Stufe.' },
+    luckyClover: { name: 'Glücksklee', desc: '+4% Gold pro Stufe.' },
+    owlFeather: { name: 'Eulenfeder', desc: '+4% EP pro Stufe.' },
+    moonstone: { name: 'Mondstein', desc: '+3% Essenz pro Stufe.' },
+    hourglass: { name: 'Sanduhr', desc: '+1 s Boss-Zeit pro Stufe.' },
+    emberCore: { name: 'Glutkern', desc: '+6% Schaden für Glut-Kreaturen pro Stufe.' },
+    tideCore: { name: 'Flutkern', desc: '+6% Schaden für Flut-Kreaturen pro Stufe.' },
+    groveCore: { name: 'Hainkern', desc: '+6% Schaden für Hain-Kreaturen pro Stufe.' },
+  },
+  tips: {
+    ok: 'Verstanden',
+    welcome:
+      'Dein Team kämpft von allein. Gib Gold für die Schnell-Upgrades unten aus, um stärker zu werden.',
+    summon: 'Du hast genug Essenz! Öffne 🔮 Beschwören, um eine neue Kreatur zu rufen.',
+    boss: 'Jede 10. Stufe ist ein Boss mit Zeitlimit. Ist er zu stark, zieht sich das Team zurück und farmt – upgrade und aktiviere dann wieder das Vorrücken.',
+    synergy:
+      'Team-Tipp: 3+ Kreaturen eines Reichs geben Verwandtschaft (Angriff/LP), eine ausgeglichene Mischung gibt Zwielicht (Gold/EP).',
+    expeditions:
+      'Expeditionen freigeschaltet! Schicke Kreaturen, die nicht im Team sind, unter 🐾 Team → Expeditionen los.',
+    rebloom:
+      'Du kannst jetzt neu erblühen (🌸). Das setzt den Lauf zurück, gibt aber Samen für dauerhafte Talente.',
+  },
   update: {
     available: 'Eine neue Version ist verfügbar.',
     reload: 'Aktualisieren',
@@ -166,7 +217,10 @@ export const de: Dictionary = {
     execute: '+{value}% Schaden gegen Gegner unter 30% LP.',
   },
   upgrade: {
-    sharpen: { name: 'Krallen schärfen', desc: '+20% Team-Angriff pro Stufe, verdoppelt sich alle 25 Stufen.' },
+    sharpen: {
+      name: 'Krallen schärfen',
+      desc: '+20% Team-Angriff pro Stufe, verdoppelt sich alle 25 Stufen.',
+    },
     vitality: { name: 'Herzhafte Mahlzeit', desc: '+20% Team-LP pro Stufe, verdoppelt sich alle 25 Stufen.' },
     greed: { name: 'Glitzertaschen', desc: '+15% Gold pro Stufe, verdoppelt sich alle 25 Stufen.' },
     wisdom: { name: 'Alte Geschichten', desc: '+15% EP pro Stufe, verdoppelt sich alle 25 Stufen.' },

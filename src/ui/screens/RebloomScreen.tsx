@@ -50,10 +50,16 @@ export function RebloomScreen() {
                   </div>
                   <p className="small muted">{t(`talent.${tal.id}.desc`)}</p>
                   {!unlocked && tal.requires ? (
-                    <p className="small">🔒 {t('rebloom.requires', { talent: t(`talent.${tal.requires}.name`) })}</p>
+                    <p className="small">
+                      🔒 {t('rebloom.requires', { talent: t(`talent.${tal.requires}.name`) })}
+                    </p>
                   ) : (
                     !maxed && (
-                      <button className="btn primary" disabled={!canBuyTalent(s, tal.id)} onClick={() => gameStore.dispatch((st) => buyTalent(st, tal.id))}>
+                      <button
+                        className="btn primary"
+                        disabled={!canBuyTalent(s, tal.id)}
+                        onClick={() => gameStore.dispatch((st) => buyTalent(st, tal.id))}
+                      >
                         🌱 {t('rebloom.cost', { cost: n(talentCost(s, tal.id)) })}
                       </button>
                     )

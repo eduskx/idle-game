@@ -72,11 +72,7 @@ export function isTalentUnlocked(s: GameState, id: TalentId): boolean {
 
 export function canBuyTalent(s: GameState, id: TalentId): boolean {
   const def = TALENTS.find((t) => t.id === id)!;
-  return (
-    isTalentUnlocked(s, id) &&
-    s.talents[id] < def.maxLevel &&
-    s.currencies.seeds >= talentCost(s, id)
-  );
+  return isTalentUnlocked(s, id) && s.talents[id] < def.maxLevel && s.currencies.seeds >= talentCost(s, id);
 }
 
 export function buyTalent(s: GameState, id: TalentId): boolean {
@@ -159,7 +155,9 @@ export function summon(s: GameState): SummonResult | null {
 
 export function setTeam(s: GameState, team: string[]): boolean {
   const slots = teamSlots(s);
-  const unique = [...new Set(team)].filter((id) => s.creatures[id]);
+  const unique = [...new Set(team)].filter(
+    (id) => s.creatures[id] && !s.expeditions.some((e) => e.defId === id),
+  );
   if (unique.length === 0 || unique.length > slots) return false;
   s.team = unique;
   // Reset HP bookkeeping for removed members.
@@ -173,9 +171,13 @@ export function setTeam(s: GameState, team: string[]): boolean {
 }
 
 export function toggleTeamMember(s: GameState, defId: string): boolean {
+  if (s.expeditions.some((e) => e.defId === defId)) return false;
   if (s.team.includes(defId)) {
     if (s.team.length <= 1) return false;
-    return setTeam(s, s.team.filter((id) => id !== defId));
+    return setTeam(
+      s,
+      s.team.filter((id) => id !== defId),
+    );
   }
   if (s.team.length >= teamSlots(s)) return false;
   return setTeam(s, [...s.team, defId]);
@@ -238,4 +240,3 @@ export function checkAchievements(s: GameState): string[] {
   }
   return unlocked;
 }
-

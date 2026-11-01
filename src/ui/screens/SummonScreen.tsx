@@ -50,8 +50,18 @@ export function SummonScreen() {
           {results.map((r, i) => {
             const def = CREATURE_BY_ID[r.defId]!;
             return (
-              <li key={i} className={`summon-result rarity-${def.rarity}`} style={{ animationDelay: `${i * 60}ms` }}>
-                <Sprite id={def.id} look={def.look} realm={def.realm} size={56} label={t(`creature.${def.id}`)} />
+              <li
+                key={i}
+                className={`summon-result rarity-${def.rarity}`}
+                style={{ animationDelay: `${i * 60}ms` }}
+              >
+                <Sprite
+                  id={def.id}
+                  look={def.look}
+                  realm={def.realm}
+                  size={56}
+                  label={t(`creature.${def.id}`)}
+                />
                 <span className="small">{t(`creature.${def.id}`)}</span>
                 <span className={`tag ${r.isNew ? 'new' : ''}`}>
                   {r.isNew ? t('summon.new') : r.starUp ? t('summon.starUp') : t('summon.shard')}
@@ -79,9 +89,22 @@ export function SummonScreen() {
           const unlocked = poolIds.has(c.id);
           const owned = Boolean(s.creatures[c.id]);
           return (
-            <li key={c.id} className={`pool-item rarity-${c.rarity} ${unlocked ? '' : 'locked'}`} title={unlocked ? t(`creature.${c.id}`) : t('summon.unlocksAt', { zone: c.unlockZone + 1 })}>
-              <Sprite id={c.id} look={c.look} realm={c.realm} size={44} dim={!owned} label={unlocked ? t(`creature.${c.id}`) : '?'} />
-              <span className="tiny">{unlocked ? t(`creature.${c.id}`) : t('summon.unlocksAt', { zone: c.unlockZone + 1 })}</span>
+            <li
+              key={c.id}
+              className={`pool-item rarity-${c.rarity} ${unlocked ? '' : 'locked'}`}
+              title={unlocked ? t(`creature.${c.id}`) : t('summon.unlocksAt', { zone: c.unlockZone + 1 })}
+            >
+              <Sprite
+                id={c.id}
+                look={c.look}
+                realm={c.realm}
+                size={44}
+                dim={!owned}
+                label={unlocked ? t(`creature.${c.id}`) : '?'}
+              />
+              <span className="tiny">
+                {unlocked ? t(`creature.${c.id}`) : t('summon.unlocksAt', { zone: c.unlockZone + 1 })}
+              </span>
             </li>
           );
         })}

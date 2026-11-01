@@ -3,7 +3,9 @@ import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vitest/config';
 import { VitePWA } from 'vite-plugin-pwa';
 
-const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as { version: string };
+const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as {
+  version: string;
+};
 
 // GitHub Pages serves the app from /<repo>/. Override with BASE_PATH for other hosts.
 const base = process.env.BASE_PATH ?? '/';

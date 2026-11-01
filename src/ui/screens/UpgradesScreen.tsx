@@ -39,10 +39,18 @@ export function UpgradesScreen() {
                 <p className="small muted">{t(`upgrade.${u.id}.desc`)}</p>
                 {!maxed && (
                   <div className="row gap">
-                    <button className="btn primary" disabled={!affordable} onClick={() => gameStore.dispatch((st) => buyUpgradeMax(st, u.id, 1))}>
+                    <button
+                      className="btn primary"
+                      disabled={!affordable}
+                      onClick={() => gameStore.dispatch((st) => buyUpgradeMax(st, u.id, 1))}
+                    >
                       {t('upgrades.buy')} · 🪙 {n(cost)}
                     </button>
-                    <button className="btn ghost" disabled={!affordable} onClick={() => gameStore.dispatch((st) => buyUpgradeMax(st, u.id))}>
+                    <button
+                      className="btn ghost"
+                      disabled={!affordable}
+                      onClick={() => gameStore.dispatch((st) => buyUpgradeMax(st, u.id))}
+                    >
                       {t('upgrades.buyMax')}
                     </button>
                   </div>

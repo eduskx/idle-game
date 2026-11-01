@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { getZone } from '../data/world';
-import { zoneOf } from '../engine';
+import { expeditionRemaining, zoneOf } from '../engine';
 import { formatDuration } from '../i18n';
 import { useT } from '../i18n/useT';
 import { gameStore, useGame, useUi } from '../store/gameStore';
@@ -11,8 +11,12 @@ import { BattleScreen } from './screens/BattleScreen';
 // Secondary screens are split into their own chunks so the first paint stays small.
 const TeamScreen = lazy(() => import('./screens/TeamScreen').then((m) => ({ default: m.TeamScreen })));
 const SummonScreen = lazy(() => import('./screens/SummonScreen').then((m) => ({ default: m.SummonScreen })));
-const UpgradesScreen = lazy(() => import('./screens/UpgradesScreen').then((m) => ({ default: m.UpgradesScreen })));
-const RebloomScreen = lazy(() => import('./screens/RebloomScreen').then((m) => ({ default: m.RebloomScreen })));
+const UpgradesScreen = lazy(() =>
+  import('./screens/UpgradesScreen').then((m) => ({ default: m.UpgradesScreen })),
+);
+const RebloomScreen = lazy(() =>
+  import('./screens/RebloomScreen').then((m) => ({ default: m.RebloomScreen })),
+);
 const MoreScreen = lazy(() => import('./screens/MoreScreen').then((m) => ({ default: m.MoreScreen })));
 
 type Tab = 'battle' | 'team' | 'summon' | 'upgrades' | 'rebloom' | 'more';
@@ -66,6 +70,7 @@ export function App() {
   }, [ui.newAchievements, t]);
 
   const report = ui.offlineReport;
+  const expeditionReady = s.expeditions.some((e) => expeditionRemaining(e) <= 0);
 
   return (
     <div className={`app realm-bg-${realm}`}>
@@ -74,7 +79,9 @@ export function App() {
         <div className="currencies">
           <Currency kind="gold" amount={s.currencies.gold} />
           <Currency kind="essence" amount={s.currencies.essence} />
-          {(s.currencies.seeds > 0 || s.lifetime.reblooms > 0) && <Currency kind="seeds" amount={s.currencies.seeds} />}
+          {(s.currencies.seeds > 0 || s.lifetime.reblooms > 0) && (
+            <Currency kind="seeds" amount={s.currencies.seeds} />
+          )}
         </div>
       </header>
 
@@ -91,8 +98,14 @@ export function App() {
 
       <nav className="bottom-nav" aria-label="Main">
         {TABS.map((x) => (
-          <button key={x.id} className={`nav-btn ${tab === x.id ? 'active' : ''}`} aria-current={tab === x.id ? 'page' : undefined} onClick={() => setTab(x.id)}>
+          <button
+            key={x.id}
+            className={`nav-btn ${tab === x.id ? 'active' : ''}`}
+            aria-current={tab === x.id ? 'page' : undefined}
+            onClick={() => setTab(x.id)}
+          >
             <span aria-hidden="true">{x.icon}</span>
+            {x.id === 'team' && expeditionReady && <span className="dot nav-dot" />}
             <span className="nav-label">{t(`nav.${x.id}`)}</span>
           </button>
         ))}
@@ -115,7 +128,9 @@ export function App() {
             <li>⚔️ +{n(report.kills)}</li>
           </ul>
           {report.cappedSeconds < report.seconds && (
-            <p className="small muted">{t('offline.capped', { hours: Math.round(report.cappedSeconds / 3600) })}</p>
+            <p className="small muted">
+              {t('offline.capped', { hours: Math.round(report.cappedSeconds / 3600) })}
+            </p>
           )}
           <div className="row end">
             <button className="btn primary" autoFocus onClick={() => gameStore.dismissOffline()}>

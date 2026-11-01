@@ -28,6 +28,16 @@ export const saveSchema = z.object({
   upgrades: z.record(id, int),
   talents: z.record(id, int),
   achievements: z.array(id).max(500),
+  charms: z.record(id, int.max(1000)),
+  expeditions: z
+    .array(
+      z.object({
+        defId: id,
+        durationId: z.enum(['short', 'medium', 'long', 'epic']),
+        startedAt: nonNeg,
+      }),
+    )
+    .max(10),
   battle: z.object({
     stage: int.min(1),
     autoAdvance: z.boolean(),

@@ -2,7 +2,8 @@ import { getCreature } from '../../data/creatures';
 import { getEnemy, getZone } from '../../data/world';
 import {
   BALANCE,
-  BOSS_TIME,
+  buyUpgrade,
+  canBuyUpgrade,
   estimatedDps,
   globalModifiers,
   isBossStage,
@@ -10,12 +11,17 @@ import {
   stageInZone,
   STAGES_PER_ZONE,
   teamStats,
+  upgradeLevelCost,
   zoneOf,
+  type UpgradeId,
 } from '../../engine';
 import { useT } from '../../i18n/useT';
 import { gameStore, useGame } from '../../store/gameStore';
 import { ProgressBar } from '../components/common';
 import { Sprite } from '../components/Sprite';
+import { Tips } from '../components/Tips';
+
+const QUICK: UpgradeId[] = ['sharpen', 'vitality', 'greed', 'wisdom'];
 
 export function BattleScreen() {
   const s = useGame();
@@ -46,6 +52,7 @@ export function BattleScreen() {
 
   return (
     <div className="battle">
+      <Tips state={s} />
       <div
         className={`arena realm-${zone.realm}`}
         style={{ background: `linear-gradient(160deg, ${zone.palette[0]}, ${zone.palette[1]})` }}
@@ -60,7 +67,8 @@ export function BattleScreen() {
           <div className="arena-progress">
             {boss ? (
               <span className="boss-tag">
-                {t('battle.boss')} {t('battle.bossTimer', { seconds: Math.ceil(b.bossTimer ?? BOSS_TIME) })}
+                {t('battle.boss')}{' '}
+                {t('battle.bossTimer', { seconds: Math.ceil(b.bossTimer ?? mods.bossTime) })}
               </span>
             ) : (
               <span>{t('battle.kills', { kills: b.kills, needed: KILLS_PER_STAGE })}</span>
@@ -75,8 +83,19 @@ export function BattleScreen() {
               const hp = b.teamHp[m.defId] ?? m.maxHp;
               const hit = hits.some((h) => h.t === 'hit' && h.target === m.defId && h.id === lastEvent?.id);
               return (
-                <div key={m.defId} className={`fighter ${hp <= 0 ? 'down' : ''} ${hit ? 'shake' : ''}`} style={{ '--i': i } as React.CSSProperties}>
-                  <Sprite id={def.id} look={def.look} realm={def.realm} size={i === 0 ? 72 : 60} label={t(`creature.${def.id}`)} dim={hp <= 0} />
+                <div
+                  key={m.defId}
+                  className={`fighter ${hp <= 0 ? 'down' : ''} ${hit ? 'shake' : ''}`}
+                  style={{ '--i': i } as React.CSSProperties}
+                >
+                  <Sprite
+                    id={def.id}
+                    look={def.look}
+                    realm={def.realm}
+                    size={i === 0 ? 72 : 60}
+                    label={t(`creature.${def.id}`)}
+                    dim={hp <= 0}
+                  />
                   <ProgressBar value={hp} max={m.maxHp} label={t(`creature.${def.id}`)} />
                 </div>
               );
@@ -85,7 +104,10 @@ export function BattleScreen() {
 
           <div className="enemy-side">
             {enemy && enemyDef && (
-              <div key={`${b.stage}-${s.lifetime.kills}`} className={`fighter enemy ${enemy.isBoss ? 'is-boss' : ''} spawn`}>
+              <div
+                key={`${b.stage}-${s.lifetime.kills}`}
+                className={`fighter enemy ${enemy.isBoss ? 'is-boss' : ''} spawn`}
+              >
                 <div className="enemy-name">{t(`enemy.${enemyDef.id}`)}</div>
                 <Sprite
                   id={enemyDef.id}
@@ -95,7 +117,12 @@ export function BattleScreen() {
                   flip
                   label={t(`enemy.${enemyDef.id}`)}
                 />
-                <ProgressBar value={enemy.hp} max={enemy.maxHp} tone={enemy.isBoss ? 'boss' : 'enemy'} label={t(`enemy.${enemyDef.id}`)} />
+                <ProgressBar
+                  value={enemy.hp}
+                  max={enemy.maxHp}
+                  tone={enemy.isBoss ? 'boss' : 'enemy'}
+                  label={t(`enemy.${enemyDef.id}`)}
+                />
                 <div className="enemy-hp">
                   {n(Math.max(0, enemy.hp))} / {n(enemy.maxHp)}
                 </div>
@@ -105,7 +132,11 @@ export function BattleScreen() {
                       .filter((h) => h.t === 'hit' && h.target === 'enemy')
                       .map((h) =>
                         h.t === 'hit' ? (
-                          <span key={h.id} className={`dmg ${h.crit ? 'crit' : ''}`} style={{ left: `${(h.id * 37) % 70}%` }}>
+                          <span
+                            key={h.id}
+                            className={`dmg ${h.crit ? 'crit' : ''}`}
+                            style={{ left: `${(h.id * 37) % 70}%` }}
+                          >
                             {n(h.amount)}
                           </span>
                         ) : null,
@@ -116,7 +147,14 @@ export function BattleScreen() {
             )}
           </div>
         </div>
-        {boss && <ProgressBar value={b.bossTimer ?? BOSS_TIME} max={BOSS_TIME} tone="boss" label="boss timer" />}
+        {boss && (
+          <ProgressBar
+            value={b.bossTimer ?? mods.bossTime}
+            max={mods.bossTime}
+            tone="boss"
+            label="boss timer"
+          />
+        )}
       </div>
 
       <div className="battle-controls">
@@ -127,13 +165,29 @@ export function BattleScreen() {
             onChange={(e) => gameStore.dispatch((st) => (st.battle.autoAdvance = e.target.checked))}
           />
           <span>
-            {t('battle.autoAdvance')}: <strong>{b.autoAdvance ? t('battle.advancing') : t('battle.farming')}</strong>
+            {t('battle.autoAdvance')}:{' '}
+            <strong>{b.autoAdvance ? t('battle.advancing') : t('battle.farming')}</strong>
           </span>
         </label>
         <div className="muted">{t('battle.dps', { dps: n(estimatedDps(s)) })}</div>
       </div>
       {!b.autoAdvance && <p className="notice">{t('battle.farmingHint')}</p>}
       <p className="synergy">{synergyText}</p>
+      <div className="quick-upgrades" aria-label={t('battle.quickUpgrades')}>
+        {QUICK.map((id) => (
+          <button
+            key={id}
+            className="btn quick"
+            disabled={!canBuyUpgrade(s, id)}
+            onClick={() => gameStore.dispatch((st) => buyUpgrade(st, id))}
+          >
+            <span>{t(`upgrade.${id}.name`)}</span>
+            <small>
+              {t('upgrades.level', { level: s.upgrades[id] })} · 🪙 {n(upgradeLevelCost(s, id))}
+            </small>
+          </button>
+        ))}
+      </div>
       <p className="muted small">
         {t('battle.zone', { zone: zoneIdx + 1 })} · {t(`realm.${zone.realm}`)}
       </p>

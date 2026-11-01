@@ -7,7 +7,8 @@
 type Migration = (data: Record<string, unknown>) => Record<string, unknown>;
 
 const MIGRATIONS: Record<number, Migration> = {
-  // 2: (d) => ({ ...d, version: 2, newField: 0 }),
+  // v2 added charms and expeditions.
+  2: (d) => ({ ...d, version: 2, charms: {}, expeditions: [] }),
 };
 
 export function migrate(raw: unknown): unknown {

@@ -95,7 +95,9 @@ export function MoreScreen() {
           <select
             id="lang"
             value={s.settings.language}
-            onChange={(e) => gameStore.dispatch((st) => (st.settings.language = e.target.value === 'de' ? 'de' : 'en'))}
+            onChange={(e) =>
+              gameStore.dispatch((st) => (st.settings.language = e.target.value === 'de' ? 'de' : 'en'))
+            }
           >
             <option value="de">Deutsch</option>
             <option value="en">English</option>
@@ -178,7 +180,13 @@ export function MoreScreen() {
       {exportCode && (
         <Modal title={t('more.export')} onClose={() => setExportCode(null)}>
           <p>{t('more.exportFallback')}</p>
-          <textarea className="import" rows={6} readOnly value={exportCode} onFocus={(e) => e.currentTarget.select()} />
+          <textarea
+            className="import"
+            rows={6}
+            readOnly
+            value={exportCode}
+            onFocus={(e) => e.currentTarget.select()}
+          />
           <div className="row end">
             <button className="btn primary" onClick={() => setExportCode(null)}>
               {t('common.close')}
@@ -186,7 +194,13 @@ export function MoreScreen() {
           </div>
         </Modal>
       )}
-      {confirmImport && <ConfirmDialog text={t('more.importConfirm')} onConfirm={onImport} onCancel={() => setConfirmImport(false)} />}
+      {confirmImport && (
+        <ConfirmDialog
+          text={t('more.importConfirm')}
+          onConfirm={onImport}
+          onCancel={() => setConfirmImport(false)}
+        />
+      )}
       {confirmReset && (
         <ConfirmDialog
           danger
