@@ -1,9 +1,9 @@
 name: Deploy to GitHub Pages
 
 # Free for public repositories. One-time setup: Settings → Pages → Source: "GitHub Actions".
+# Manual for now (Actions → Deploy to GitHub Pages → Run workflow). Once Pages is enabled,
+# add `push: branches: [main]` back to deploy automatically on every merge.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

@@ -68,13 +68,7 @@ export function ExpeditionsPanel() {
             const left = expeditionRemaining(e, now);
             return (
               <li key={e.defId} className="card expedition">
-                <Sprite
-                  id={def.id}
-                  look={def.look}
-                  realm={def.realm}
-                  size={48}
-                  label={t(`creature.${def.id}`)}
-                />
+                <Sprite id={def.id} size={48} label={t(`creature.${def.id}`)} />
                 <div className="card-body">
                   <strong>{t(`creature.${def.id}`)}</strong>
                   <span className="small muted">

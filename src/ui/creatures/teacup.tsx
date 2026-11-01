@@ -1,0 +1,124 @@
+import { Blush, Eye, Glow, GroundShadow, Linear, type ArtProps } from './kit';
+
+const INK = '#3a2a2a';
+
+/** Teacup – a sleepy steam spirit that lives in a porcelain cup. Its steam curls are its ears. */
+export function Teacup({ uid, view }: ArtProps) {
+  const cup = `${uid}-cup`;
+  const tea = `${uid}-tea`;
+  const steam = `${uid}-steam`;
+  const glow = `${uid}-glow`;
+  const defs = (
+    <defs>
+      <linearGradient id={cup} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="60%" stopColor="#eef0f6" />
+        <stop offset="100%" stopColor="#c3c8da" />
+      </linearGradient>
+      <radialGradient id={tea} cx="40%" cy="35%" r="75%">
+        <stop offset="0%" stopColor="#fff2d6" />
+        <stop offset="55%" stopColor="#f3c27e" />
+        <stop offset="100%" stopColor="#c7864a" />
+      </radialGradient>
+      <Linear id={steam} from="#ffffff" to="#ffffff00" />
+      <Glow id={glow} std={3} />
+    </defs>
+  );
+
+  const handleSide = view === 'back' ? -1 : 1;
+  const saucerAndCup = (
+    <g>
+      <ellipse cx="100" cy="178" rx="62" ry="12" fill="#e9ecf4" stroke={INK} strokeWidth={3} />
+      <ellipse cx="100" cy="176" rx="40" ry="6" fill="#d6dbe8" />
+      {/* handle */}
+      <path
+        d={`M${100 + handleSide * 44} 130 Q${100 + handleSide * 70} 132 ${100 + handleSide * 66} 150 Q${100 + handleSide * 60} 166 ${100 + handleSide * 40} 160`}
+        fill="none"
+        stroke={INK}
+        strokeWidth={13}
+        strokeLinecap="round"
+      />
+      <path
+        d={`M${100 + handleSide * 44} 130 Q${100 + handleSide * 70} 132 ${100 + handleSide * 66} 150 Q${100 + handleSide * 60} 166 ${100 + handleSide * 40} 160`}
+        fill="none"
+        stroke="#f4f5fa"
+        strokeWidth={7}
+        strokeLinecap="round"
+      />
+      {/* cup body */}
+      <path
+        d="M50 118 L150 118 Q148 168 100 172 Q52 168 50 118 Z"
+        fill={`url(#${cup})`}
+        stroke={INK}
+        strokeWidth={3.5}
+      />
+      {/* blue pattern band */}
+      <path d="M54 134 Q100 146 146 134" fill="none" stroke="#5b8fd6" strokeWidth={4} />
+      <g fill="#5b8fd6">
+        <circle cx="70" cy="150" r="3.5" />
+        <circle cx="100" cy="156" r="4" />
+        <circle cx="130" cy="150" r="3.5" />
+      </g>
+      <ellipse cx="100" cy="118" rx="50" ry="10" fill="#f9fafc" stroke={INK} strokeWidth={3} />
+    </g>
+  );
+
+  const spirit = (face: boolean) => (
+    <g>
+      {/* steam ears */}
+      <g
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth={9}
+        strokeLinecap="round"
+        opacity={0.95}
+        filter={`url(#${glow})`}
+      >
+        <path d="M76 66 Q62 50 74 36 Q84 26 78 14" />
+        <path d="M124 66 Q138 50 126 36 Q116 26 122 14" />
+      </g>
+      <path
+        d="M58 118 Q54 64 100 60 Q146 64 142 118 Z"
+        fill={`url(#${tea})`}
+        stroke={INK}
+        strokeWidth={3.5}
+      />
+      <ellipse cx="100" cy="118" rx="44" ry="8" fill="#b97a3f" opacity={0.6} />
+      {face ? (
+        <g>
+          <Eye cx={84} cy={92} r={8} iris="#5a3418" />
+          <Eye cx={116} cy={92} r={8} iris="#5a3418" />
+          <Blush cx={72} cy={104} rx={6} />
+          <Blush cx={128} cy={104} rx={6} />
+          <path
+            d="M94 104 Q100 110 106 104"
+            fill="none"
+            stroke={INK}
+            strokeWidth={2.5}
+            strokeLinecap="round"
+          />
+          {/* floating leaf */}
+          <path d="M108 70 Q122 62 128 72 Q118 80 108 70 Z" fill="#7cc46a" stroke={INK} strokeWidth={2} />
+        </g>
+      ) : (
+        <path
+          d="M80 80 Q100 70 120 80"
+          stroke="#fff2d6"
+          strokeWidth={4}
+          fill="none"
+          strokeLinecap="round"
+          opacity={0.7}
+        />
+      )}
+    </g>
+  );
+
+  return (
+    <svg viewBox="0 0 200 200">
+      {defs}
+      <GroundShadow rx={60} y={188} />
+      {spirit(view === 'front')}
+      {saucerAndCup}
+    </svg>
+  );
+}

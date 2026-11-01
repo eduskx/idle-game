@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CREATURES } from '../data/creatures';
 import { ACHIEVEMENTS, TALENTS, UPGRADES } from '../data/progression';
-import { ENEMIES, ZONES } from '../data/world';
+import { ZONES } from '../data/world';
 import { de } from './de';
 import { en } from './en';
 import { formatNumber, translate } from '.';
@@ -20,7 +20,6 @@ describe('i18n', () => {
   it('every content id has a name in both languages', () => {
     const keys = [
       ...CREATURES.map((c) => `creature.${c.id}`),
-      ...ENEMIES.map((e) => `enemy.${e.id}`),
       ...ZONES.map((z) => `zone.${z.id}`),
       ...UPGRADES.map((u) => `upgrade.${u.id}.name`),
       ...TALENTS.map((t) => `talent.${t.id}.name`),
