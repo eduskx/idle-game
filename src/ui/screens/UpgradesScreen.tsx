@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { UPGRADES } from '../../data/progression';
 import { buyUpgradeMax, canBuyUpgrade, upgradeLevelCost } from '../../engine';
 import { useT } from '../../i18n/useT';
@@ -14,6 +15,17 @@ const ICONS: Record<string, string> = {
   pack: '🐾',
 };
 
+/** Accent per upgrade, so the list reads by color: attack red, life green, gold, XP blue … */
+const ACCENTS: Record<string, string> = {
+  sharpen: '#ef6a6a',
+  vitality: '#6fdc8c',
+  greed: '#f5c26b',
+  wisdom: '#7cc4ff',
+  focus: '#ff9a4c',
+  swiftness: '#9fe3ff',
+  pack: '#b79cff',
+};
+
 export function UpgradesScreen() {
   const s = useGame();
   const { t, n } = useT();
@@ -27,18 +39,22 @@ export function UpgradesScreen() {
           const cost = upgradeLevelCost(s, u.id);
           const affordable = canBuyUpgrade(s, u.id);
           return (
-            <li key={u.id} className="card upgrade-card">
+            <li
+              key={u.id}
+              className={`card upgrade-card ${maxed ? 'maxed' : ''}`}
+              style={{ '--up': ACCENTS[u.id] ?? 'var(--accent)' } as CSSProperties}
+            >
               <div className="upgrade-icon" aria-hidden="true">
                 {ICONS[u.id]}
               </div>
               <div className="card-body">
                 <div className="row between">
-                  <strong>{t(`upgrade.${u.id}.name`)}</strong>
+                  <strong className="upgrade-name">{t(`upgrade.${u.id}.name`)}</strong>
                   <span className="pill">{maxed ? t('upgrades.max') : t('upgrades.level', { level })}</span>
                 </div>
-                <p className="small muted">{t(`upgrade.${u.id}.desc`)}</p>
+                <p className="small muted upgrade-desc">{t(`upgrade.${u.id}.desc`)}</p>
                 {!maxed && (
-                  <div className="row gap">
+                  <div className="row gap upgrade-buy">
                     <button
                       className="btn primary"
                       disabled={!affordable}

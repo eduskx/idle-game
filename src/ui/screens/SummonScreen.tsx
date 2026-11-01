@@ -5,6 +5,7 @@ import { useT } from '../../i18n/useT';
 import { gameStore, useGame } from '../../store/gameStore';
 import { Currency, Section } from '../components/common';
 import { Sprite } from '../components/Sprite';
+import { SummonCircle } from '../components/SummonCircle';
 import { TypeChips } from '../components/TypeChip';
 import { chargeMs, FLASH_MS } from '../summonReveal';
 
@@ -37,8 +38,10 @@ export function SummonScreen() {
   return (
     <Section title={t('summon.title')} aside={<Currency kind="essence" amount={s.currencies.essence} />}>
       <p className="muted small">{t('summon.description')}</p>
-      <div className="summon-circle" aria-hidden="true">
-        <div className="circle-glow" />
+      <div className="summon-circle">
+        <SummonCircle
+          color={`var(--rarity-${availableRarities[availableRarities.length - 1] ?? 'common'})`}
+        />
       </div>
       <div className="row gap center">
         <button className="btn primary big" disabled={!canSummon(s, 1)} onClick={() => doSummon(1)}>
@@ -171,8 +174,7 @@ function SummonReveal({ results, onDone }: { results: SummonResult[]; onDone: ()
 
       <div className="reveal-stage" aria-hidden={phase !== 'show'}>
         <div className="reveal-circle">
-          <div className="reveal-ring" />
-          <div className="reveal-ring inner" />
+          <SummonCircle size={230} />
           <div className="reveal-core" />
         </div>
         <div className="reveal-flash" />

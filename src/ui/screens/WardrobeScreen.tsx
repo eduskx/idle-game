@@ -124,7 +124,8 @@ export function WardrobeScreen() {
                 onClick={() => gameStore.dispatch((st) => equipAvatarItem(st, slot, item.id))}
               >
                 <span className="wardrobe-thumb">
-                  <Avatar avatar={preview} viewBox={SLOT_VIEWBOX[slot]} />
+                  {/* Locked: only the piece itself as a silhouette, no avatar around it. */}
+                  <Avatar avatar={preview} viewBox={SLOT_VIEWBOX[slot]} only={unlocked ? undefined : slot} />
                   {!unlocked && (
                     <span className="wardrobe-lock" aria-hidden="true">
                       🔒
@@ -136,8 +137,10 @@ export function WardrobeScreen() {
                     </span>
                   )}
                 </span>
-                <strong className="wardrobe-name">{t(`avatar.item.${slot}.${item.id}`)}</strong>
-                {item.realm && (
+                <strong className={unlocked ? 'wardrobe-name' : 'sr-only'}>
+                  {t(`avatar.item.${slot}.${item.id}`)}
+                </strong>
+                {unlocked && item.realm && (
                   <span className={`set-tag set-tag-${item.realm}`}>{t(`avatar.set.${item.realm}`)}</span>
                 )}
                 {!unlocked && (

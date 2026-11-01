@@ -30,6 +30,7 @@ export const en = {
     rebloomTalents: '{seeds} seeds · talents',
     unlockAt: 'Unlocks at stage {stage}',
     avatarHint: 'Wardrobe',
+    leader: 'Leader',
   },
   battle: {
     stage: 'Stage {stage}',

@@ -112,30 +112,35 @@ export function TeamScreen({ initialView = 'creatures' }: { initialView?: View }
                   key={c.defId}
                   className={`card creature-card rarity-${def.rarity} realm-${def.realm} ${inTeam ? 'in-team' : ''}`}
                 >
-                  <div className="card-art">
-                    <Sprite id={def.id} size={64} label={t(`creature.${def.id}`)} />
+                  <div className={`cc-portrait type-${def.types[0]}`}>
+                    <div className={`cc-portrait-bg type-${def.types[1] ?? def.types[0]}`}>
+                      <Sprite id={def.id} size={84} label={t(`creature.${def.id}`)} />
+                    </div>
                     {pos === 0 && <span className="badge">{t('team.front')}</span>}
                   </div>
-                  <div className="card-body">
+                  <div className="cc-head">
                     <div className="row between">
-                      <strong>{t(`creature.${def.id}`)}</strong>
+                      <strong className="cc-name">{t(`creature.${def.id}`)}</strong>
                       <span className="stars" aria-label={t('team.stars', { stars: c.stars })}>
                         {'★'.repeat(c.stars)}
                         <span className="muted">{'★'.repeat(MAX_STARS - c.stars)}</span>
                       </span>
                     </div>
-                    <div className="tags">
-                      <span className={`tag rarity rarity-${def.rarity}`}>{t(`rarity.${def.rarity}`)}</span>
-                      <span className={`tag realm-${def.realm}`}>{t(`realm.${def.realm}`)}</span>
-                      <TypeChips types={def.types} />
+                    <div className="cc-meta small">
+                      <span className="rarity">{t(`rarity.${def.rarity}`)}</span>
+                      <span aria-hidden="true">·</span>
+                      <span className={`cc-realm realm-${def.realm}`}>{t(`realm.${def.realm}`)}</span>
                     </div>
+                    <TypeChips types={def.types} />
                     {matchup !== 'neutral' && (
                       <div className={`matchup matchup-${matchup}`}>
                         {t(matchup === 'strong' ? 'team.matchStrong' : 'team.matchWeak')}
                       </div>
                     )}
-                    <div className="small">
-                      {t('team.level', { level: c.level, cap })}
+                  </div>
+                  <div className="cc-body">
+                    <div className="cc-level small">
+                      <span>{t('team.level', { level: c.level, cap })}</span>
                       <ProgressBar
                         value={c.level >= cap ? 1 : c.xp}
                         max={c.level >= cap ? 1 : xpToNextLevel(c.level)}
@@ -143,15 +148,18 @@ export function TeamScreen({ initialView = 'creatures' }: { initialView?: View }
                         label="XP"
                       />
                     </div>
-                    <div className="stat-row small">
+                    <div className="cc-stats">
                       <span>
-                        {t('team.atk')} {n(stats.atk)}
+                        <small>{t('team.atk')}</small>
+                        <b>{n(stats.atk)}</b>
                       </span>
                       <span>
-                        {t('team.hp')} {n(stats.maxHp)}
+                        <small>{t('team.hp')}</small>
+                        <b>{n(stats.maxHp)}</b>
                       </span>
                       <span>
-                        {t('team.speed')} {stats.speed.toFixed(2)}
+                        <small>{t('team.speed')}</small>
+                        <b>{stats.speed.toFixed(2)}</b>
                       </span>
                     </div>
                     <p className="small ability">
@@ -160,7 +168,7 @@ export function TeamScreen({ initialView = 'creatures' }: { initialView?: View }
                       })}
                     </p>
                     {c.stars < MAX_STARS && (
-                      <div className="small muted">
+                      <div className="tiny muted">
                         {t('team.shards', { shards: c.shards, needed: needShards })}
                       </div>
                     )}

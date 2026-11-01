@@ -120,14 +120,29 @@ export function Teacup({ uid, view }: ArtProps) {
           <path d="M108 70 Q122 62 128 72 Q118 80 108 70 Z" fill="#7cc46a" stroke={INK} strokeWidth={2} />
         </g>
       ) : (
-        <path
-          d="M80 80 Q100 70 120 80"
-          stroke="#fff2d6"
-          strokeWidth={4}
-          fill="none"
-          strokeLinecap="round"
-          opacity={0.7}
-        />
+        <g>
+          {/* back of the head: a slow tea swirl, the leaf from the other side, still dozing */}
+          <path
+            d="M100 96 Q92 96 92 88 Q92 78 102 78 Q114 78 114 90 Q114 104 98 106 Q80 106 78 90"
+            stroke="#fff2d6"
+            strokeWidth={3.5}
+            fill="none"
+            strokeLinecap="round"
+            opacity={0.75}
+          />
+          <path d="M92 70 Q78 62 72 72 Q82 80 92 70 Z" fill="#7cc46a" stroke={INK} strokeWidth={2} />
+          <path d="M92 70 Q82 70 76 72" stroke="#4f8f44" strokeWidth={1.5} fill="none" />
+          <g className="cr-zz">
+            <path
+              d="M52 64 L62 64 L52 74 L62 74"
+              fill="none"
+              stroke="#8a6a5a"
+              strokeWidth={2.5}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          </g>
+        </g>
       )}
     </g>
   );
@@ -138,6 +153,22 @@ export function Teacup({ uid, view }: ArtProps) {
       <GroundShadow rx={60} y={188} />
       {spirit(view === 'front')}
       {saucerAndCup}
+      {view === 'back' && (
+        <g>
+          {/* chipped rim (the cup's little flaw) */}
+          <path
+            d="M118 110 L124 116 L130 110 Z"
+            fill="#c7864a"
+            stroke={INK}
+            strokeWidth={2}
+            strokeLinejoin="round"
+          />
+          {/* tea bag string over the rim with its tag */}
+          <path d="M78 116 Q72 128 74 140" stroke={INK} strokeWidth={1.8} fill="none" />
+          <rect x="66" y="140" width="16" height="14" rx="2" fill="#f6e3b4" stroke={INK} strokeWidth={2.2} />
+          <path d="M70 147 H78" stroke="#cf8a34" strokeWidth={2} strokeLinecap="round" />
+        </g>
+      )}
     </svg>
   );
 }
