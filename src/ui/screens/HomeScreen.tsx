@@ -19,34 +19,53 @@ import { useGame } from '../../store/gameStore';
 import { Backdrop } from '../components/Backdrop';
 import { ProgressBar } from '../components/common';
 import { Sprite } from '../components/Sprite';
+import { Avatar } from '../avatar/Avatar';
 
-export type HubTarget = 'battle' | 'expeditions' | 'rebloom';
+export type HubTarget = 'battle' | 'expeditions' | 'rebloom' | 'wardrobe';
 
 /**
  * Where each team member stands in the hub scene: the leader up front in the middle,
- * the rest staggered behind it (higher = further away = smaller).
+ * the rest staggered behind it (higher = further away = smaller). The player avatar
+ * stands front-left, so the team is shifted to the right.
  */
 const SLOTS: { x: number; y: number; size: number; z: number }[] = [
-  { x: 50, y: 12, size: 136, z: 5 },
-  { x: 21, y: 68, size: 108, z: 4 },
-  { x: 79, y: 68, size: 108, z: 4 },
-  { x: 33, y: 138, size: 80, z: 3 },
-  { x: 67, y: 138, size: 80, z: 3 },
+  { x: 60, y: 12, size: 136, z: 5 },
+  { x: 38, y: 74, size: 108, z: 4 },
+  { x: 84, y: 66, size: 108, z: 4 },
+  { x: 50, y: 142, size: 80, z: 3 },
+  { x: 74, y: 140, size: 80, z: 3 },
 ];
 
-/** Placeholder for the future player avatar (paper-doll with unlockable outfits). */
-function AvatarSlot() {
+/** The player's avatar standing in the scene; opens the wardrobe. */
+function HubAvatar({ onOpen }: { onOpen: () => void }) {
+  const s = useGame();
   const { t } = useT();
   return (
-    <div className="avatar-slot" role="img" aria-label={t('home.avatarSoon')}>
-      <svg viewBox="0 0 48 64" aria-hidden="true">
-        <circle cx="24" cy="18" r="11" />
-        <path d="M5 60 C5 42 13 34 24 34 C35 34 43 42 43 60 Z" />
-      </svg>
-      <span>{t('home.avatarSoon')}</span>
-    </div>
+    <button className="hub-avatar" onClick={onOpen} aria-label={t('avatar.edit')}>
+      <Avatar avatar={s.avatar} className="breathe-av" />
+      <span className="hub-avatar-tag" aria-hidden="true">
+        👕 {t('home.avatarHint')}
+      </span>
+    </button>
   );
 }
+
+/**
+ * How each species reacts when tapped in the hub, matching its personality
+ * (docs/CREATURE_BIBLE.md): animation name and a little emote.
+ */
+const REACTIONS: Record<string, { anim: string; emote: string }> = {
+  mossling: { anim: 'hide', emote: '!' },
+  emberpup: { anim: 'hop', emote: '★' },
+  puddlefin: { anim: 'tilt', emote: '?' },
+  teacup: { anim: 'doze', emote: 'z' },
+  honeybear: { anim: 'squish', emote: '♥' },
+  gloomwisp: { anim: 'droop', emote: '…' },
+  bonecrow: { anim: 'cock', emote: '♪' },
+  hexcat: { anim: 'snub', emote: '~' },
+  drownedknight: { anim: 'clank', emote: '!' },
+  eclipsewyrm: { anim: 'rear', emote: '‼' },
+};
 
 function Chevron() {
   return (
@@ -60,6 +79,12 @@ export function HomeScreen({ onOpen }: { onOpen: (target: HubTarget) => void }) 
   const s = useGame();
   const { t, n } = useT();
   const [now, setNow] = useState(() => Date.now());
+  const [reaction, setReaction] = useState<{ id: string; n: number } | null>(null);
+  useEffect(() => {
+    if (!reaction) return;
+    const id = setTimeout(() => setReaction(null), 1200);
+    return () => clearTimeout(id);
+  }, [reaction]);
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
@@ -97,8 +122,9 @@ export function HomeScreen({ onOpen }: { onOpen: (target: HubTarget) => void }) 
         </div>
         {team.map((id, i) => {
           const slot = SLOTS[i]!;
+          const react = reaction?.id === id ? (REACTIONS[id] ?? { anim: 'hop', emote: '!' }) : null;
           return (
-            <div
+            <button
               key={id}
               className={`hub-member depth-${i === 0 ? 'front' : i < 3 ? 'mid' : 'back'}`}
               style={
@@ -109,19 +135,30 @@ export function HomeScreen({ onOpen }: { onOpen: (target: HubTarget) => void }) 
                   '--delay': `${-i * 0.7}s`,
                 } as CSSProperties
               }
+              aria-label={t(`creature.${id}`)}
+              onClick={() => setReaction((r) => ({ id, n: (r?.n ?? 0) + 1 }))}
             >
               <div className="hub-shadow" />
-              <Sprite
-                id={id}
-                size={slot.size}
-                scale="stage"
-                label={t(`creature.${id}`)}
-                className={`breathe hub-idle ${i === 0 ? 'leader' : ''}`}
-              />
-            </div>
+              <div
+                key={react ? reaction!.n : 0}
+                className={react ? `hub-react react-${react.anim}` : 'hub-react'}
+              >
+                <Sprite
+                  id={id}
+                  size={slot.size}
+                  scale="stage"
+                  className={`breathe hub-idle ${i === 0 ? 'leader' : ''}`}
+                />
+              </div>
+              {react && (
+                <span key={reaction!.n} className="hub-emote" aria-hidden="true">
+                  {react.emote}
+                </span>
+              )}
+            </button>
           );
         })}
-        <AvatarSlot />
+        <HubAvatar onOpen={() => onOpen('wardrobe')} />
       </div>
 
       <button className="btn hub-cta" onClick={() => onOpen('battle')}>

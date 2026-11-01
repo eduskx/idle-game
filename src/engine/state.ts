@@ -1,9 +1,10 @@
 import { STARTER_CREATURES } from '../data/creatures';
 import { TALENTS, UPGRADES } from '../data/progression';
+import { defaultAvatar } from './avatar';
 import { randomSeed } from './rng';
 import type { BattleState, GameState, OwnedCreature, TalentId, UpgradeId } from './types';
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 export function newOwnedCreature(defId: string): OwnedCreature {
   return { defId, level: 1, xp: 0, stars: 0, shards: 0 };
@@ -61,6 +62,7 @@ export function createInitialState(now = Date.now(), seed = randomSeed()): GameS
       reducedMotion: false,
       showDamageNumbers: true,
     },
+    avatar: defaultAvatar(),
     lastSeen: now,
     createdAt: now,
   };

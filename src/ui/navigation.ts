@@ -2,14 +2,15 @@
 export const NAV_TABS = ['home', 'team', 'summon', 'upgrades', 'more'] as const;
 export type NavTab = (typeof NAV_TABS)[number];
 
-/** Screens reached from a nav tab (battle and rebloom via the hub, expeditions via team). */
-export type Route = NavTab | 'battle' | 'rebloom' | 'expeditions';
+/** Screens reached from a nav tab (battle, rebloom and wardrobe via the hub, expeditions via team). */
+export type Route = NavTab | 'battle' | 'rebloom' | 'expeditions' | 'wardrobe';
 
 /** The nav tab that stays highlighted while a route is open. */
 export const ROUTE_PARENT: Record<Route, NavTab> = {
   home: 'home',
   battle: 'home',
   rebloom: 'home',
+  wardrobe: 'home',
   team: 'team',
   expeditions: 'team',
   summon: 'summon',

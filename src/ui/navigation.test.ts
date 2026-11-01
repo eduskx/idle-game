@@ -10,6 +10,7 @@ describe('parseStoredTab', () => {
     expect(parseStoredTab('battle')).toBe('home');
     expect(parseStoredTab('rebloom')).toBe('home');
     expect(parseStoredTab('expeditions')).toBe('team');
+    expect(parseStoredTab('wardrobe')).toBe('home');
   });
 
   it('falls back to home for missing or unknown values', () => {

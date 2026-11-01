@@ -78,14 +78,16 @@ describe('charms', () => {
   });
 });
 
-describe('save migration v1 -> v2', () => {
-  it('upgrades an old save', () => {
-    const v2 = toSaveData(createInitialState(0, 3)) as Record<string, unknown>;
-    const { charms: _c, expeditions: _e, ...rest } = v2;
+describe('save migration v1 -> current', () => {
+  it('upgrades an old save through every step', () => {
+    const current = toSaveData(createInitialState(0, 3)) as Record<string, unknown>;
+    const { charms: _c, expeditions: _e, avatar: _a, ...rest } = current;
     const v1 = { ...rest, version: 1 };
     const migrated = migrate(v1) as Record<string, unknown>;
-    expect(migrated.version).toBe(2);
+    expect(migrated.version).toBe(3);
+    expect(migrated.charms).toEqual({});
     const s = fromUnknown(v1);
+    expect(s.avatar).toEqual(current.avatar);
     expect(s.charms).toEqual({});
     expect(s.expeditions).toEqual([]);
   });

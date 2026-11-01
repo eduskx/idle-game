@@ -19,6 +19,9 @@ const UpgradesScreen = lazy(() =>
 const RebloomScreen = lazy(() =>
   import('./screens/RebloomScreen').then((m) => ({ default: m.RebloomScreen })),
 );
+const WardrobeScreen = lazy(() =>
+  import('./screens/WardrobeScreen').then((m) => ({ default: m.WardrobeScreen })),
+);
 const MoreScreen = lazy(() => import('./screens/MoreScreen').then((m) => ({ default: m.MoreScreen })));
 
 const NAV_ICONS: Record<NavTab, string> = {
@@ -90,7 +93,7 @@ export function App() {
       </header>
 
       <main className="content" id="main">
-        {(route === 'battle' || route === 'rebloom' || route === 'expeditions') && (
+        {route !== tab && (
           <button className="btn ghost back-btn" onClick={() => setRoute(tab)}>
             <span aria-hidden="true">‹</span> {t(`nav.${tab}`)}
           </button>
@@ -104,6 +107,7 @@ export function App() {
           {route === 'upgrades' && <UpgradesScreen />}
           {route === 'rebloom' && <RebloomScreen />}
           {route === 'more' && <MoreScreen />}
+          {route === 'wardrobe' && <WardrobeScreen />}
         </Suspense>
       </main>
 

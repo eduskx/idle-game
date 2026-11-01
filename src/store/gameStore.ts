@@ -4,6 +4,7 @@ import {
   checkAchievements,
   createInitialState,
   simulate,
+  unlockedItemKeys,
   type GameState,
   type OfflineReport,
 } from '../engine';
@@ -47,6 +48,8 @@ class GameStore {
   private lastTick = 0;
   private toastId = 0;
   private lastEventId = 0;
+  /** Wardrobe items known to be unlocked; null until the first check after a (re)load. */
+  private knownItems: Set<string> | null = null;
 
   subscribe = (listener: Listener): (() => void) => {
     this.listeners.add(listener);
@@ -160,7 +163,23 @@ class GameStore {
   private afterChange(): void {
     const unlocked = checkAchievements(this.state);
     if (unlocked.length) this.ui.newAchievements = [...this.ui.newAchievements, ...unlocked];
+    this.reportWardrobeUnlocks();
     this.emit();
+  }
+
+  /** Announces wardrobe items that became available since the last check. */
+  private reportWardrobeUnlocks(): void {
+    const keys = unlockedItemKeys(this.state);
+    const known = this.knownItems;
+    this.knownItems = new Set(keys);
+    if (!known) return;
+    const lang = this.state.settings.language;
+    for (const key of keys) {
+      if (known.has(key)) continue;
+      const [slot, id] = key.split(':');
+      const name = translate(lang, `avatar.item.${slot}.${id}`);
+      this.toast(translate(lang, 'avatar.unlocked', { name }), 'success');
+    }
   }
 
   /** Runs a game action (mutating) and refreshes the UI. */
@@ -182,6 +201,7 @@ class GameStore {
 
   async replaceState(next: GameState): Promise<void> {
     this.state = next;
+    this.knownItems = null;
     this.state.lastSeen = Date.now();
     await this.save();
     this.emit();
@@ -190,6 +210,7 @@ class GameStore {
   async reset(): Promise<void> {
     await this.repo?.clear();
     this.state = createInitialState();
+    this.knownItems = null;
     this.ui = { offlineReport: null, toasts: [], newAchievements: [] };
     await this.save();
     this.emit();

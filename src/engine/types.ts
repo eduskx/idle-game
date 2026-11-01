@@ -179,6 +179,19 @@ export interface Settings {
   showDamageNumbers: boolean;
 }
 
+/** Paper-doll slots of the player avatar (see docs/research/VISUAL_UX_RESEARCH.md §7). */
+export type AvatarSlot = 'hair' | 'top' | 'bottom' | 'shoes' | 'hat' | 'accessory';
+
+/** What the player avatar wears. Only ids and palette indices are saved. */
+export interface AvatarState {
+  /** Index into AVATAR_SKIN_TONES. */
+  skin: number;
+  /** Index into AVATAR_HAIR_COLORS. */
+  hairColor: number;
+  /** Item id per slot ('none' for empty hat/accessory). */
+  items: Record<AvatarSlot, string>;
+}
+
 export interface GameState {
   version: number;
   /** Seed for the deterministic RNG; advances with every roll. */
@@ -198,6 +211,7 @@ export interface GameState {
   runHighestStage: number;
   lifetime: Lifetime;
   settings: Settings;
+  avatar: AvatarState;
   /** Unix ms of the last tick, used for offline progress. */
   lastSeen: number;
   createdAt: number;

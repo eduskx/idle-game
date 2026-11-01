@@ -1,5 +1,6 @@
 import { CHARM_BY_ID, type CharmId } from '../data/charms';
 import { CREATURE_BY_ID, STARTER_CREATURES } from '../data/creatures';
+import { defaultAvatar, sanitizeAvatar } from '../engine/avatar';
 import { emptyTalents, emptyUpgrades, newBattle, newOwnedCreature, SAVE_VERSION } from '../engine/state';
 import type { GameState } from '../engine/types';
 import { migrate } from './migrations';
@@ -22,6 +23,7 @@ export function toSaveData(s: GameState): SaveData {
     runHighestStage: s.runHighestStage,
     lifetime: { ...s.lifetime },
     settings: { ...s.settings },
+    avatar: { skin: s.avatar.skin, hairColor: s.avatar.hairColor, items: { ...s.avatar.items } },
     lastSeen: s.lastSeen,
     createdAt: s.createdAt,
   };
@@ -62,7 +64,7 @@ export function fromUnknown(raw: unknown): GameState {
   const battle = newBattle(d.battle.stage);
   battle.autoAdvance = d.battle.autoAdvance;
 
-  return {
+  const state: GameState = {
     version: SAVE_VERSION,
     rngState: d.rngState,
     currencies: d.currencies,
@@ -84,9 +86,13 @@ export function fromUnknown(raw: unknown): GameState {
     runHighestStage: d.runHighestStage,
     lifetime: d.lifetime,
     settings: d.settings,
+    avatar: defaultAvatar(),
     lastSeen: d.lastSeen,
     createdAt: d.createdAt,
   };
+  // Unlocks depend on achievements and lifetime stats, so the avatar is checked last.
+  state.avatar = sanitizeAvatar(state, d.avatar);
+  return state;
 }
 
 // ---------------------------------------------------------------- Export strings

@@ -99,3 +99,36 @@ were crammed side by side, and nothing showed the team as "yours".
 
 Next: Puddlefin and Drowned Knight back views; hub juice (tap a creature for a reaction); a matchup
 hint in Team (who is strong against the current zone); then the avatar.
+
+## Iteration 5 – Player avatar, wardrobe and hub reactions
+
+Review: the art sheet still meets the bible. The weakest views were the backs of Puddlefin (plain
+blue blob) and Drowned Knight (flat helm). The hub had only a dashed "avatar coming soon" box.
+
+- **Player avatar (paper-doll):** hand-drawn layered SVG in the creature style (`src/ui/avatar/`):
+  one shared chibi pose (viewBox 200×300), fixed layers (hood → back hair → legs → bottoms → shoes →
+  torso → top → hands → neck accessory → head/face → front hair → hat → face accessory). Hair is split
+  into back and front parts; hats hide the bun. Skin, hair and clothing colors are CSS variables
+  (`--av-skin`, `--av-hair`, `--av-<slot>-1/2/3`).
+- **Wardrobe:** 23 pieces in six slots (hair, top, bottoms, shoes, hat, extra), each slot with a
+  Hearth piece (knit sweater, bobble hat, patchwork skirt, felt slippers, scarf, bun) and an Umbra
+  piece (spectral hood, crescent hat, night wrap, claw boots, moth brooch, night veil). 6 skin tones and
+  8 hair colors are free. Everything else unlocks through existing milestones (achievements, highest
+  stage, reblooms); no shop, no costs. Locked pieces show a silhouette, the condition and progress.
+  A toast announces new pieces.
+- **Hub:** the avatar stands front-left in the scene (tap → wardrobe), the team moved right.
+  Tapping a creature plays a personality reaction with an emote: Mossling ducks and trembles,
+  Emberpup hops, Puddlefin tilts its head, Teacup dozes, Honeybear squishes, Gloomwisp droops,
+  Bonecrow snaps its head, Hexcat turns away, Drowned Knight clanks, Eclipse Wyrm rears up.
+  Reduced motion keeps only the emote.
+- **Save v3:** `avatar` (skin, hair color, item per slot). Migration v2→v3 adds the default outfit;
+  loading repairs unknown/locked items and out-of-range colors. Tests for migration, round trip,
+  repair, unlocks and wardrobe data.
+- **Art:** Puddlefin's back has a dark dorsal stripe, wet fur tufts, darker ear backs, elbows hugging
+  the pebble, whiskers past the cheeks, a mirrored lily pad and a thick ringed tail. Drowned Knight's
+  back has a riveted comb ridge, a dented neck guard with rust runs, a barnacle colony, both claws
+  peeking out and the red crab abdomen curling out under the rim.
+- `npm run art` now also renders avatar outfits (default, both realm sets, every piece).
+
+Next: locked wardrobe tiles could show only the piece instead of a full silhouette; show the avatar
+small in the battle stage (back view needed); matchup hint in Team.
