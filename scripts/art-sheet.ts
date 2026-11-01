@@ -21,7 +21,8 @@ const cells = Object.entries(CREATURE_ART)
     return `<div class="cell"><div class="row"><div class="big">${front}</div><div class="big">${back}</div><div class="small">${small}</div></div><p>${id}</p></div>`;
   })
   .join('');
-// Avatar outfits: the default, every item once (on top of the default) and the two realm sets.
+// Avatar outfits (front and back): the default, every item once (on top of the default) and the
+// two realm sets.
 const base: AvatarState = {
   skin: DEFAULT_AVATAR.skin,
   hairColor: DEFAULT_AVATAR.hairColor,
@@ -58,14 +59,19 @@ const outfits: AvatarState[] = [
   ...AVATAR_ITEMS.filter((i) => i.id !== 'none').map((i, n) => outfit({ [i.slot]: i.id }, n % 6, n % 8)),
 ];
 const avatars = outfits
-  .map((a) => `<div class="av">${renderToStaticMarkup(createElement(Avatar, { avatar: a }))}</div>`)
+  .map(
+    (a) =>
+      `<div class="av">${renderToStaticMarkup(createElement(Avatar, { avatar: a }))}${renderToStaticMarkup(
+        createElement(Avatar, { avatar: a, view: 'back' }),
+      )}</div>`,
+  )
   .join('');
 
 const html = `<!doctype html><html><head><style>
 body{margin:0;background:#2a2238;font-family:sans-serif;color:#eee;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:8px;width:1000px}
 .cell{background:linear-gradient(#cfe8c0,#f3e7c4);border-radius:12px;padding:6px}
 .cell:nth-child(n+6){background:linear-gradient(#2d2442,#4a3160)}
-.avatars{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;background:linear-gradient(#f3e7c4,#cfe8c0);border-radius:12px;padding:6px}.av svg{width:120px;height:180px}
+.avatars{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;background:linear-gradient(#f3e7c4,#cfe8c0);border-radius:12px;padding:6px}.av{display:flex;background:#0000000d;border-radius:8px}.av svg{width:94px;height:141px}
 .row{display:flex;align-items:flex-end;gap:6px}.big svg{width:200px;height:200px}.small svg{width:56px;height:56px}
 p{margin:0;text-align:center;color:#222;font-weight:700}.cell:nth-child(n+6) p{color:#eee}
 </style></head><body>${cells}<div class="avatars">${avatars}</div></body></html>`;

@@ -7,6 +7,7 @@ export function Hexcat({ uid, view }: ArtProps) {
   const fur = `${uid}-fur`;
   const flame = `${uid}-flame`;
   const glow = `${uid}-glow`;
+  const backFur = `${uid}-bfur`;
   const defs = (
     <defs>
       <Shade id={fur} light="#4b4068" base="#251f36" dark="#100c18" />
@@ -76,25 +77,93 @@ export function Hexcat({ uid, view }: ArtProps) {
   );
 
   if (view === 'back') {
+    // Seen from behind the cat is mostly black fur, so it reads through light instead of color:
+    // an emerald rim light thrown by the tail flames, emerald ear insides peeking past the ear
+    // backs, the gold collar with its buckle and three outlined tails curling out to the sides.
+    const BODY = 'M60 176 Q50 120 76 104 Q100 94 124 104 Q150 120 140 176 Z';
+    const HEAD = 'M58 74 A42 36 0 1 0 142 74 A42 36 0 1 0 58 74 Z';
+    const rim = `${uid}-rim`;
+    const rimLit = (d: string, cx: number, cy: number) => (
+      <g>
+        <path d={d} fill="#2fd98a" />
+        {/* the copy covers all but a crescent: thick on the right (two flames), thin on the left */}
+        <path
+          d={d}
+          fill={`url(#${backFur})`}
+          transform={`translate(${cx - 3.5} ${cy + 3}) scale(0.94 0.97) translate(${-cx} ${-cy})`}
+        />
+        <path d={d} fill="none" stroke={INK} strokeWidth={3.5} strokeLinejoin="round" />
+      </g>
+    );
+    const backTails = (
+      <g strokeLinecap="round" fill="none">
+        {(
+          [
+            ['cr-tail cr-tail-3', 'M84 170 Q34 172 30 126 Q30 104 42 92', 11],
+            ['cr-tail cr-tail-1', 'M114 170 Q166 164 160 112 Q156 90 140 80', 12],
+            ['cr-tail cr-tail-2', 'M118 172 Q184 172 180 128 Q178 110 170 100', 11],
+          ] as const
+        ).map(([cls, d, w]) => (
+          <g key={cls} className={cls}>
+            <path d={d} stroke={INK} strokeWidth={w + 7} />
+            <path d={d} stroke={`url(#${backFur})`} strokeWidth={w} />
+            <path d={d} stroke="#2fd98a" strokeWidth={2} opacity={0.6} transform="translate(2 -2)" />
+          </g>
+        ))}
+      </g>
+    );
     return (
       <svg viewBox="0 0 200 200">
         {defs}
-        <GroundShadow rx={52} />
-        <path
-          d="M60 176 Q50 120 76 104 Q100 94 124 104 Q150 120 140 176 Z"
-          fill={`url(#${fur})`}
-          stroke={INK}
-          strokeWidth={3.5}
-        />
-        {ears}
-        <ellipse cx="100" cy="74" rx="42" ry="36" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
-        {collar}
-        {/* tails rise in front, seen from behind */}
-        <g transform="translate(0 6)">
-          {tails}
-          {tailFlames}
+        <defs>
+          <Shade id={backFur} light="#5d4f85" base="#2c2542" dark="#130f1e" />
+          <clipPath id={rim}>
+            <path d={BODY} />
+          </clipPath>
+        </defs>
+        <GroundShadow rx={56} />
+        {rimLit(BODY, 100, 140)}
+        {/* haunches and a faint hex sigil in the fur between the shoulders */}
+        <g clipPath={`url(#${rim})`}>
+          <ellipse cx="70" cy="166" rx="20" ry="16" fill="#3a3157" stroke={INK} strokeWidth={2.5} />
+          <ellipse cx="130" cy="166" rx="20" ry="16" fill="#3a3157" stroke={INK} strokeWidth={2.5} />
         </g>
-        <path d="M84 60 Q100 54 116 60" stroke="#4b4068" strokeWidth={3} fill="none" opacity={0.6} />
+        <path
+          d="M100 128 L100 150 M92 132 L108 146 M108 132 L92 146"
+          stroke="#2fd98a"
+          strokeWidth={2.2}
+          strokeLinecap="round"
+          opacity={0.55}
+        />
+        {/* ears: dark backs with the emerald insides showing along the outer edges */}
+        <g stroke={INK} strokeWidth={3.5} strokeLinejoin="round">
+          <path d="M60 64 L56 18 L92 46 Z" fill={`url(#${backFur})`} />
+          <path d="M140 64 L144 18 L108 46 Z" fill={`url(#${backFur})`} />
+        </g>
+        <path d="M58.5 52 L56.5 22 L66 36 Q62 44 58.5 52 Z" fill="#1fbf78" />
+        <path d="M141.5 52 L143.5 22 L134 36 Q138 44 141.5 52 Z" fill="#1fbf78" />
+        <path d="M60 40 L57 22 L74 34" stroke="#7dffb6" strokeWidth={1.6} fill="none" opacity={0.7} />
+        <path d="M140 40 L143 22 L126 34" stroke="#7dffb6" strokeWidth={1.6} fill="none" opacity={0.7} />
+        {rimLit(HEAD, 100, 74)}
+        {/* nape tuft and the parting of the fur on the crown */}
+        <path d="M88 104 L94 96 L100 106 L106 96 L112 104" fill="none" stroke={INK} strokeWidth={2.5} />
+        <path d="M84 56 Q100 50 116 56" stroke="#6a5c94" strokeWidth={3} fill="none" opacity={0.7} />
+        {/* collar from behind: the band dips over the nape, buckle in the middle */}
+        <path
+          d="M62 106 Q100 124 138 106"
+          stroke="#d4a73a"
+          strokeWidth={8}
+          fill="none"
+          strokeLinecap="round"
+        />
+        <path d="M62 106 Q100 124 138 106" stroke={INK} strokeWidth={1.5} fill="none" opacity={0.5} />
+        <rect x="90" y="108" width="20" height="14" rx="2.5" fill="#f0c95a" stroke={INK} strokeWidth={2.5} />
+        <rect x="95" y="112" width="10" height="6" rx="1" fill="#6b4e12" />
+        <path d="M100 112 L100 118" stroke="#f0c95a" strokeWidth={2} />
+        <path d="M110 114 L118 113" stroke="#a37a1e" strokeWidth={3} strokeLinecap="round" />
+        {/* the three tails curl out to both sides, each ending in a flame */}
+        {backTails}
+        {tailFlames}
       </svg>
     );
   }

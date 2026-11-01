@@ -18,7 +18,7 @@ import {
 } from '../../engine';
 import { useT } from '../../i18n/useT';
 import { gameStore, useGame } from '../../store/gameStore';
-import { Avatar, SLOT_VIEWBOX } from '../avatar/Avatar';
+import { Avatar, PIECE_VIEWBOX, SLOT_VIEWBOX } from '../avatar/Avatar';
 import { ProgressBar, Section } from '../components/common';
 
 function UnlockText({ item }: { item: AvatarItemDef }) {
@@ -125,7 +125,11 @@ export function WardrobeScreen() {
               >
                 <span className="wardrobe-thumb">
                   {/* Locked: only the piece itself as a silhouette, no avatar around it. */}
-                  <Avatar avatar={preview} viewBox={SLOT_VIEWBOX[slot]} only={unlocked ? undefined : slot} />
+                  <Avatar
+                    avatar={preview}
+                    viewBox={unlocked ? SLOT_VIEWBOX[slot] : (PIECE_VIEWBOX[item.id] ?? SLOT_VIEWBOX[slot])}
+                    only={unlocked ? undefined : slot}
+                  />
                   {!unlocked && (
                     <span className="wardrobe-lock" aria-hidden="true">
                       🔒

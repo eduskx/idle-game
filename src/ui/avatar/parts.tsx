@@ -577,6 +577,19 @@ export const SHOE_PARTS: Record<string, PartArt> = {
 
 // ------------------------------------------------------------------ hats
 
+const CRESCENT_HAT = (
+  <>
+    <ellipse cx="100" cy="74" rx="68" ry="13" style={c('hat', 1)} {...line} />
+    <path
+      d="M64 72 Q72 44 90 24 Q104 6 132 2 Q116 14 114 28 Q122 52 136 72 Q100 80 64 72 Z"
+      style={c('hat', 1)}
+      {...line}
+    />
+    <path d="M114 28 Q122 52 136 72 Q128 74 122 75 Q118 50 114 28 Z" style={c('hat', 2)} />
+    <path d="M68 62 Q100 70 132 62 L134 70 Q100 78 66 70 Z" style={c('hat', 3)} {...line} strokeWidth={2.4} />
+  </>
+);
+
 export const HAT_PARTS: Record<string, PartArt> = {
   none: {},
   bobble: {
@@ -632,19 +645,7 @@ export const HAT_PARTS: Record<string, PartArt> = {
   crescent: {
     hat: (
       <g>
-        <ellipse cx="100" cy="74" rx="68" ry="13" style={c('hat', 1)} {...line} />
-        <path
-          d="M64 72 Q72 44 90 24 Q104 6 132 2 Q116 14 114 28 Q122 52 136 72 Q100 80 64 72 Z"
-          style={c('hat', 1)}
-          {...line}
-        />
-        <path d="M114 28 Q122 52 136 72 Q128 74 122 75 Q118 50 114 28 Z" style={c('hat', 2)} />
-        <path
-          d="M68 62 Q100 70 132 62 L134 70 Q100 78 66 70 Z"
-          style={c('hat', 3)}
-          {...line}
-          strokeWidth={2.4}
-        />
+        {CRESCENT_HAT}
         {/* crescent moon emblem */}
         <path
           d="M96 34 A12 12 0 1 0 108 52 A9 9 0 1 1 96 34 Z"
@@ -714,4 +715,298 @@ export const PARTS_BY_SLOT: Record<Exclude<AvatarSlot, 'hair'>, Record<string, P
   shoes: SHOE_PARTS,
   hat: HAT_PARTS,
   accessory: ACCESSORY_PARTS,
+};
+
+// ------------------------------------------------------------------ back view
+/*
+ * The avatar seen from behind (battle stage, standing behind the own monster). Same pose and
+ * anchors as the front, so bottoms, shoes and most hats are reused as they are; hair, tops and
+ * accessories get their own back pieces. Draw order in the back view: legs, bottom, shoes,
+ * torso, top, hands, neck, head, hairBack (now covering the head), topBack (hood), hat.
+ */
+
+export function HeadBack() {
+  return (
+    <g>
+      <Pair>
+        <circle cx="51" cy="106" r="9" style={SKIN} {...line} />
+      </Pair>
+      <path
+        d="M100 54 C130 54 151 70 151 100 C151 128 132 146 100 146 C68 146 49 128 49 100 C49 70 70 54 100 54 Z"
+        style={SKIN}
+        {...line}
+      />
+      <path d="M86 140 Q100 146 114 140" fill="none" style={sv('--av-skin-2')} strokeWidth={3} />
+    </g>
+  );
+}
+
+/** Crown whorl: the spiral every head of hair has at the back. */
+const WHORL = (
+  <path
+    d="M102 70 q-8 -2 -8 5 q0 7 9 6 q10 -2 9 -11"
+    fill="none"
+    style={sv('--av-hair-2')}
+    strokeWidth={2.4}
+    strokeLinecap="round"
+  />
+);
+const BACK_SHINE = (
+  <path
+    d="M64 70 Q78 54 98 50"
+    fill="none"
+    stroke="#fff"
+    strokeWidth={4}
+    strokeLinecap="round"
+    opacity={0.25}
+  />
+);
+const BACK_CAP =
+  'M46 106 C40 58 66 42 100 42 C134 42 160 58 154 106 C154 118 150 126 144 130 Q100 140 56 130 C50 126 46 118 46 106 Z';
+
+export const HAIR_BACK_VIEW: Record<string, (hat: boolean) => PartArt> = {
+  short: () => ({
+    hairBack: (
+      <g>
+        <path
+          d="M46 104 C40 56 66 40 100 40 C134 40 160 56 154 104 C154 116 150 124 144 128 L136 120 L128 130 L118 122 L108 132 L100 122 L92 132 L82 122 L72 130 L64 120 L56 128 C50 124 46 116 46 104 Z"
+          style={HAIR}
+          {...line}
+        />
+        <path d="M98 41 Q104 26 118 28 Q108 32 108 42 Z" style={HAIR} {...line} />
+        {WHORL}
+        {BACK_SHINE}
+      </g>
+    ),
+  }),
+  bob: () => ({
+    hairBack: (
+      <g>
+        <path
+          d="M42 104 C36 56 66 40 100 40 C134 40 164 56 158 104 L160 140 Q130 150 100 146 Q70 150 40 140 Z"
+          style={HAIR}
+          {...line}
+        />
+        <path
+          d="M76 92 Q72 120 74 142 M100 84 L100 144 M124 92 Q128 120 126 142"
+          fill="none"
+          style={sv('--av-hair-2')}
+          strokeWidth={2.2}
+          strokeLinecap="round"
+        />
+        {WHORL}
+        {BACK_SHINE}
+      </g>
+    ),
+  }),
+  braids: () => ({
+    hairBack: (
+      <g>
+        <Pair>
+          {[120, 134, 148, 162].map((y) => (
+            <ellipse key={y} cx={y < 140 ? 56 : 58} cy={y} rx="8.5" ry="8" style={HAIR} {...line} />
+          ))}
+          <rect x="51" y="168" width="14" height="6" rx="3" fill="#e65a4f" {...line} strokeWidth={2.2} />
+          <path d="M54 174 L52 186 L58 180 L62 188 L62 174 Z" style={HAIR} {...line} strokeWidth={2.2} />
+        </Pair>
+        <path d={BACK_CAP} style={HAIR} {...line} />
+        {/* center parting, the braids pulled to the sides */}
+        <path d="M100 44 L100 134" fill="none" style={sv('--av-hair-2')} strokeWidth={2.6} />
+        <path
+          d="M96 60 Q70 80 58 116 M104 60 Q130 80 142 116"
+          fill="none"
+          style={sv('--av-hair-2')}
+          strokeWidth={2}
+          opacity={0.7}
+        />
+        {BACK_SHINE}
+      </g>
+    ),
+  }),
+  bun: (hat) => ({
+    hairBack: (
+      <g>
+        <path d={BACK_CAP} style={HAIR} {...line} />
+        <path
+          d="M64 128 Q80 100 96 74 M136 128 Q120 100 104 74"
+          fill="none"
+          style={sv('--av-hair-2')}
+          strokeWidth={2}
+          opacity={0.7}
+        />
+        {!hat && (
+          <>
+            <circle cx="100" cy="58" r="20" style={HAIR} {...line} />
+            <path
+              d="M86 58 Q100 46 114 58 Q100 70 88 62"
+              fill="none"
+              style={sv('--av-hair-2')}
+              strokeWidth={2.4}
+            />
+            <rect x="92" y="74" width="16" height="7" rx="3" style={HAIR2} {...line} strokeWidth={2.2} />
+          </>
+        )}
+        {BACK_SHINE}
+      </g>
+    ),
+  }),
+  veil: () => ({
+    hairBack: (
+      <g>
+        <path
+          d="M42 102 C36 54 66 38 100 38 C134 38 164 54 158 102 L164 204 Q150 214 136 206 Q100 214 64 206 Q50 214 36 204 Z"
+          style={HAIR}
+          {...line}
+        />
+        <path
+          d="M70 90 Q62 150 66 204 M100 80 L100 208 M130 90 Q138 150 134 204"
+          fill="none"
+          style={sv('--av-hair-2')}
+          strokeWidth={2.4}
+          strokeLinecap="round"
+        />
+        {WHORL}
+        {BACK_SHINE}
+      </g>
+    ),
+  }),
+};
+
+export const TOP_BACK_VIEW: Record<string, PartArt> = {
+  tee: {
+    top: (
+      <g>
+        <path d={TOP_TORSO} style={c('top', 1)} {...line} />
+        <TopShade />
+        <Pair>
+          <Tube d={SHORT_SLEEVE} w={17} style={cs('top', 1)} />
+        </Pair>
+        <path d="M90 151 Q100 155 110 151" fill="none" style={cs('top', 2)} strokeWidth={3} />
+        <path d="M100 160 L100 210" fill="none" style={cs('top', 2)} strokeWidth={1.6} opacity={0.6} />
+      </g>
+    ),
+  },
+  vest: {
+    top: (
+      <g>
+        <path d={TOP_TORSO} style={c('top', 1)} {...line} />
+        <Pair>
+          <Tube d={SHORT_SLEEVE} w={17} style={cs('top', 3)} />
+        </Pair>
+        <TopShade />
+        <path d="M100 152 L100 216" fill="none" style={cs('top', 2)} strokeWidth={2.4} />
+        <path d="M76 200 Q100 206 124 200" fill="none" style={cs('top', 2)} strokeWidth={2.4} />
+      </g>
+    ),
+  },
+  knit: {
+    top: (
+      <g>
+        <path d="M74 154 Q100 144 126 154 L131 216 Q100 224 69 216 Z" style={c('top', 1)} {...line} />
+        <TopShade />
+        <Pair>
+          <Tube d={LONG_SLEEVE} w={19} style={cs('top', 1)} />
+          <Tube d="M68.5 198 L67 204" w={18} style={cs('top', 2)} />
+        </Pair>
+        <path d="M70 208 Q100 216 130 208 L131 216 Q100 224 69 216 Z" style={c('top', 2)} {...line} />
+        <ellipse cx="100" cy="152" rx="16" ry="5" style={c('top', 2)} {...line} />
+        <path
+          d="M74 172 L80 178 L86 172 L92 178 L98 172 L104 178 L110 172 L116 178 L122 172 L127 177"
+          fill="none"
+          style={cs('top', 3)}
+          strokeWidth={2.4}
+          strokeLinejoin="round"
+        />
+      </g>
+    ),
+  },
+  shroud: {
+    top: (
+      <g>
+        <path d={TOP_TORSO} style={c('top', 2)} {...line} />
+        <Pair>
+          <Tube d={LONG_SLEEVE} w={17} style={cs('top', 2)} />
+        </Pair>
+        {/* the ragged cape falls over the whole back */}
+        <path
+          d="M68 148 Q100 138 132 148 L146 226 L134 220 L124 232 L112 222 L100 234 L88 222 L76 232 L66 220 L54 226 Z"
+          style={c('top', 1)}
+          {...line}
+        />
+        <path
+          d="M58 220 L66 214 L76 226 L88 216 L100 228 L112 216 L124 226 L134 214 L142 220"
+          fill="none"
+          style={cs('top', 3)}
+          strokeWidth={2}
+          opacity={0.75}
+        />
+        <path d="M120 150 L132 148 L146 226 L136 221 Q132 180 120 150 Z" style={c('top', 2)} opacity={0.7} />
+      </g>
+    ),
+    // the hood is up, so from behind it covers the hair
+    topBack: (
+      <g>
+        <path
+          d="M40 122 C32 54 64 30 100 30 C136 30 168 54 160 122 C158 144 140 156 100 158 C60 156 42 144 40 122 Z"
+          style={c('top', 1)}
+          {...line}
+        />
+        <path d="M100 34 L100 154" fill="none" style={cs('top', 2)} strokeWidth={2.4} />
+        <path
+          d="M140 50 C154 70 158 100 152 130 C146 146 130 154 112 157 C136 142 150 110 140 50 Z"
+          style={c('top', 2)}
+          opacity={0.7}
+        />
+      </g>
+    ),
+  },
+};
+
+export const HAT_BACK_VIEW: Record<string, PartArt> = {
+  ...HAT_PARTS,
+  crescent: { hat: <g>{CRESCENT_HAT}</g> },
+};
+
+export const ACCESSORY_BACK_VIEW: Record<string, PartArt> = {
+  none: {},
+  // only the temple arms show, hooked over the ears
+  glasses: {
+    face: (
+      <Pair>
+        <path
+          d="M60 99 Q50 98 46 104"
+          fill="none"
+          style={cs('accessory', 1)}
+          strokeWidth={2.6}
+          strokeLinecap="round"
+        />
+      </Pair>
+    ),
+  },
+  // wrapped once around the neck, one end hanging down the back
+  scarf: {
+    neck: (
+      <g>
+        <path d="M78 146 Q100 156 122 146 L126 160 Q100 172 74 160 Z" style={c('accessory', 1)} {...line} />
+        <path d="M104 160 L110 200 L124 196 L118 158 Z" style={c('accessory', 1)} {...line} />
+        <path d="M108 174 L120 172 M110 186 L122 184" style={cs('accessory', 3)} strokeWidth={3} />
+        <path
+          d="M112 200 L112 206 M117 199 L118 205 M122 197 L123 203"
+          style={cs('accessory', 2)}
+          strokeWidth={2.4}
+          strokeLinecap="round"
+        />
+      </g>
+    ),
+  },
+  // pinned on the chest: not visible from behind
+  mothpin: {},
+};
+
+export const BACK_VIEW_BY_SLOT: Record<Exclude<AvatarSlot, 'hair'>, Record<string, PartArt>> = {
+  top: TOP_BACK_VIEW,
+  bottom: BOTTOM_PARTS,
+  shoes: SHOE_PARTS,
+  hat: HAT_BACK_VIEW,
+  accessory: ACCESSORY_BACK_VIEW,
 };

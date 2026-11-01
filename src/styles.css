@@ -35,6 +35,9 @@
   --accent-ink: #1b1626;
   --type-chip-bg: rgb(0 0 0 / 0.35);
   --type-chip-mix: #fff;
+  /* borders of interactive controls: at least 3:1 against cards (WCAG 1.4.11) */
+  --control-line: #8577b0;
+  --nav-active: var(--primary);
   font-family:
     'Nunito Variable',
     ui-rounded,
@@ -63,21 +66,23 @@
   --muted: #7a5f4b;
   --primary: #ff8a4c;
   --primary-ink: #2e1405;
-  --accent: #3d8a47;
+  --accent: #2a7536;
   --accent-ink: #ffffff;
   --danger: #c93b3b;
   --success: #2e8a43;
   --warning: #c98a00;
-  --hearth: #c25a17;
+  --hearth: #a84a0f;
   --umbra: #7450d0;
-  --rarity-common: #6f6880;
-  --rarity-rare: #1f74c4;
+  --rarity-common: #5f5870;
+  --rarity-rare: #1a64ac;
   --rarity-epic: #8447d6;
-  --rarity-legendary: #b36b00;
+  --rarity-legendary: #965800;
   --rarity-mythic: #cf2f65;
   --chip-bg: #fff;
   --track: #3b2a201f;
   --type-chip-bg: #2e2219;
+  --control-line: #a07c56;
+  --nav-active: #b4470f;
   color-scheme: light;
 }
 :root[data-realm='umbra'] {
@@ -92,6 +97,7 @@
   --primary-ink: #170f2c;
   --accent: #4de2c4;
   --accent-ink: #0b1f1b;
+  --control-line: #8a7cb5;
 }
 
 * {
@@ -297,7 +303,7 @@ h3 {
   filter: none;
 }
 .nav-btn.active .nav-label {
-  color: var(--primary);
+  color: var(--nav-active);
   font-weight: 700;
 }
 
@@ -323,7 +329,7 @@ h3 {
 /* ---------------------------------------------------------------- buttons */
 
 .btn {
-  border: 1px solid var(--line);
+  border: 1px solid var(--control-line);
   background: var(--card-2);
   border-radius: 10px;
   padding: 0.55rem 0.9rem;
@@ -471,12 +477,17 @@ h3 {
 .sprite.is-alpha > svg {
   filter: drop-shadow(0 0 10px var(--boss)) drop-shadow(0 0 2px #fff6);
 }
-.alpha-crown {
+/* `.sprite > svg` (the creature art) must not resize the crown, so this needs the same specificity. */
+.sprite > svg.alpha-crown {
   position: absolute;
   width: 26%;
+  height: auto;
   left: 37%;
   top: -6%;
+  bottom: auto;
+  translate: none;
   transform: rotate(-8deg);
+  animation: none;
 }
 [data-motion='full'] .breathe > svg {
   transform-origin: 50% 92%;
@@ -975,7 +986,7 @@ h3 {
   z-index: 2;
 }
 .player-spot {
-  left: 0;
+  left: 22px;
   bottom: -18px;
   width: 210px;
   height: 200px;
@@ -1007,6 +1018,25 @@ h3 {
 }
 .player-actor {
   bottom: 30px;
+}
+/* The player's avatar, small and seen from behind, standing left behind the own monster. */
+.trainer {
+  position: absolute;
+  z-index: 1;
+  left: -34px;
+  bottom: 8px;
+  width: 92px;
+  height: 138px;
+  pointer-events: none;
+}
+/* a faint moonlit rim keeps the dark clothes readable against the Umbra night */
+.realm-umbra .trainer {
+  filter: drop-shadow(0 0 1.5px rgb(214 200 255 / 0.55));
+}
+.trainer svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 .enemy-actor .sprite > svg {
   filter: saturate(0.95) brightness(0.97);
@@ -1386,14 +1416,11 @@ h3 {
   position: relative;
   --t1: var(--type);
 }
-.cc-portrait-bg {
+/* Portrait tile tinted by the creature's types (dual types blend): Team cards and Summon pool. */
+.type-portrait-bg {
   --t2: var(--type);
-  width: 96px;
-  height: 96px;
   display: grid;
   place-items: end center;
-  padding-bottom: 4px;
-  border-radius: 14px;
   overflow: hidden;
   background:
     radial-gradient(70% 22% at 50% 92%, rgb(0 0 0 / 0.22), transparent 70%),
@@ -1404,6 +1431,12 @@ h3 {
       color-mix(in srgb, var(--t2) 70%, #1b1626)
     );
   box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--t1) 60%, transparent);
+}
+.cc-portrait-bg {
+  width: 96px;
+  height: 96px;
+  padding-bottom: 4px;
+  border-radius: 14px;
 }
 .cc-head {
   grid-area: head;
@@ -1563,7 +1596,7 @@ h3 {
   flex: 1;
   min-height: 40px;
   border-radius: 999px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--control-line);
   background: transparent;
   cursor: pointer;
 }
@@ -2077,8 +2110,27 @@ h3 {
   padding: 4px;
   line-height: 1.15;
 }
-.pool-item.locked {
-  filter: brightness(0.25);
+.pool-portrait {
+  --t1: var(--type);
+  margin-bottom: 3px;
+}
+.pool-portrait .type-portrait-bg {
+  width: 58px;
+  height: 58px;
+  padding-bottom: 2px;
+  border-radius: 10px;
+}
+/* locked: neutral tile, black silhouette, but the unlock hint stays readable */
+.pool-item.locked .type-portrait-bg {
+  --t1: #6b6380;
+  --t2: #6b6380;
+}
+.pool-item.locked .sprite {
+  filter: brightness(0);
+  opacity: 0.55;
+}
+.pool-item.locked .tiny {
+  color: var(--muted);
 }
 
 /* ---------------------------------------------------------------- more */
