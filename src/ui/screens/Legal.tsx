@@ -59,6 +59,8 @@ export function LegalContent({ page }: { page: LegalPage }) {
           <li>React (MIT) – Meta Platforms, Inc.</li>
           <li>Zod (MIT) – Colin McDonnell</li>
           <li>Workbox (MIT) – Google LLC</li>
+          <li>Fredoka (SIL OFL 1.1) – The Fredoka Project Authors</li>
+          <li>Nunito (SIL OFL 1.1) – The Nunito Project Authors</li>
         </ul>
       </div>
     );

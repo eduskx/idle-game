@@ -10,7 +10,7 @@ before you earn money.
 - ✅ Hosting on GitHub Pages is mentioned (IP addresses in server logs, EU-US Data Privacy Framework).
 - ✅ **Copyright**: all creatures, names, texts and placeholder art are original. Do not copy art, names or
   mechanics 1:1 from other games. "Inspired by the genre" is fine; cloning a specific game is not.
-- ✅ Third-party licenses listed in-game (React, Zod, Workbox – all MIT).
+- ✅ Third-party licenses listed in-game (React, Zod, Workbox – all MIT; fonts Fredoka and Nunito – SIL OFL 1.1, self-hosted via Fontsource).
 - ⚠️ **Imprint (Impressum)**: `src/config/legal.ts` is empty on purpose. As soon as the site is
   "geschäftsmäßig" (regularly offered, even free, especially with donation links or ads), § 5 DDG requires
   name, address and email. Fill in the config; the page renders automatically.

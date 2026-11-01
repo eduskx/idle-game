@@ -6,9 +6,11 @@ import { useT } from '../i18n/useT';
 import { gameStore, useGame, useUi } from '../store/gameStore';
 import { Currency, Modal } from './components/common';
 import { UpdatePrompt } from './components/UpdatePrompt';
-import { BattleScreen } from './screens/BattleScreen';
+import { NAV_TABS, parseStoredTab, ROUTE_PARENT, TAB_KEY, type NavTab, type Route } from './navigation';
+import { HomeScreen } from './screens/HomeScreen';
 
 // Secondary screens are split into their own chunks so the first paint stays small.
+const BattleScreen = lazy(() => import('./screens/BattleScreen').then((m) => ({ default: m.BattleScreen })));
 const TeamScreen = lazy(() => import('./screens/TeamScreen').then((m) => ({ default: m.TeamScreen })));
 const SummonScreen = lazy(() => import('./screens/SummonScreen').then((m) => ({ default: m.SummonScreen })));
 const UpgradesScreen = lazy(() =>
@@ -19,34 +21,28 @@ const RebloomScreen = lazy(() =>
 );
 const MoreScreen = lazy(() => import('./screens/MoreScreen').then((m) => ({ default: m.MoreScreen })));
 
-type Tab = 'battle' | 'team' | 'summon' | 'upgrades' | 'rebloom' | 'more';
+const NAV_ICONS: Record<NavTab, string> = {
+  home: '🏡',
+  team: '🐾',
+  summon: '🔮',
+  upgrades: '⬆️',
+  more: '☰',
+};
 
-const TABS: { id: Tab; icon: string }[] = [
-  { id: 'battle', icon: '⚔️' },
-  { id: 'team', icon: '🐾' },
-  { id: 'summon', icon: '🔮' },
-  { id: 'upgrades', icon: '⬆️' },
-  { id: 'rebloom', icon: '🌸' },
-  { id: 'more', icon: '☰' },
-];
-
-const TAB_KEY = 'hollowbloom.tab';
-
-function readTab(): Tab {
+function readTab(): NavTab {
   try {
-    const v = localStorage.getItem(TAB_KEY);
-    if (v && TABS.some((x) => x.id === v)) return v as Tab;
+    return parseStoredTab(localStorage.getItem(TAB_KEY));
   } catch {
-    /* storage unavailable */
+    return 'home';
   }
-  return 'battle';
 }
 
 export function App() {
   const s = useGame();
   const ui = useUi();
   const { t, n, lang } = useT();
-  const [tab, setTab] = useState<Tab>(readTab);
+  const [route, setRoute] = useState<Route>(readTab);
+  const tab = ROUTE_PARENT[route];
   const realm = getZone(zoneOf(s.battle.stage)).realm;
 
   useEffect(() => {
@@ -58,9 +54,17 @@ export function App() {
   }, [tab]);
 
   useEffect(() => {
+    if (typeof window.scrollTo === 'function') window.scrollTo({ top: 0 });
+  }, [route]);
+
+  useEffect(() => {
     document.documentElement.lang = lang;
+    document.documentElement.dataset.realm = realm;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', realm === 'hearth' ? '#fff3e2' : '#14121f');
     document.documentElement.dataset.motion = s.settings.reducedMotion ? 'reduced' : 'full';
-  }, [lang, s.settings.reducedMotion]);
+  }, [lang, realm, s.settings.reducedMotion]);
 
   useEffect(() => {
     if (ui.newAchievements.length === 0) return;
@@ -86,27 +90,36 @@ export function App() {
       </header>
 
       <main className="content" id="main">
+        {(route === 'battle' || route === 'rebloom' || route === 'expeditions') && (
+          <button className="btn ghost back-btn" onClick={() => setRoute(tab)}>
+            <span aria-hidden="true">‹</span> {t(`nav.${tab}`)}
+          </button>
+        )}
         <Suspense fallback={<p className="muted center">…</p>}>
-          {tab === 'battle' && <BattleScreen />}
-          {tab === 'team' && <TeamScreen />}
-          {tab === 'summon' && <SummonScreen />}
-          {tab === 'upgrades' && <UpgradesScreen />}
-          {tab === 'rebloom' && <RebloomScreen />}
-          {tab === 'more' && <MoreScreen />}
+          {route === 'home' && <HomeScreen onOpen={setRoute} />}
+          {route === 'battle' && <BattleScreen />}
+          {route === 'team' && <TeamScreen />}
+          {route === 'expeditions' && <TeamScreen initialView="expeditions" />}
+          {route === 'summon' && <SummonScreen />}
+          {route === 'upgrades' && <UpgradesScreen />}
+          {route === 'rebloom' && <RebloomScreen />}
+          {route === 'more' && <MoreScreen />}
         </Suspense>
       </main>
 
       <nav className="bottom-nav" aria-label="Main">
-        {TABS.map((x) => (
+        {NAV_TABS.map((id) => (
           <button
-            key={x.id}
-            className={`nav-btn ${tab === x.id ? 'active' : ''}`}
-            aria-current={tab === x.id ? 'page' : undefined}
-            onClick={() => setTab(x.id)}
+            key={id}
+            className={`nav-btn ${tab === id ? 'active' : ''}`}
+            aria-current={tab === id ? 'page' : undefined}
+            onClick={() => setRoute(id)}
           >
-            <span aria-hidden="true">{x.icon}</span>
-            {x.id === 'team' && expeditionReady && <span className="dot nav-dot" />}
-            <span className="nav-label">{t(`nav.${x.id}`)}</span>
+            <span className="nav-icon" aria-hidden="true">
+              {NAV_ICONS[id]}
+            </span>
+            {id === 'team' && expeditionReady && route !== 'expeditions' && <span className="dot nav-dot" />}
+            <span className="nav-label">{t(`nav.${id}`)}</span>
           </button>
         ))}
       </nav>

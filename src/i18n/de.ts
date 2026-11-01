@@ -7,6 +7,7 @@ export const de: Dictionary = {
     loading: 'Der Hain erwacht…',
   },
   nav: {
+    home: 'Home',
     battle: 'Kampf',
     team: 'Team',
     summon: 'Beschwören',
@@ -18,6 +19,19 @@ export const de: Dictionary = {
     gold: 'Gold',
     essence: 'Essenz',
     seeds: 'Samen',
+  },
+  home: {
+    continue: 'Weiterkämpfen',
+    zoneProgress: 'Zonenfortschritt',
+    bossIn: 'Boss in {count} Stufen',
+    bossNow: 'Jetzt Bosskampf!',
+    expeditionsIdle: 'Niemand unterwegs. Schick freie Kreaturen los.',
+    expeditionsAway: '{used}/{max} unterwegs · nächste in {time}',
+    expeditionsReady: '{count} mit Beute zurück – jetzt einsammeln',
+    rebloomReady: 'Bereit: Neublüte für {seeds} Samen',
+    rebloomTalents: '{seeds} Samen · Talente',
+    unlockAt: 'Ab Stufe {stage} freigeschaltet',
+    avatarSoon: 'Dein Avatar – bald verfügbar',
   },
   battle: {
     stage: 'Stufe {stage}',
