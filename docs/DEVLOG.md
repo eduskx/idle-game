@@ -14,3 +14,5 @@ Continuous improvement loop: evaluate (screenshots at 390×844) → improve → 
 - Old saves are repaired automatically (removed creatures dropped, starters guaranteed).
 - Research report: `docs/research/VISUAL_UX_RESEARCH.md`.
 - Deploy workflow switched to manual until GitHub Pages is enabled.
+- Single-file **phone preview** build (`npm run build:preview` → `dist-preview/hollowbloom.html`),
+  published as a private claude.ai page after each iteration.
