@@ -100,7 +100,12 @@ export function SummonScreen() {
               className={`pool-item rarity-${c.rarity} ${unlocked ? '' : 'locked'}`}
               title={unlocked ? t(`creature.${c.id}`) : t('summon.unlocksAt', { zone: c.unlockZone + 1 })}
             >
-              <Sprite id={c.id} size={44} dim={!owned} label={unlocked ? t(`creature.${c.id}`) : '?'} />
+              {/* same type-tinted portrait as the Team cards; locked species stay a dark silhouette */}
+              <div className={`pool-portrait type-${c.types[0]}`}>
+                <div className={`type-portrait-bg type-${c.types[1] ?? c.types[0]}`}>
+                  <Sprite id={c.id} size={50} dim={!owned} label={unlocked ? t(`creature.${c.id}`) : '?'} />
+                </div>
+              </div>
               {unlocked && <TypeChips types={c.types} compact />}
               <span className="tiny">
                 {unlocked ? t(`creature.${c.id}`) : t('summon.unlocksAt', { zone: c.unlockZone + 1 })}

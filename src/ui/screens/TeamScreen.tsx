@@ -113,7 +113,7 @@ export function TeamScreen({ initialView = 'creatures' }: { initialView?: View }
                   className={`card creature-card rarity-${def.rarity} realm-${def.realm} ${inTeam ? 'in-team' : ''}`}
                 >
                   <div className={`cc-portrait type-${def.types[0]}`}>
-                    <div className={`cc-portrait-bg type-${def.types[1] ?? def.types[0]}`}>
+                    <div className={`type-portrait-bg cc-portrait-bg type-${def.types[1] ?? def.types[0]}`}>
                       <Sprite id={def.id} size={84} label={t(`creature.${def.id}`)} />
                     </div>
                     {pos === 0 && <span className="badge">{t('team.front')}</span>}

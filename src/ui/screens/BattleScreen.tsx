@@ -18,6 +18,7 @@ import {
 } from '../../engine';
 import { useT } from '../../i18n/useT';
 import { gameStore, useGame } from '../../store/gameStore';
+import { Avatar } from '../avatar/Avatar';
 import { Backdrop } from '../components/Backdrop';
 import { Sprite } from '../components/Sprite';
 import { Tips } from '../components/Tips';
@@ -234,6 +235,10 @@ export function BattleScreen() {
         {active && (
           <div className="spot player-spot">
             <div className="platform platform-near" />
+            {/* the tamer stands just behind the own monster, seen from behind like it */}
+            <div className="trainer" aria-hidden="true">
+              <Avatar avatar={s.avatar} view="back" className="breathe-av" />
+            </div>
             <div ref={playerRef} className="actor player-actor">
               <Sprite
                 id={active.defId}

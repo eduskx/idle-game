@@ -196,3 +196,39 @@ only=<slot>`), the condition and progress; the name stays for screen readers onl
 
 Next: the brooch silhouette in the wardrobe is tiny (crop per piece instead of per slot); Summon pool
 tiles could use the same type-tinted portrait as Team; Hexcat's back is still a dark blob.
+
+## Iteration 8 – Hexcat's back, the tamer in battle, theme contrast, pool portraits
+
+Review: the art sheet still meets the bible for shape, color, face and size. The weakest view was
+Hexcat's back: a black blob with no outline on its tails, unreadable in grayscale. The other backs
+were checked against silhouette, grayscale and 48 px and hold up; Emberpup's back is still the plainest.
+
+- **Hexcat back:** an emerald rim light thrown by the tail flames (a crescent, stronger on the right),
+  emerald ear insides peeking past the ear backs, the gold collar with a buckle over the nape, haunches,
+  a faint hex sigil in the fur and three outlined tails with a lit edge curling out to both sides.
+  It now reads in grayscale and at 48 px. The tail whip idle keeps working (same `cr-tail-*` groups).
+- **Avatar back view** (`<Avatar view="back">`): new head from behind, hair from behind for all five
+  styles (crown whorl, bob strands, braids with parting, bun, long veil), tops from behind (the shroud's
+  hood covers the hair, the cape falls over the back), the crescent hat without its emblem, glasses as
+  temple arms, the scarf with one end down the back, the brooch hidden. Bottoms and shoes are reused.
+  The art sheet now shows every outfit front and back.
+- **Tamer in battle:** your avatar stands small, seen from behind, in the front-left corner next to
+  your monster (over-the-shoulder), breathing with it. In Umbra a faint moonlit rim keeps dark
+  outfits readable. The monster moved 22 px right to make room.
+- **Alpha crown bug:** `.sprite > svg` outranked `.alpha-crown`, so the boss crown was blown up to
+  the full sprite size and covered the face. Fixed; the crown no longer breathes with the art.
+- **Theme contrast (WCAG AA):** a scripted audit of every screen (text vs. effective background,
+  opacity included) found no Umbra text below AA, but control borders at 1.5:1. New `--control-line`
+  token (≥ 3:1 against cards, WCAG 1.4.11) for buttons and tabs in all themes. Hearth had real text
+  failures, fixed at the same time: accent green, rare/legendary/common rarity colors, the Hearth realm
+  label and the active nav label (now `--nav-active`) are darker. Remaining audit hits are false
+  positives (gradient logo, outlined damage numbers, disabled buttons).
+- **Summon pool tiles:** the same type-tinted portrait as the Team cards (shared `.type-portrait-bg`).
+  Locked species are a black silhouette on a neutral tile; the unlock hint is no longer darkened to
+  unreadable by a brightness filter on the whole tile.
+- **Wardrobe:** locked pieces are cropped to the piece itself (`PIECE_VIEWBOX`, measured bounding
+  boxes), so the brooch, the sprout and the shoes fill their tiles. Tests cover back pieces for every
+  item and the crops.
+
+Next: Emberpup's back could read stronger (tail rings from behind); the tamer could react to wins and
+boss fights; Hearth damage numbers need a darker outline on light skies.
