@@ -43,30 +43,97 @@ export function Drownedknight({ uid, view }: ArtProps) {
   );
 
   if (view === 'back') {
+    // From behind: a raised comb ridge with rivets, a dented and rusted neck guard,
+    // a barnacle colony, both claws (big one mirrored to the right) peeking out at the
+    // sides, and the soft red crab abdomen curling out of the helm's rim.
     return (
       <svg viewBox="0 0 200 200">
         {defs}
         <GroundShadow rx={62} />
         {legs}
-        {/* helm seen from behind, tattered plume on top */}
+        {/* claws peeking out from behind the helm */}
+        <g stroke={INK} strokeWidth={3} strokeLinejoin="round">
+          <path
+            d="M170 150 Q186 126 170 110 Q156 102 148 116 Q160 118 160 130 Q152 128 144 134 Q150 154 170 150 Z"
+            fill={`url(#${shell})`}
+          />
+          <path
+            d="M48 140 Q30 132 28 146 Q34 148 36 152 Q30 154 32 160 Q46 162 50 152 Z"
+            fill={`url(#${shell})`}
+          />
+        </g>
         <path
           d="M52 160 L52 82 Q52 36 100 34 Q148 36 148 82 L148 160 Q100 172 52 160 Z"
           fill={`url(#${metal})`}
           stroke={INK}
           strokeWidth={3.5}
         />
-        <path d="M100 36 L100 162" stroke="#3a4a50" strokeWidth={4} />
-        <path d="M54 120 Q100 132 146 120" stroke="#4fa39a" strokeWidth={6} fill="none" opacity={0.6} />
+        {/* raised comb ridge with rivets */}
+        <path
+          d="M94 36 Q100 32 106 36 L106 160 Q100 162 94 160 Z"
+          fill="#3a6662"
+          stroke={INK}
+          strokeWidth={2.5}
+        />
+        <g fill="#9fd0c6" stroke={INK} strokeWidth={1.5}>
+          <circle cx="100" cy="56" r="2.6" />
+          <circle cx="100" cy="80" r="2.6" />
+          <circle cx="100" cy="104" r="2.6" />
+          <circle cx="100" cy="128" r="2.6" />
+        </g>
+        {/* neck guard plate, dented, with rust runs */}
+        <path
+          d="M54 126 Q100 140 146 126 L146 142 Q100 156 54 142 Z"
+          fill="#3f7570"
+          stroke={INK}
+          strokeWidth={2.5}
+        />
+        <path d="M120 132 Q126 138 132 131" fill="none" stroke={INK} strokeWidth={2} opacity={0.6} />
+        <g stroke="#b5622a" strokeWidth={3.5} fill="none" strokeLinecap="round" opacity={0.75}>
+          <path d="M70 140 Q68 150 72 158" />
+          <path d="M130 140 Q132 148 129 154" />
+          <path d="M84 60 Q80 76 84 92" />
+        </g>
+        {/* patina */}
+        <path
+          d="M136 64 Q140 90 136 114"
+          stroke="#4fa39a"
+          strokeWidth={5}
+          fill="none"
+          opacity={0.55}
+          strokeLinecap="round"
+        />
         <path
           d="M100 34 Q86 10 64 14 Q78 20 76 30 Q60 26 52 40 Q74 36 100 40 Z"
           fill={`url(#${plume})`}
           stroke={INK}
           strokeWidth={2.5}
         />
-        {barnacles}
+        {/* barnacle colony */}
+        <g fill="#d8d2c0" stroke={INK} strokeWidth={1.5}>
+          <circle cx="66" cy="96" r="6" />
+          <circle cx="76" cy="104" r="4" />
+          <circle cx="64" cy="110" r="3.5" />
+          <circle cx="134" cy="72" r="4" />
+        </g>
+        <g fill="#5a5448">
+          <circle cx="66" cy="96" r="2" />
+          <circle cx="76" cy="104" r="1.4" />
+        </g>
         {seaweed}
-        {/* crab abdomen peeking out at the bottom */}
-        <ellipse cx="100" cy="166" rx="30" ry="12" fill={`url(#${shell})`} stroke={INK} strokeWidth={3} />
+        {/* the crab's soft abdomen curling out under the rim */}
+        <path
+          d="M72 164 Q100 176 128 164 Q132 178 116 184 Q100 188 92 178 Q82 182 72 164 Z"
+          fill={`url(#${shell})`}
+          stroke={INK}
+          strokeWidth={3}
+          strokeLinejoin="round"
+        />
+        <g stroke="#7e2219" strokeWidth={2} fill="none" strokeLinecap="round">
+          <path d="M90 168 Q94 174 92 178" />
+          <path d="M104 170 Q108 176 106 182" />
+          <path d="M118 168 Q120 174 118 178" />
+        </g>
       </svg>
     );
   }

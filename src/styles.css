@@ -1501,38 +1501,431 @@ h3 {
   }
 }
 
-.avatar-slot {
+/* Player avatar standing in the hub scene (tap → wardrobe). */
+.hub-avatar {
   position: absolute;
   z-index: 6;
-  right: 10px;
-  top: 10px;
-  width: 64px;
+  left: 2%;
+  bottom: 6px;
+  width: 92px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
   display: grid;
   justify-items: center;
-  gap: 2px;
-  padding: 6px 4px 4px;
-  border: 2px dashed color-mix(in srgb, var(--text) 45%, transparent);
-  border-radius: 14px;
-  background: rgb(0 0 0 / 0.14);
-  font-size: 0.6rem;
-  line-height: 1.15;
-  text-align: center;
-  color: var(--text);
-  text-shadow: 0 1px 2px #000a;
 }
-.avatar-slot svg {
-  width: 24px;
+.hub-avatar svg {
+  width: 92px;
+  height: 138px;
+  filter: drop-shadow(0 2px 0 rgb(0 0 0 / 0.08));
+}
+.hub-avatar .hub-shadow {
+  bottom: 22px;
+  width: 60%;
+}
+.hub-avatar-tag {
+  margin-top: -6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-size: 0.66rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
+}
+.hub-avatar:focus-visible,
+.hub-member:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+[data-motion='full'] .breathe-av {
+  transform-origin: 50% 94%;
+  animation: breathe 3.4s ease-in-out infinite;
+}
+
+/* Tap reactions in the hub, one per personality (see CREATURE_BIBLE.md). */
+button.hub-member {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.hub-react {
+  transform-origin: 50% 95%;
+}
+[data-motion='full'] .react-hide {
+  animation: react-hide 1s ease-out;
+}
+[data-motion='full'] .react-hop {
+  animation: react-hop 0.8s ease-out;
+}
+[data-motion='full'] .react-tilt {
+  animation: react-tilt 1.1s ease-in-out;
+}
+[data-motion='full'] .react-doze {
+  animation: react-doze 1.2s ease-in-out;
+}
+[data-motion='full'] .react-squish {
+  animation: react-squish 0.9s ease-in-out;
+}
+[data-motion='full'] .react-droop {
+  animation: react-droop 1.2s ease-in-out;
+}
+[data-motion='full'] .react-cock {
+  animation: react-cock 1s steps(1, end);
+}
+[data-motion='full'] .react-snub {
+  animation: react-snub 1.1s ease-in-out;
+}
+[data-motion='full'] .react-clank {
+  animation: react-clank 0.8s ease-in;
+}
+[data-motion='full'] .react-rear {
+  animation: react-rear 1s ease-out;
+}
+@keyframes react-hide {
+  0%,
+  100% {
+    transform: none;
+  }
+  15%,
+  70% {
+    transform: scale(1.12, 0.72);
+  }
+  25%,
+  45% {
+    transform: scale(1.12, 0.72) translateX(-2px);
+  }
+  35%,
+  55% {
+    transform: scale(1.12, 0.72) translateX(2px);
+  }
+}
+@keyframes react-hop {
+  0%,
+  100% {
+    transform: none;
+  }
+  20% {
+    transform: scale(1.08, 0.9);
+  }
+  45% {
+    transform: translateY(-26px) rotate(-8deg);
+  }
+  70% {
+    transform: translateY(0) scale(1.06, 0.94);
+  }
+  85% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes react-tilt {
+  0%,
+  100% {
+    transform: none;
+  }
+  25%,
+  60% {
+    transform: rotate(-12deg);
+  }
+  80% {
+    transform: rotate(5deg);
+  }
+}
+@keyframes react-doze {
+  0%,
+  100% {
+    transform: none;
+  }
+  30% {
+    transform: rotate(6deg) translateY(2px);
+  }
+  65% {
+    transform: rotate(-5deg) translateY(2px);
+  }
+}
+@keyframes react-squish {
+  0%,
+  100% {
+    transform: none;
+  }
+  30% {
+    transform: scale(1.1, 0.88);
+  }
+  60% {
+    transform: scale(0.95, 1.08) translateY(-6px);
+  }
+}
+@keyframes react-droop {
+  0%,
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+  40%,
+  70% {
+    transform: translateY(10px) scale(0.94);
+    opacity: 0.7;
+  }
+}
+@keyframes react-cock {
+  0%,
+  100% {
+    transform: none;
+  }
+  10% {
+    transform: rotate(14deg);
+  }
+  55% {
+    transform: rotate(-6deg);
+  }
+  80% {
+    transform: rotate(14deg);
+  }
+}
+@keyframes react-snub {
+  0%,
+  100% {
+    transform: none;
+  }
+  20%,
+  75% {
+    transform: scaleX(-1);
+  }
+}
+@keyframes react-clank {
+  0%,
+  100% {
+    transform: none;
+  }
+  30% {
+    transform: translateY(-12px);
+  }
+  50% {
+    transform: translateY(0) scale(1.06, 0.92);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  70% {
+    transform: translateX(3px);
+  }
+}
+@keyframes react-rear {
+  0%,
+  100% {
+    transform: none;
+  }
+  35%,
+  65% {
+    transform: translateY(-10px) scale(1.12);
+  }
+  45% {
+    transform: translateY(-10px) scale(1.12) translateX(-3px);
+  }
+  55% {
+    transform: translateY(-10px) scale(1.12) translateX(3px);
+  }
+}
+.hub-emote {
+  position: absolute;
+  top: -6px;
+  right: 6%;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 6px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px 999px 999px 4px;
+  background: #fff;
+  color: #2b1d17;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.25);
+  pointer-events: none;
+  animation: emote 1.2s ease-out forwards;
+}
+@keyframes emote {
+  0% {
+    transform: scale(0.4) translateY(8px);
+    opacity: 0;
+  }
+  15% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------- wardrobe */
+
+.wardrobe-stage {
+  position: relative;
+  height: 250px;
+  display: grid;
+  place-items: end center;
+  padding-bottom: 6px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background:
+    radial-gradient(60% 50% at 50% 92%, rgb(255 255 255 / 0.35), transparent 70%),
+    linear-gradient(180deg, #ffe9c9, #f7c99a);
+}
+.wardrobe-stage.realm-umbra {
+  background:
+    radial-gradient(60% 45% at 50% 92%, rgb(167 123 255 / 0.4), transparent 70%),
+    linear-gradient(180deg, #2a2142, #17122a);
+}
+.wardrobe-avatar {
+  width: 160px;
+  height: 240px;
+}
+.swatch-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.swatch-label {
+  flex-basis: 100%;
+  font-weight: 700;
+}
+.swatch {
+  width: 32px;
   height: 32px;
-  fill: color-mix(in srgb, var(--text) 30%, transparent);
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: linear-gradient(135deg, var(--sw) 55%, var(--sw-2) 56%);
+  cursor: pointer;
+  padding: 0;
 }
-.realm-hearth .avatar-slot {
-  color: #3a2a1a;
-  text-shadow: none;
-  border-color: #3a2a1a66;
-  background: #ffffff40;
+.swatch.active {
+  border-color: var(--text);
+  box-shadow:
+    0 0 0 2px var(--card),
+    0 0 0 4px var(--primary);
 }
-.realm-hearth .avatar-slot svg {
-  fill: #3a2a1a40;
+.slot-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 14px 0 10px;
+}
+.slot-tabs .tab {
+  padding: 0 8px;
+}
+.wardrobe-grid {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.wardrobe-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 4px;
+  padding: 8px 8px 10px;
+  border-radius: var(--radius);
+  border: 2px solid var(--line);
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+.wardrobe-item.worn {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+.wardrobe-item.locked {
+  cursor: default;
+  border-style: dashed;
+  background: var(--card-2);
+}
+.wardrobe-thumb {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  background: var(--card-2);
+}
+.wardrobe-item.locked .wardrobe-thumb {
+  background: var(--card);
+}
+.wardrobe-thumb svg {
+  width: 100%;
+  height: 100%;
+}
+.wardrobe-item.locked .wardrobe-thumb svg {
+  filter: brightness(0) opacity(0.28);
+}
+.wardrobe-lock,
+.wardrobe-check {
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+.wardrobe-check {
+  background: var(--primary);
+  color: var(--primary-ink);
+  border-color: transparent;
+  font-weight: 800;
+}
+.wardrobe-name {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  line-height: 1.15;
+}
+.wardrobe-cond {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  color: var(--muted);
+  line-height: 1.25;
+}
+.set-tag {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.set-tag-hearth {
+  background: color-mix(in srgb, var(--hearth) 22%, transparent);
+  color: var(--hearth);
+}
+.set-tag-umbra {
+  background: color-mix(in srgb, var(--umbra) 22%, transparent);
+  color: var(--umbra);
 }
 
 .hub-cta {

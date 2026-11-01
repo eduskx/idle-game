@@ -4,11 +4,15 @@
  * 2. add a function here that converts version N-1 to N
  * 3. add a test with a real old save in persistence.test.ts
  */
+import { defaultAvatar } from '../engine/avatar';
+
 type Migration = (data: Record<string, unknown>) => Record<string, unknown>;
 
 const MIGRATIONS: Record<number, Migration> = {
   // v2 added charms and expeditions.
   2: (d) => ({ ...d, version: 2, charms: {}, expeditions: [] }),
+  // v3 added the player avatar (paper-doll); everyone starts with the default outfit.
+  3: (d) => ({ ...d, version: 3, avatar: defaultAvatar() }),
 };
 
 export function migrate(raw: unknown): unknown {

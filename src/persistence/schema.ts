@@ -57,6 +57,18 @@ export const saveSchema = z.object({
     reducedMotion: z.boolean(),
     showDamageNumbers: z.boolean(),
   }),
+  avatar: z.object({
+    skin: int.max(100),
+    hairColor: int.max(100),
+    items: z.object({
+      hair: id,
+      top: id,
+      bottom: id,
+      shoes: id,
+      hat: id,
+      accessory: id,
+    }),
+  }),
   lastSeen: nonNeg,
   createdAt: nonNeg,
 });

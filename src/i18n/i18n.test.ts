@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { AVATAR_ITEMS } from '../data/avatar';
 import { CREATURES } from '../data/creatures';
 import { ACHIEVEMENTS, TALENTS, UPGRADES } from '../data/progression';
 import { ZONES } from '../data/world';
@@ -24,6 +25,7 @@ describe('i18n', () => {
       ...UPGRADES.map((u) => `upgrade.${u.id}.name`),
       ...TALENTS.map((t) => `talent.${t.id}.name`),
       ...ACHIEVEMENTS.map((a) => `achievement.${a.id}`),
+      ...AVATAR_ITEMS.map((i) => `avatar.item.${i.slot}.${i.id}`),
     ];
     for (const key of keys) {
       expect(translate('en', key), key).not.toBe(key);

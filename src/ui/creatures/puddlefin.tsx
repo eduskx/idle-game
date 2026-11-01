@@ -52,10 +52,15 @@ export function Puddlefin({ uid, view }: ArtProps) {
   );
 
   if (view === 'back') {
+    // Seen from behind: the thick ringed otter tail sweeps toward the viewer, the darker
+    // back stripe and wet fur tufts give the slender body texture, the elbows hug the
+    // pebble (its glow spills out at the sides) and the whiskers poke out past the cheeks.
     return (
       <svg viewBox="0 0 200 200">
         {defs}
         <GroundShadow rx={48} />
+        {/* pebble glow leaking past the body */}
+        <ellipse cx="100" cy="128" rx="42" ry="16" fill="#ffd98a" opacity={0.35} filter={`url(#${glow})`} />
         <ellipse cx="80" cy="178" rx="13" ry="8" fill="#2f4a66" stroke={INK} strokeWidth={3} />
         <ellipse cx="120" cy="178" rx="13" ry="8" fill="#2f4a66" stroke={INK} strokeWidth={3} />
         <path
@@ -64,11 +69,59 @@ export function Puddlefin({ uid, view }: ArtProps) {
           stroke={INK}
           strokeWidth={3.5}
         />
-        <circle cx="72" cy="56" r="8" fill="#5f82a3" stroke={INK} strokeWidth={3} />
-        <circle cx="128" cy="56" r="8" fill="#5f82a3" stroke={INK} strokeWidth={3} />
+        {/* darker dorsal stripe and wet fur tufts */}
+        <path
+          d="M100 86 Q114 110 110 150 Q106 172 100 176 Q94 172 90 150 Q86 110 100 86 Z"
+          fill="#2f4a66"
+          opacity={0.55}
+        />
+        <g fill="none" stroke="#a9c3da" strokeWidth={2.2} strokeLinecap="round" opacity={0.7}>
+          <path d="M78 112 l5 -5 l3 6" />
+          <path d="M118 120 l5 -5 l3 6" />
+          <path d="M80 146 l5 -5 l3 6" />
+        </g>
+        {/* elbows bent forward, hugging the pebble */}
+        <path
+          d="M68 118 Q56 128 66 140 Q72 134 74 124 Z"
+          fill="#4c6d8d"
+          stroke={INK}
+          strokeWidth={3}
+          strokeLinejoin="round"
+        />
+        <path
+          d="M132 118 Q144 128 134 140 Q128 134 126 124 Z"
+          fill="#4c6d8d"
+          stroke={INK}
+          strokeWidth={3}
+          strokeLinejoin="round"
+        />
+        {/* ears with darker backs */}
+        <circle cx="72" cy="56" r="8" fill="#4c6d8d" stroke={INK} strokeWidth={3} />
+        <circle cx="128" cy="56" r="8" fill="#4c6d8d" stroke={INK} strokeWidth={3} />
         <ellipse cx="100" cy="72" rx="34" ry="32" fill={`url(#${fur})`} stroke={INK} strokeWidth={3.5} />
-        {hat}
-        <g transform="translate(200 18) scale(-1 1)">{tail}</g>
+        {/* whiskers poking out past the cheeks */}
+        <g stroke={INK} strokeWidth={1.6} strokeLinecap="round" opacity={0.7}>
+          <path d="M68 88 L56 84" />
+          <path d="M68 92 L56 94" />
+          <path d="M132 88 L144 84" />
+          <path d="M132 92 L144 94" />
+        </g>
+        {/* nape tuft */}
+        <path d="M90 100 Q100 92 110 100 Q104 98 100 104 Q96 98 90 100 Z" fill="#2f4a66" opacity={0.6} />
+        <g transform="translate(200 0) scale(-1 1)">{hat}</g>
+        {/* thick ringed tail swinging toward the viewer */}
+        <path
+          d="M104 170 Q150 176 160 150 Q166 130 150 120 Q156 140 140 154 Q124 164 102 160 Z"
+          fill="#3f5f7e"
+          stroke={INK}
+          strokeWidth={3.5}
+          strokeLinejoin="round"
+        />
+        <g stroke="#2a4460" strokeWidth={3} strokeLinecap="round" fill="none">
+          <path d="M122 160 Q126 170 124 172" />
+          <path d="M140 154 Q146 162 146 168" />
+          <path d="M152 140 Q158 146 160 150" />
+        </g>
       </svg>
     );
   }

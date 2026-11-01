@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState, globalModifiers, memberStats, simulate, typeCharmBonus } from '../engine';
+import {
+  createInitialState,
+  defaultAvatar,
+  globalModifiers,
+  memberStats,
+  simulate,
+  typeCharmBonus,
+} from '../engine';
 import { exportSave, fromUnknown, importSave, SaveError, toSaveData } from './serialize';
 import { MemoryRepository } from './repository';
 
@@ -56,6 +63,31 @@ describe('persistence', () => {
     expect(memberStats(s, 'mossling', globalModifiers(s)).types).toEqual(['grove', 'stone']);
     simulate(s, 10);
     expect(s.battle.enemy?.types.length).toBeGreaterThan(0);
+  });
+
+  it('migrates a v2 save to v3 with the default avatar', () => {
+    const v2 = toSaveData(createInitialState(1000, 9)) as Record<string, unknown>;
+    delete v2.avatar;
+    v2.version = 2;
+    const s = fromUnknown(JSON.parse(JSON.stringify(v2)));
+    expect(s.version).toBe(3);
+    expect(s.avatar).toEqual(defaultAvatar());
+  });
+
+  it('round-trips the avatar and repairs locked or unknown items', () => {
+    const s = createInitialState(1000, 9);
+    s.lifetime.reblooms = 1;
+    s.avatar = { skin: 4, hairColor: 6, items: { ...defaultAvatar().items, hair: 'braids', hat: 'sprout' } };
+    expect(fromUnknown(toSaveData(s)).avatar).toEqual(s.avatar);
+
+    const data = toSaveData(createInitialState(1000, 9));
+    // A locked hat, an unknown top, a color index out of range.
+    data.avatar = { skin: 99, hairColor: 2, items: { ...data.avatar.items, hat: 'crescent', top: 'armor' } };
+    const repaired = fromUnknown(data).avatar;
+    expect(repaired.items.hat).toBe('none');
+    expect(repaired.items.top).toBe('tee');
+    expect(repaired.skin).toBe(defaultAvatar().skin);
+    expect(repaired.hairColor).toBe(2);
   });
 
   it('saves and loads through a repository', async () => {
